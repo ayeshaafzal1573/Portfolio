@@ -1169,15 +1169,15 @@ border-width: 23.9rem;
 padding: 0 3% 30rem;}
     .services{
     
-    height: 100vh;
+    height: 120vh;
     }
 
 .skills{
-height: 100vh;
+height: 140vh;
 text-align: center;
 }
 .portfolio{
-height:300vh;
+height:760vh;
 }
 .contact{
 height: 10vh;
@@ -1305,7 +1305,7 @@ margin: 0px;
 padding: 0px;
 }
 .about {
-    min-height: 80vh;
+    min-height: 120vh;
     padding: 5rem 2% 1rem;
     display: block;
     width: auto;
