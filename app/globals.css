@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-inter: "Inter", sans-serif;
+  --font-sora: "Sora", sans-serif;
+}
+
+/* Pastel Theme */
+.pastel {
+  --bg-primary: rgb(136, 174, 245);
+  --bg-secondary: #e0e0e0;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --accent-lavender: #e6e6fa;
+  --accent-mint: #98ff98;
+  --accent-blush: #ffc0cb;
+  --accent-sky: #87ceeb;
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.18);
+}
+
+/* Dark Theme */
+.dark {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #0d0d0d;
+  --bg-tertiary: #2c2c2c;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --accent-electric: #00d4ff;
+  --accent-purple: #8b5cf6;
+  --accent-lime: #84cc16;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Girly Blue Theme */
+.girly-blue {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --text-primary: #2c3e50;
+  --text-secondary: #5a6c7d;
+  --accent-blue: #8aaae5;
+  --accent-light-blue: #b0c4de;
+  --accent-dark-blue: #6a80b8;
+  --accent-pink: #f8bbd9;
+  --glass-bg: rgba(138, 170, 229, 0.15);
+  --glass-border: rgba(138, 170, 229, 0.2);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 20px var(--accent-blue);
+  }
+  to {
+    box-shadow: 0 0 30px var(--accent-blue), 0 0 40px var(--accent-blue);
+  }
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-blue);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dark-blue);
+}
+
+/* Hide scrollbar for slider */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
