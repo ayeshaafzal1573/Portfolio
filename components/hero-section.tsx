@@ -166,8 +166,8 @@ export function HeroSection() {
                 style={{ animationDelay: "1s" }}
               >
                 <img
-                  src="/placeholder-user.jpeg?height=400&width=400"
-                  alt="Ayesha Afzal - Full-Stack Developer & UI/UX Designer"
+                  src="/AyeshaAfzal.jpg?height=400&width=400"
+                  alt="Ayesha Afzal - Full-Stack & Mobile App Developer & UI/UX Designer"
                   className="w-full h-full object-cover rounded-full"
                 />
               </div>
