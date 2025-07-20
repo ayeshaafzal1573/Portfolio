@@ -176,21 +176,21 @@ export function ContactSection() {
           <div className="mt-12 pt-8 border-t border-opacity-20">
             <div className="flex justify-center gap-6">
               <a
-                href="https://github.com"
+                href="https://github.com/ayeshaafzal1573/"
                 className="p-4 glass-card rounded-full hover:scale-110 transition-all duration-300 group"
                 aria-label="GitHub"
               >
                 <Github className="w-6 h-6 group-hover:text-purple-500 dark:group-hover:text-blue-400 girly-blue:group-hover:text-blue-500 transition-colors" />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/ayeshaafzalqadir/"
                 className="p-4 glass-card rounded-full hover:scale-110 transition-all duration-300 group"
                 aria-label="LinkedIn"
               >
                 <Linkedin className="w-6 h-6 group-hover:text-purple-500 dark:group-hover:text-blue-400 girly-blue:group-hover:text-blue-500 transition-colors" />
               </a>
               <a
-                href="https://dribbble.com"
+                href="https://www.behance.net/ayeshaafzal14"
                 className="p-4 glass-card rounded-full hover:scale-110 transition-all duration-300 group"
                 aria-label="Dribbble"
               >

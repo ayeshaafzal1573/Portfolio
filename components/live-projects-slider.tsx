@@ -15,19 +15,11 @@ export function LiveProjectsSlider() {
 
   const fetchLiveProjects = async () => {
     try {
-      if (!isSupabaseConfigured()) {
-        console.log("Supabase not configured, using mock data")
-        setProjects(getMockLiveProjects())
-        return
-      }
-
-      const { data, error } = await supabase.from("live_projects").select("*").order("created_at", { ascending: false })
-
-      if (error) throw error
-      setProjects(data || [])
+    
+     setProjects(getMockLiveProjects())
     } catch (error) {
       console.error("Error fetching live projects:", error)
-      setProjects(getMockLiveProjects())
+      
     } finally {
       setLoading(false)
     }

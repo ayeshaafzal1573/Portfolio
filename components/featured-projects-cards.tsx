@@ -37,23 +37,12 @@ export function FeaturedProjectsCards() {
 
   const fetchCategorizedProjects = async () => {
     try {
-      if (!isSupabaseConfigured()) {
-        console.log("Supabase not configured, using mock data")
-        setProjects(getMockCategorizedProjects())
-        return
-      }
-
-      const { data, error } = await supabase
-        .from("categorized_projects")
-        .select("*")
-        .eq("is_featured", true)
-        .order("created_at", { ascending: false })
-
-      if (error) throw error
-      setProjects(data || [])
+     
+  setProjects(getMockCategorizedProjects())
+    
     } catch (error) {
       console.error("Error fetching categorized projects:", error)
-      setProjects(getMockCategorizedProjects())
+    
     } finally {
       setLoading(false)
     }
@@ -65,11 +54,11 @@ export function FeaturedProjectsCards() {
     title: "SMF-Jewels",
     description:
       "Discover the finest collection of handcrafted luxury jewelry. Each piece tells a story of elegance, craftsmanship, and timeless beauty.",
-    category: "MERN Stack",
+    category: "Full-Stack",
     tech_stack: ["MongoDB", "Express.js", "React", "Node.js"],
     demo_url: "https://smf-jewels.vercel.app/",
     github_url: "#",
-    video_url: "/LuxuryStay.mp4",
+    video_url: "/SMFJEWELS.webm",
     is_featured: true,
     created_at: new Date().toISOString(),
   },
@@ -108,7 +97,7 @@ export function FeaturedProjectsCards() {
     tech_stack: ["PHP", "MYSQL", "Bootstrap", "JQUERY"],
     demo_url: "https://projects.sunaina.codes/ypp/index.php",
     github_url: "#",
-    video_url: "/Yummy Pet Palate.mp4",
+    video_url: "/YummyPetPalate.mp4",
     is_featured: true,
     created_at: new Date().toISOString(),
   },
@@ -131,7 +120,7 @@ export function FeaturedProjectsCards() {
     description:
       "Empowering artistic visions through education and innovation at the Institute of Fine Arts. Join our creative community today.",
     category: "Full-Stack",
-    tech_stack: ["PHP", "MYSQL"],
+    tech_stack: ["ASP.NET", "SQL Server", "Bootstrap"],
     demo_url: "#",
     github_url: "#",
     video_url: "/InstituteofFineArts.mp4",
@@ -183,7 +172,7 @@ export function FeaturedProjectsCards() {
     description:
       "Taverna—a modern mobile app designed in react native to revolutionize your bar-hopping experience.",
     category: "Mobile Apps",
-    tech_stack: ["React Native", "Firebase"],
+    tech_stack: ["React Native", "Node.js", "MongoDB"],
     demo_url: "https://www.linkedin.com/posts/ayeshaafzalqadir_mobileappdevelopment-tavernaapp-innovation-activity-7284941587606884352-GpZZ",
     github_url: "#",
     video_url: "/Taverna.mp4",
@@ -278,45 +267,6 @@ export function FeaturedProjectsCards() {
     demo_url: "https://saclothing.netlify.app/",
     github_url: "#",
     video_url: "/SAClothing.mp4",
-    is_featured: true,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "18",
-    title: "Turbo Drive",
-    description:
-      "Elevate your drive to new heights with Turbo Car where performance meets passion.",
-    category: "UI/UX Designs",
-    tech_stack: ["Figma"],
-    demo_url: "https://www.figma.com/design/nPlWEOj8JSfYOSG0YTNvpU/website-design",
-    github_url: "#",
-    video_url: "/turbo.png",
-    is_featured: true,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "19",
-    title: "Watch Wonders",
-    description:
-      "Our passion lies in bringing you a curated selection of timepieces that go beyond mere functionality.",
-    category: "UI/UX Designs",
-    tech_stack: ["Figma"],
-    demo_url: "https://www.figma.com/design/nPlWEOj8JSfYOSG0YTNvpU/website-design",
-    github_url: "#",
-    video_url: "/wrist-watch-wen.jpg",
-    is_featured: true,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "20",
-    title: "Recipe App",
-    description:
-      "Explore our Recipe App - your culinary companion. Discover delightful recipes and share your reviews, savoring the joy of cooking together.",
-    category: "UI/UX Designs",
-    tech_stack: ["Figma"],
-    demo_url: "https://www.figma.com/design/wQ3i07jBKVqn967dJ03XIF/Recipe-App",
-    github_url: "#",
-    video_url: "/RECIPE APP.jpg",
     is_featured: true,
     created_at: new Date().toISOString(),
   }
