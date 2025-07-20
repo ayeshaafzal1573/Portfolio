@@ -2,3 +2,9 @@
   for = "/sitemap.xml"
   [headers.values]
     Content-Type = "application/xml"
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/next"
