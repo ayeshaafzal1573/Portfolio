@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { ArrowRight } from "lucide-react"
+import { ArrowDown, ArrowRight } from "lucide-react"
 
 export function HeroSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -141,13 +141,19 @@ export function HeroSection() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-6 items-start">
-              <button
-                onClick={scrollToProjects}
-                className="group px-10 py-5 pastel:bg-gradient-to-r pastel:from-purple-500 pastel:to-pink-500 dark:bg-gradient-to-r dark:from-blue-500 dark:to-purple-500 girly-blue:bg-gradient-to-r girly-blue:from-blue-500 girly-blue:to-indigo-500 text-white rounded-full hover:scale-105 transition-all duration-300 flex items-center gap-3 text-lg font-semibold shadow-lg"
+              <a
+                href="/ayesha-afzal-qadir.pdf"
+                download
+                className="group px-10 py-5 pastel:bg-gradient-to-r pastel:from-purple-500 pastel:to-pink-500 
+             dark:bg-gradient-to-r dark:from-blue-500 dark:to-purple-500 
+             girly-blue:bg-gradient-to-r girly-blue:from-blue-500 girly-blue:to-indigo-500 
+             text-white rounded-full hover:scale-105 transition-all duration-300 
+             flex items-center gap-3 text-lg font-semibold shadow-lg"
               >
-                View Projects
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-              </button>
+                Download CV
+                <ArrowDown className="w-6 h-6 group-hover:translate-y-1 transition-transform" />
+              </a>
+
 
               <button
                 onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
@@ -166,8 +172,10 @@ export function HeroSection() {
                 style={{ animationDelay: "1s" }}
               >
                 <img
-                  src="/AyeshaAfzal.jpeg?height=400&width=400"
-                  alt="Ayesha Afzal - Full-Stack & Mobile App Developer & UI/UX Designer"
+                  src="/ayesha-afzal-qadir.jpeg"
+                  width={400}
+                  height={400}
+                  alt="Ayesha Afzal, Full-Stack & Mobile App Developer"
                   className="w-full h-full object-cover rounded-full"
                 />
               </div>

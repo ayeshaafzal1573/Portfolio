@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter, Sora } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import Script from "next/script"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -80,6 +81,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          id="person-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Ayesha Afzal",
+              jobTitle: "Full-Stack & Mobile App Developer",
+              url: "https://ayeshaafzalqadir.netlify.app",
+              image: "https://ayeshaafzalqadir.netlify.app/ayesha-afzal-qadir.jpg",
+            }),
+          }}
+        />
+      </head>
       <body className={`${inter.variable} ${sora.variable} font-inter antialiased`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
