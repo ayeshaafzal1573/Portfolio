@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://ayeshaafzalqadir.netlify.app
+
+# Sitemaps
+Sitemap: https://ayeshaafzalqadir.netlify.app/sitemap.xml
