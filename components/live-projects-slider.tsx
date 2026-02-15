@@ -15,11 +15,11 @@ export function LiveProjectsSlider() {
 
   const fetchLiveProjects = async () => {
     try {
-    
-     setProjects(getMockLiveProjects())
+
+      setProjects(getMockLiveProjects())
     } catch (error) {
       console.error("Error fetching live projects:", error)
-      
+
     } finally {
       setLoading(false)
     }
@@ -28,16 +28,16 @@ export function LiveProjectsSlider() {
   const getMockLiveProjects = (): LiveProject[] => [
     {
       id: "1",
-      name: "SMF Jewels",
-      thumbnail_url: "/1.png?height=200&width=300",
-      live_url: "https://smf-jewels.vercel.app/",
+      name: "KWSC Unified App",
+      thumbnail_url: "/kwsc.png?height=200&width=300",
+      live_url: "https://play.google.com/store/apps/details?id=pk.gov.kwsc.kwsc_digital&hl=en",
       created_at: new Date().toISOString(),
     },
     {
       id: "2",
-      name: "Hotel Management System",
-      thumbnail_url: "/2.png?height=200&width=300",
-      live_url: "https://luxurystay-hms.vercel.app/",
+      name: "Asani Website",
+      thumbnail_url: "/web.png?height=200&width=300",
+      live_url: "https://asani-website.vercel.app/",
       created_at: new Date().toISOString(),
     },
     {
@@ -56,9 +56,9 @@ export function LiveProjectsSlider() {
     },
     {
       id: "5",
-      name: "Pandemix",
+      name: "Hotel Management System",
       thumbnail_url: "/5.png?height=200&width=300",
-      live_url: "https://projects.sunaina.codes/pandemix/index.php",
+      live_url: "https://luxurystay-hms.vercel.app/",
       created_at: new Date().toISOString(),
     },
   ]

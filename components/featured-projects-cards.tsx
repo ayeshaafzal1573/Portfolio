@@ -269,7 +269,46 @@ export function FeaturedProjectsCards() {
     video_url: "/SAClothing.mp4",
     is_featured: true,
     created_at: new Date().toISOString(),
-  }
+   },
+   {
+     id: "18",
+     title: "KWSC Unified App",
+     description:
+       "KWSC Unified App lets you access all water-related services in one place.",
+     category: "Full-Stack",
+     tech_stack: ["Fastify", "PostgreSQL", "Node JS"],
+     demo_url: "https://play.google.com/store/apps/details?id=pk.gov.kwsc.kwsc_digital&hl=en",
+     github_url: "#",
+     video_url: "/kwsc.png",
+     is_featured: true,
+     created_at: new Date().toISOString(),
+   },
+   {
+     id: "19",
+     title: "Asani Dashboard",
+     description:
+       "Asani Dashboard is a comprehensive web application designed to provide users with real-time insights and analytics for their projects, enabling efficient management and informed decision-making.",
+     category: "Full-Stack",
+     tech_stack: ["Redis", "PostgreSQL", "Node JS"],
+     demo_url: "asani.io",
+     github_url: "#",
+     video_url: "/asani-dashboard.png",
+     is_featured: true,
+     created_at: new Date().toISOString(),
+   },
+   {
+     id: "20",
+     title: "Asani Website",
+     description:
+        "Asani Website is a modern web application designed to provide users with a seamless and intuitive experience for managing their projects, tasks, and team collaboration, all while delivering real-time updates and insights.",
+     category: "Full-Stack",
+     tech_stack: ["Next.js", "Node JS"],
+     demo_url: "https://asani-website.vercel.app/",
+     github_url: "#",
+     video_url: "/web.png",
+     is_featured: true,
+     created_at: new Date().toISOString(),
+   }
 ];
 
 

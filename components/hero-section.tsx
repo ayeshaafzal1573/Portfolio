@@ -130,7 +130,7 @@ export function HeroSection() {
                   className="block text-3xl md:text-4xl lg:text-5xl pastel:text-pink-500 dark:text-purple-400 girly-blue:text-blue-600 animate-float mt-2"
                   style={{ animationDelay: "0.5s" }}
                 >
-                  Full-Stack & Mobile App Developer
+                  Software Engineer
                 </span>
               </h1>
 
