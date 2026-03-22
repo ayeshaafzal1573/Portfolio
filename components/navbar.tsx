@@ -46,8 +46,8 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-2xl font-sora font-bold">
-            <span className="pastel:text-purple-600 dark:text-blue-400 girly-blue:text-blue-500">{"<Portfolio/>"}</span>
+          <div className="text-2xl font-sora font-semibold tracking-tight">
+            <span className="pastel:text-purple-700 dark:text-blue-300 girly-blue:text-blue-600">Ayesha.</span>
           </div>
 
           <div className="hidden md:flex items-center space-x-8">

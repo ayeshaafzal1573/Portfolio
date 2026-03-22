@@ -6,4 +6,4 @@ Allow: /
 Host: https://ayeshaafzalqadir.netlify.app
 
 # Sitemaps
-Sitemap: https://ayeshaafzalqadir.netlify.app/sitemap.xml
+Sitemap: https://ayeshaafzalqadir.vercel.app/sitemap.xml

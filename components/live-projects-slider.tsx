@@ -151,7 +151,7 @@ export function LiveProjectsSlider() {
                     href={project.live_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 pastel:bg-gradient-to-r pastel:from-purple-500 pastel:to-pink-500 dark:bg-gradient-to-r dark:from-blue-500 dark:to-purple-500 girly-blue:bg-gradient-to-r girly-blue:from-blue-500 girly-blue:to-indigo-500 text-white rounded-full font-semibold hover:scale-105 transition-all duration-300"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-main text-slate-800 shadow-md border border-white/40 rounded-full font-semibold hover:scale-105 transition-all duration-300"
                   >
                     View Live
                     <ExternalLink className="w-4 h-4" />

@@ -4,6 +4,13 @@ import { Code, Palette, Database, Smartphone, Globe, Zap } from "lucide-react"
 
 const timeline = [
   {
+    year: "Present",
+    title: "Full-Stack Developer @ Asani.io",
+    description:
+      "Working as a Full-Stack Developer with a strong focus on backend architecture. Responsibilities include routing and APIs using Fastify, database management with PostgreSQL, implementing unified CI/CD pipelines via Jenkins, and monitoring cloud logs.",
+    skills: ["Fastify", "PostgreSQL", "CI/CD", "Jenkins", "Cloud Logs"],
+  },
+  {
     year: "2025",
     title: "Full-Stack Developer & UI/UX Designer",
     description:
@@ -109,7 +116,7 @@ export function AboutSection() {
                       <h4 className="font-sora font-bold">{skill.name}</h4>
                       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
                         <div
-                          className="h-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 dark:from-blue-400 dark:to-purple-400 transition-all duration-1000"
+                          className="h-2 rounded-full bg-gradient-main transition-all duration-1000"
                           style={{ width: `${skill.level}%` }}
                         />
                       </div>

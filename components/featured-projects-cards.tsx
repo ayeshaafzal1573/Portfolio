@@ -14,14 +14,10 @@ const categoryIcons = {
 
 
 const categoryColors = {
-  "MERN Stack":
-    "pastel:from-purple-500 pastel:to-pink-500 dark:from-blue-500 dark:to-purple-500 girly-blue:from-blue-500 girly-blue:to-indigo-500",
-  "Full-Stack":
-    "pastel:from-mint-400 pastel:to-sky-400 dark:from-lime-500 dark:to-electric-500 girly-blue:from-blue-400 girly-blue:to-light-blue-400",
-  "Mobile Apps":
-    "pastel:from-blush-400 pastel:to-lavender-400 dark:from-purple-500 dark:to-pink-500 girly-blue:from-pink-400 girly-blue:to-blue-400",
-  "UI/UX Designs":
-    "pastel:from-sky-400 pastel:to-mint-400 dark:from-electric-500 dark:to-lime-500 girly-blue:from-light-blue-400 girly-blue:to-blue-400",
+  "MERN Stack": "bg-gradient-main text-slate-800 border-white/40",
+  "Full-Stack": "bg-gradient-main text-slate-800 border-white/40",
+  "Mobile Apps": "bg-gradient-main text-slate-800 border-white/40",
+  "UI/UX Designs": "bg-gradient-main text-slate-800 border-white/40",
 }
 
 export function FeaturedProjectsCards() {
@@ -319,7 +315,7 @@ export function FeaturedProjectsCards() {
     return (
       <section
         id="projects"
-        className="py-20 px-6 pastel:bg-gradient-to-br pastel:from-purple-50 pastel:to-pink-50 dark:bg-gradient-to-br dark:from-gray-900 dark:to-blue-900 girly-blue:bg-gradient-to-br girly-blue:from-blue-50 girly-blue:to-indigo-50"
+        className="py-20 px-6"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -345,7 +341,7 @@ export function FeaturedProjectsCards() {
   return (
     <section
       id="projects"
-      className="py-20 px-6 pastel:bg-gradient-to-br pastel:from-purple-50 pastel:to-pink-50 dark:bg-gradient-to-br dark:from-gray-900 dark:to-blue-900 girly-blue:bg-gradient-to-br girly-blue:from-blue-50 girly-blue:to-indigo-50"
+      className="py-20 px-6"
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
@@ -362,7 +358,7 @@ export function FeaturedProjectsCards() {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                   selectedCategory === category
-                    ? "pastel:bg-gradient-to-r pastel:from-purple-500 pastel:to-pink-500 dark:bg-gradient-to-r dark:from-blue-500 dark:to-purple-500 girly-blue:bg-gradient-to-r girly-blue:from-blue-500 girly-blue:to-indigo-500 text-white"
+                    ? "bg-gradient-main text-slate-800 shadow-md border border-white/40"
                     : "glass-card hover:scale-105"
                 }`}
               >

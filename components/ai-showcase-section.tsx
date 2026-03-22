@@ -40,7 +40,7 @@ export function AIShowcaseSection() {
   return (
     <section
       id="ai-showcase"
-      className="py-20 px-6 pastel:bg-gradient-to-br pastel:from-purple-50 pastel:to-pink-50 dark:bg-gradient-to-br dark:from-gray-900 dark:to-blue-900 girly-blue:bg-gradient-to-br girly-blue:from-blue-50 girly-blue:to-indigo-50"
+      className="py-20 px-6"
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
@@ -59,8 +59,8 @@ export function AIShowcaseSection() {
               style={{ animationDelay: `${index * 0.5}s` }}
             >
               <div className="flex items-start gap-6">
-                <div className="p-4 rounded-2xl pastel:bg-gradient-to-br pastel:from-purple-400 pastel:to-pink-400 dark:bg-gradient-to-br dark:from-blue-500 dark:to-purple-500 girly-blue:bg-gradient-to-br girly-blue:from-blue-400 girly-blue:to-indigo-400 group-hover:animate-glow">
-                  <project.icon className="w-8 h-8 text-white" />
+                <div className="p-4 rounded-2xl bg-gradient-main text-slate-800 shadow-md border border-white/40 group-hover:animate-glow">
+                  <project.icon className="w-8 h-8 text-slate-800" />
                 </div>
 
                 <div className="flex-1">
