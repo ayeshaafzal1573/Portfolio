@@ -1,5 +1,5 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: "https://ayeshaafzalqadir.netlify.app",
+  siteUrl: "https://ayeshaafzalqadir.vercel.app",
   generateRobotsTxt: true,
 };

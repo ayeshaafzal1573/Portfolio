@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://ayeshaafzalqadir.netlify.app
+Host: https://ayeshaafzalqadir.vercel.app
 
 # Sitemaps
 Sitemap: https://ayeshaafzalqadir.vercel.app/sitemap.xml

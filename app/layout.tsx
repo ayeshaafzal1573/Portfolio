@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     "Software Developer Portfolio",
     "Top Freelance Full Stack Developer",
     "Scalable Applications",
-    "Portfolio Ayesha Afzal", 
+    "Portfolio Ayesha Afzal",
   ],
   authors: [{ name: "Ayesha Afzal", url: "https://ayeshaafzalqadir.vercel.app/" }],
   creator: "Ayesha Afzal",
@@ -67,12 +67,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Ayesha Afzal - Full-Stack & Mobile Developer Portfolio",
     description:
-      "Explore the portfolio of Ayesha Afzal – expert in MERN Stack, React Native, Next.js, Fastify, and UI/UX design. Delivering innovative and scalable web & mobile solutions.", 
+      "Explore the portfolio of Ayesha Afzal – expert in MERN Stack, React Native, Next.js, Fastify, and UI/UX design. Delivering innovative and scalable web & mobile solutions.",
     url: "https://ayeshaafzalqadir.vercel.app/",
     siteName: "Ayesha Afzal Portfolio",
     images: [
       {
-        url: "https://ayeshaafzalqadir.vercel.app/AyeshaAfzal.jpeg", 
+        url: "https://ayeshaafzalqadir.vercel.app/AyeshaAfzal.jpeg",
         width: 1200,
         height: 630,
         alt: "Ayesha Afzal - Full-Stack Developer & Mobile Application Developer Portfolio",
@@ -107,7 +107,7 @@ export default function RootLayout({
               "@type": "Person",
               name: "Ayesha Afzal",
               jobTitle: "Full-Stack & Mobile App Developer",
-              url: "https://ayeshaafzalqadir.netlify.app",
+              url: "https://ayeshaafzalqadir.vercel.app",
               image: "https://ayeshaafzalqadir.vercel.app/ayesha-afzal-qadir.jpg",
             }),
           }}
