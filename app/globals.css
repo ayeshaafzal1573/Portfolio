@@ -7,46 +7,46 @@
   --font-sora: "Sora", sans-serif;
 }
 
-/* Pastel Theme */
+/* Pastel Theme (Minimal Light) */
 .pastel {
-  --bg-primary: rgb(136, 174, 245);
-  --bg-secondary: #e0e0e0;
-  --text-primary: #333333;
-  --text-secondary: #666666;
-  --accent-lavender: #e6e6fa;
-  --accent-mint: #98ff98;
-  --accent-blush: #ffc0cb;
-  --accent-sky: #87ceeb;
-  --glass-bg: rgba(255, 255, 255, 0.25);
-  --glass-border: rgba(255, 255, 255, 0.18);
+  --bg-primary: #FAF9F6;
+  --bg-secondary: #F2EFE9;
+  --text-primary: #2C2C2C;
+  --text-secondary: #6A6A6A;
+  --accent-lavender: #EAE1DC;
+  --accent-mint: #EFE3E5;
+  --accent-blush: #DCCBBE;
+  --accent-sky: #D6DFE6;
+  --glass-bg: rgba(250, 249, 246, 0.75);
+  --glass-border: rgba(212, 196, 183, 0.3);
 }
 
-/* Dark Theme */
+/* Dark Theme (Midnight Rose) */
 .dark {
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #0d0d0d;
-  --bg-tertiary: #2c2c2c;
-  --text-primary: #ffffff;
-  --text-secondary: #cccccc;
-  --accent-electric: #00d4ff;
-  --accent-purple: #8b5cf6;
-  --accent-lime: #84cc16;
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --bg-primary: #1C1A1A;
+  --bg-secondary: #262322;
+  --bg-tertiary: #302C2C;
+  --text-primary: #EBE5E0;
+  --text-secondary: #A8A09B;
+  --accent-electric: #D5AAB2;
+  --accent-purple: #B89080;
+  --accent-lime: #A5B9CB;
+  --glass-bg: rgba(28, 26, 26, 0.7);
+  --glass-border: rgba(235, 229, 224, 0.15);
 }
 
-/* Girly Blue Theme */
+/* Girly Blue Theme (Elegant Beige) */
 .girly-blue {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #2c3e50;
-  --text-secondary: #5a6c7d;
-  --accent-blue: #8aaae5;
-  --accent-light-blue: #b0c4de;
-  --accent-dark-blue: #6a80b8;
-  --accent-pink: #f8bbd9;
-  --glass-bg: rgba(138, 170, 229, 0.15);
-  --glass-border: rgba(138, 170, 229, 0.2);
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8F6F4;
+  --text-primary: #333130;
+  --text-secondary: #7A7571;
+  --accent-blue: #CDB1A1;
+  --accent-light-blue: #E8CDAB;
+  --accent-dark-blue: #DFBA8D;
+  --accent-pink: #E3C9CE;
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(205, 177, 161, 0.25);
 }
 
 body {

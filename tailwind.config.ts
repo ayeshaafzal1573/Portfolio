@@ -65,35 +65,64 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Your custom pastel colors
+        // Soft Minimalist Standard Colors overrides
+        purple: {
+          50: '#FDFCFB', 100: '#F7F4F2', 200: '#EAE1DC', 300: '#DCCBBE', 400: '#CDB1A1',
+          500: '#B89080', 600: '#A47D6D', 700: '#906B5B', 800: '#7C5B4D', 900: '#694E42',
+        },
+        pink: {
+          50: '#FDFBFB', 100: '#F9F4F5', 200: '#EFE3E5', 300: '#E3C9CE', 400: '#D5AAB2',
+          500: '#C78C97', 600: '#B87280', 700: '#A55F6D', 800: '#8A515C', 900: '#70444E',
+        },
+        blue: {
+          50: '#FCFDFD', 100: '#F6F8F9', 200: '#E8EDF1', 300: '#D6DFE6', 400: '#BFCDDB',
+          500: '#A5B9CB', 600: '#8BA4BB', 700: '#758FA7', 800: '#627A91', 900: '#52667A',
+        },
+        indigo: {
+          50: '#FEFDFB', 100: '#FDF9F3', 200: '#F8EFE2', 300: '#F1E0C9', 400: '#E8CDAB',
+          500: '#DFBA8D', 600: '#D1A36B', 700: '#BC8A51', 800: '#A27341', 900: '#865F36',
+        },
+        mint: {
+          400: '#EAE1DC',
+          500: '#DCCBBE',
+        },
+        sky: {
+          400: '#E8CDAB',
+          500: '#DFBA8D',
+        },
+        electric: {
+          500: '#D5AAB2',
+        },
+        lime: {
+          500: '#A5B9CB',
+        },
+        // Legacy customized objects
         pastel: {
-          primary: "#F8F8F8",
-          secondary: "#E0E0E0",
-          text: "#333333",
-          lavender: "#E6E6FA",
-          mint: "#98FF98",
-          blush: "#FFC0CB",
-          sky: "#87CEEB",
+          primary: "#FAF9F6",
+          secondary: "#F2EFE9",
+          text: "#2C2C2C",
+          lavender: "#EAE1DC",
+          mint: "#EFE3E5",
+          blush: "#DCCBBE",
+          sky: "#D6DFE6",
         },
-        // Your custom dark theme colors
         dark: {
-          primary: "#1A1A1A",
-          secondary: "#0D0D0D",
-          tertiary: "#2C2C2C",
-          text: "#FFFFFF",
-          electric: "#00D4FF",
-          purple: "#8B5CF6",
-          lime: "#84CC16",
+          primary: "#1C1A1A",
+          secondary: "#262322",
+          tertiary: "#302C2C",
+          text: "#EBE5E0",
+          electric: "#D5AAB2",
+          purple: "#B89080",
+          lime: "#A5B9CB",
         },
-        // Your custom girly theme colors
         girly: {
           primary: "#FFFFFF",
-          secondary: "#F8F9FA",
-          text: "#2C3E50",
-          blue: "#8AAAE5",
-          lightBlue: "#B0C4DE",
-          darkBlue: "#6A80B8",
-          pink: "#F8BBD9",
+          secondary: "#F8F6F4",
+          text: "#333130",
+          blue: "#CDB1A1",
+          lightBlue: "#E8CDAB",
+          darkBlue: "#DFBA8D",
+          pink: "#E3C9CE",
         },
       },
       // Shadcn UI border radius variables
