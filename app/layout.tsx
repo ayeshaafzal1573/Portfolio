@@ -56,8 +56,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    // PASTE YOUR GOOGLE SEARCH CONSOLE HTML TAG CONTENT HERE
-    google: "PASTE_YOUR_GOOGLE_VERIFICATION_CODE_HERE",
+    google: "SgBG-tA1lcg8f1-cJF3YenkDx2VBZv9evORLnIVyN2U",
   },
   icons: {
     icon: "/AyeshaAfzal.jpeg",
