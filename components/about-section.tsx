@@ -51,11 +51,11 @@ const skills = [
 
 export function AboutSection() {
   return (
-    <section id="about" className="py-20 px-6">
+    <section id="about" className="section-shell">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-sora font-bold mb-6">About Me</h2>
-          <p className="text-xl text-opacity-80 max-w-3xl mx-auto">
+          <h2 className="section-title">About Me</h2>
+          <p className="section-subtitle text-xl max-w-3xl mx-auto">
             Full-Stack Developer & UI/UX Designer with 2+ years of experience building modern web and mobile applications. Specialized in scalable eCommerce platforms, admin dashboards, and intuitive user interfaces using MERN, Next.js, React Native, and FastAPI.
           </p>
         </div>
@@ -68,25 +68,25 @@ export function AboutSection() {
                 <div key={item.year} className="relative">
                   <div className="flex items-start gap-6">
                     <div className="flex flex-col items-center">
-                      <div className="w-4 h-4 rounded-full bg-purple-500 dark:bg-blue-400" />
+                      <div className="w-4 h-4 rounded-full" style={{ background: "var(--accent-primary)" }} />
                       {index < timeline.length - 1 && (
-                        <div className="w-0.5 h-16 bg-purple-200 dark:bg-blue-800 mt-2" />
+                        <div className="w-0.5 h-16 mt-2" style={{ background: "color-mix(in srgb, var(--accent-primary) 40%, transparent)" }} />
                       )}
                     </div>
 
-                    <div className="glass-card rounded-xl p-6 flex-1 hover:scale-105 transition-transform duration-300">
+                    <div className="glass-card rounded-xl p-6 flex-1 hover:scale-[1.02] transition-transform duration-300">
                       <div className="flex items-center gap-3 mb-2">
-                        <span className="text-sm font-bold text-purple-600 dark:text-blue-400">
+                        <span className="text-sm font-bold" style={{ color: "var(--accent-primary)" }}>
                           {item.year}
                         </span>
                       </div>
                       <h4 className="text-lg font-sora font-bold mb-2">{item.title}</h4>
-                      <p className="text-opacity-80 mb-4">{item.description}</p>
+                      <p className="mb-4 text-[color:var(--text-secondary)]">{item.description}</p>
                       <div className="flex flex-wrap gap-2">
                         {item.skills.map((skill) => (
                           <span
                             key={skill}
-                            className="px-3 py-1 text-xs rounded-full bg-purple-100 text-purple-700 dark:bg-blue-900 dark:text-blue-300"
+                            className="chip px-3 py-1 text-xs rounded-full"
                           >
                             {skill}
                           </span>
@@ -105,19 +105,19 @@ export function AboutSection() {
               {skills.map((skill, index) => (
                 <div
                   key={skill.name}
-                  className="glass-card rounded-xl p-6 hover:scale-105 transition-transform duration-300"
+                  className="glass-card rounded-xl p-6 hover:scale-[1.02] transition-transform duration-300"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="p-3 rounded-lg bg-purple-100 dark:bg-blue-900">
-                      <skill.icon className="w-6 h-6 text-purple-600 dark:text-blue-400" />
+                    <div className="chip p-3 rounded-lg">
+                      <skill.icon className="w-6 h-6" style={{ color: "var(--accent-primary)" }} />
                     </div>
                     <div className="flex-1">
                       <h4 className="font-sora font-bold">{skill.name}</h4>
-                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
+                      <div className="w-full rounded-full h-2 mt-2 bg-slate-300/60 dark:bg-slate-700/70">
                         <div
-                          className="h-2 rounded-full bg-gradient-main transition-all duration-1000"
-                          style={{ width: `${skill.level}%` }}
+                          className="h-2 rounded-full transition-all duration-1000"
+                          style={{ width: `${skill.level}%`, background: "var(--gradient-main)" }}
                         />
                       </div>
                     </div>

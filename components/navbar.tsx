@@ -10,7 +10,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+      setIsScrolled(window.scrollY > 24)
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
@@ -30,55 +30,53 @@ export function Navbar() {
   const getThemeIcon = () => {
     switch (theme) {
       case "dark":
-        return <Moon className="w-5 h-5" />
+        return <Moon className="h-5 w-5" />
       case "girly-blue":
-        return <Palette className="w-5 h-5" />
+        return <Palette className="h-5 w-5" />
       default:
-        return <Sun className="w-5 h-5" />
+        return <Sun className="h-5 w-5" />
     }
   }
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "glass-card" : "bg-transparent"
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
+        isScrolled ? "py-3" : "py-5"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="text-2xl font-sora font-semibold tracking-tight">
-            <span className="pastel:text-purple-700 dark:text-blue-300 girly-blue:text-blue-600">Ayesha.</span>
-          </div>
+      <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full px-5 sm:px-6 md:px-8 backdrop-blur-xl transition-all duration-300 glass-card">
+        <button
+          onClick={() => scrollToSection("home")}
+          className="py-3 text-xl font-sora font-semibold tracking-tight"
+        >
+          Ayesha.
+        </button>
 
-          <div className="hidden md:flex items-center space-x-8">
-            <button onClick={() => scrollToSection("home")} className="hover:text-opacity-70 transition-colors">
-              Home
-            </button>
-            <button
-              onClick={() => scrollToSection("live-projects")}
-              className="hover:text-opacity-70 transition-colors"
-            >
-              Live Projects
-            </button>
-            <button onClick={() => scrollToSection("projects")} className="hover:text-opacity-70 transition-colors">
-              Projects
-            </button>
-            <button onClick={() => scrollToSection("about")} className="hover:text-opacity-70 transition-colors">
-              About
-            </button>
-            <button onClick={() => scrollToSection("contact")} className="hover:text-opacity-70 transition-colors">
-              Contact
-            </button>
-          </div>
-
-          <button
-            onClick={cycleTheme}
-            className="p-2 rounded-full glass-card hover:scale-110 transition-transform"
-            aria-label="Toggle theme"
-          >
-            {getThemeIcon()}
+        <div className="hidden items-center gap-6 md:flex">
+          <button onClick={() => scrollToSection("home")} className="nav-link py-3 text-sm font-medium">
+            Home
+          </button>
+          <button onClick={() => scrollToSection("live-projects")} className="nav-link py-3 text-sm font-medium">
+            Live Projects
+          </button>
+          <button onClick={() => scrollToSection("projects")} className="nav-link py-3 text-sm font-medium">
+            Projects
+          </button>
+          <button onClick={() => scrollToSection("about")} className="nav-link py-3 text-sm font-medium">
+            About
+          </button>
+          <button onClick={() => scrollToSection("contact")} className="nav-link py-3 text-sm font-medium">
+            Contact
           </button>
         </div>
+
+        <button
+          onClick={cycleTheme}
+          className="my-2 rounded-full p-2.5 btn-secondary transition-transform duration-200 hover:scale-105"
+          aria-label="Toggle theme"
+        >
+          {getThemeIcon()}
+        </button>
       </div>
     </nav>
   )

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { ExternalLink, Github, Code, Smartphone, Palette, Globe } from "lucide-react"
-import { supabase, type CategorizedProject, isSupabaseConfigured } from "@/lib/supabase"
+import { type CategorizedProject } from "@/lib/supabase"
 
 const categoryIcons = {
   "MERN Stack": Globe,
@@ -18,6 +18,7 @@ const categoryColors = {
   "Full-Stack": "bg-gradient-main text-slate-800 border-white/40",
   "Mobile Apps": "bg-gradient-main text-slate-800 border-white/40",
   "UI/UX Designs": "bg-gradient-main text-slate-800 border-white/40",
+  "Web Development": "bg-gradient-main text-slate-800 border-white/40",
 }
 
 export function FeaturedProjectsCards() {
@@ -313,13 +314,10 @@ export function FeaturedProjectsCards() {
 
   if (loading) {
     return (
-      <section
-        id="projects"
-        className="py-20 px-6"
-      >
+      <section id="projects" className="section-shell">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-sora font-bold mb-6">Featured Projects</h2>
+            <h2 className="section-title">Featured Projects</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -339,14 +337,11 @@ export function FeaturedProjectsCards() {
   }
 
   return (
-    <section
-      id="projects"
-      className="py-20 px-6"
-    >
+    <section id="projects" className="section-shell">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-sora font-bold mb-6">Featured Projects</h2>
-          <p className="text-xl text-opacity-80 max-w-3xl mx-auto mb-8">
+          <h2 className="section-title">Featured Projects</h2>
+          <p className="section-subtitle text-xl max-w-3xl mx-auto mb-8">
             Explore my work across different categories, from full-stack applications to UI/UX design projects.
           </p>
 
@@ -358,8 +353,8 @@ export function FeaturedProjectsCards() {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                   selectedCategory === category
-                    ? "bg-gradient-main text-slate-800 shadow-md border border-white/40"
-                    : "glass-card hover:scale-105"
+                    ? "btn-primary shadow-md"
+                    : "btn-secondary hover:scale-105"
                 }`}
               >
                 {category}
@@ -374,7 +369,7 @@ export function FeaturedProjectsCards() {
             return (
               <div
                 key={project.id}
-                className="group glass-card rounded-2xl overflow-hidden hover:scale-105 hover:rotate-1 transition-all duration-500"
+                className="group glass-card rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:scale-[1.01]"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="relative overflow-hidden">
@@ -391,7 +386,7 @@ export function FeaturedProjectsCards() {
                   {/* Category Badge */}
                   <div className="absolute top-4 left-4">
                     <div
-                      className={`flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r ${categoryColors[project.category]} text-white text-sm font-semibold`}
+                      className={`flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r ${categoryColors[project.category] || "bg-gradient-main text-slate-800 border-white/40"} text-sm font-semibold`}
                     >
                       <IconComponent className="w-4 h-4" />
                       {project.category}
@@ -401,13 +396,13 @@ export function FeaturedProjectsCards() {
 
                 <div className="p-6">
                   <h3 className="text-xl font-sora font-bold mb-3">{project.title}</h3>
-                  <p className="text-opacity-80 mb-4 line-clamp-3">{project.description}</p>
+                  <p className="mb-4 line-clamp-3 text-[color:var(--text-secondary)]">{project.description}</p>
 
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.tech_stack.map((tech) => (
                       <span
                         key={tech}
-                        className="px-3 py-1 text-sm rounded-full pastel:bg-purple-100 pastel:text-purple-700 dark:bg-blue-900 dark:text-blue-300 girly-blue:bg-blue-100 girly-blue:text-blue-700"
+                        className="chip px-3 py-1 text-sm rounded-full"
                       >
                         {tech}
                       </span>
@@ -418,7 +413,9 @@ export function FeaturedProjectsCards() {
                     {project.demo_url && (
                       <a
                         href={project.demo_url}
-                        className="flex items-center gap-2 px-4 py-2 glass-card rounded-lg hover:scale-105 transition-transform"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg btn-secondary hover:scale-105 transition-transform"
                       >
                         <ExternalLink className="w-4 h-4" />
                         Demo
@@ -427,7 +424,9 @@ export function FeaturedProjectsCards() {
                     {project.github_url && (
                       <a
                         href={project.github_url}
-                        className="flex items-center gap-2 px-4 py-2 glass-card rounded-lg hover:scale-105 transition-transform"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg btn-secondary hover:scale-105 transition-transform"
                       >
                         <Github className="w-4 h-4" />
                         Code

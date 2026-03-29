@@ -65,20 +65,20 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-20 px-6">
+    <section id="contact" className="section-shell">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-sora font-bold mb-6">Let's Work Together</h2>
-          <p className="text-xl text-opacity-80 max-w-2xl mx-auto">
+          <h2 className="section-title">Let&apos;s Work Together</h2>
+          <p className="section-subtitle text-xl max-w-2xl mx-auto">
             Ready to bring your ideas to life? Let's discuss your project and create something amazing together.
           </p>
         </div>
 
         <div className="glass-card rounded-2xl p-8 md:p-12">
           {isSubmitted && (
-            <div className="mb-8 p-4 rounded-lg pastel:bg-green-100 dark:bg-green-900 girly-blue:bg-green-100 flex items-center gap-3">
+            <div className="mb-8 flex items-center gap-3 rounded-lg bg-emerald-100/80 p-4 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-200">
               <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-green-700 dark:text-green-300">
+              <span>
                 Thank you! Your message has been sent successfully. I'll get back to you soon!
               </span>
             </div>
@@ -100,10 +100,10 @@ export function ContactSection() {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-6 py-4 glass-card rounded-full border-2 border-transparent focus:border-purple-400 dark:focus:border-blue-400 girly-blue:focus:border-blue-400 outline-none transition-all duration-300 peer bg-transparent"
+                  className="peer w-full rounded-full px-6 py-4 outline-none transition-all duration-300 input-shell"
                   placeholder=" "
                 />
-                <label className="absolute left-6 top-4 text-opacity-60 transition-all duration-300 peer-focus:-translate-y-8 peer-focus:scale-75 peer-[:not(:placeholder-shown)]:-translate-y-8 peer-[:not(:placeholder-shown)]:scale-75 pointer-events-none">
+                <label className="pointer-events-none absolute left-6 top-4 text-sm text-[color:var(--text-secondary)] transition-all duration-300 peer-focus:-translate-y-7 peer-focus:scale-90 peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:scale-90">
                   Your Name
                 </label>
               </div>
@@ -115,10 +115,10 @@ export function ContactSection() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-6 py-4 glass-card rounded-full border-2 border-transparent focus:border-purple-400 dark:focus:border-blue-400 girly-blue:focus:border-blue-400 outline-none transition-all duration-300 peer bg-transparent"
+                  className="peer w-full rounded-full px-6 py-4 outline-none transition-all duration-300 input-shell"
                   placeholder=" "
                 />
-                <label className="absolute left-6 top-4 text-opacity-60 transition-all duration-300 peer-focus:-translate-y-8 peer-focus:scale-75 peer-[:not(:placeholder-shown)]:-translate-y-8 peer-[:not(:placeholder-shown)]:scale-75 pointer-events-none">
+                <label className="pointer-events-none absolute left-6 top-4 text-sm text-[color:var(--text-secondary)] transition-all duration-300 peer-focus:-translate-y-7 peer-focus:scale-90 peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:scale-90">
                   Email Address
                 </label>
               </div>
@@ -131,10 +131,10 @@ export function ContactSection() {
                 value={formData.subject}
                 onChange={handleChange}
                 required
-                className="w-full px-6 py-4 glass-card rounded-full border-2 border-transparent focus:border-purple-400 dark:focus:border-blue-400 girly-blue:focus:border-blue-400 outline-none transition-all duration-300 peer bg-transparent"
+                className="peer w-full rounded-full px-6 py-4 outline-none transition-all duration-300 input-shell"
                 placeholder=" "
               />
-              <label className="absolute left-6 top-4 text-opacity-60 transition-all duration-300 peer-focus:-translate-y-8 peer-focus:scale-75 peer-[:not(:placeholder-shown)]:-translate-y-8 peer-[:not(:placeholder-shown)]:scale-75 pointer-events-none">
+              <label className="pointer-events-none absolute left-6 top-4 text-sm text-[color:var(--text-secondary)] transition-all duration-300 peer-focus:-translate-y-7 peer-focus:scale-90 peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:scale-90">
                 Subject
               </label>
             </div>
@@ -146,10 +146,10 @@ export function ContactSection() {
                 onChange={handleChange}
                 required
                 rows={6}
-                className="w-full px-6 py-4 glass-card rounded-2xl border-2 border-transparent focus:border-purple-400 dark:focus:border-blue-400 girly-blue:focus:border-blue-400 outline-none transition-all duration-300 peer resize-none bg-transparent"
+                className="peer w-full resize-none rounded-2xl px-6 py-4 outline-none transition-all duration-300 input-shell"
                 placeholder=" "
               />
-              <label className="absolute left-6 top-4 text-opacity-60 transition-all duration-300 peer-focus:-translate-y-8 peer-focus:scale-75 peer-[:not(:placeholder-shown)]:-translate-y-8 peer-[:not(:placeholder-shown)]:scale-75 pointer-events-none">
+              <label className="pointer-events-none absolute left-6 top-4 text-sm text-[color:var(--text-secondary)] transition-all duration-300 peer-focus:-translate-y-7 peer-focus:scale-90 peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:scale-90">
                 Your Message
               </label>
             </div>
@@ -157,7 +157,7 @@ export function ContactSection() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-4 px-8 pastel:bg-gradient-to-r pastel:from-purple-500 pastel:to-pink-500 dark:bg-gradient-to-r dark:from-blue-500 dark:to-purple-500 girly-blue:bg-gradient-to-r girly-blue:from-blue-500 girly-blue:to-indigo-500 text-white rounded-full font-sora font-bold hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary flex w-full items-center justify-center gap-3 rounded-full px-8 py-4 font-sora font-bold transition-all duration-300 hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? (
                 <>
@@ -173,28 +173,28 @@ export function ContactSection() {
             </button>
           </form>
 
-          <div className="mt-12 pt-8 border-t border-opacity-20">
+          <div className="mt-12 border-t border-[color:var(--card-border)] pt-8">
             <div className="flex justify-center gap-6">
               <a
                 href="https://github.com/ayeshaafzal1573/"
-                className="p-4 glass-card rounded-full hover:scale-110 transition-all duration-300 group"
+                className="group rounded-full p-4 btn-secondary transition-all duration-300 hover:scale-110"
                 aria-label="GitHub"
               >
-                <Github className="w-6 h-6 group-hover:text-purple-500 dark:group-hover:text-blue-400 girly-blue:group-hover:text-blue-500 transition-colors" />
+                <Github className="h-6 w-6 transition-colors group-hover:text-[color:var(--accent-primary)]" />
               </a>
               <a
                 href="https://www.linkedin.com/in/ayeshaafzalqadir/"
-                className="p-4 glass-card rounded-full hover:scale-110 transition-all duration-300 group"
+                className="group rounded-full p-4 btn-secondary transition-all duration-300 hover:scale-110"
                 aria-label="LinkedIn"
               >
-                <Linkedin className="w-6 h-6 group-hover:text-purple-500 dark:group-hover:text-blue-400 girly-blue:group-hover:text-blue-500 transition-colors" />
+                <Linkedin className="h-6 w-6 transition-colors group-hover:text-[color:var(--accent-primary)]" />
               </a>
               <a
                 href="https://www.behance.net/ayeshaafzal14"
-                className="p-4 glass-card rounded-full hover:scale-110 transition-all duration-300 group"
+                className="group rounded-full p-4 btn-secondary transition-all duration-300 hover:scale-110"
                 aria-label="Dribbble"
               >
-                <Dribbble className="w-6 h-6 group-hover:text-purple-500 dark:group-hover:text-blue-400 girly-blue:group-hover:text-blue-500 transition-colors" />
+                <Dribbble className="h-6 w-6 transition-colors group-hover:text-[color:var(--accent-primary)]" />
               </a>
             </div>
           </div>

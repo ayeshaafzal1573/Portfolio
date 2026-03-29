@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
-import { supabase, type LiveProject, isSupabaseConfigured } from "@/lib/supabase"
+import { type LiveProject } from "@/lib/supabase"
 
 export function LiveProjectsSlider() {
   const [projects, setProjects] = useState<LiveProject[]>([])
@@ -15,11 +15,9 @@ export function LiveProjectsSlider() {
 
   const fetchLiveProjects = async () => {
     try {
-
       setProjects(getMockLiveProjects())
     } catch (error) {
       console.error("Error fetching live projects:", error)
-
     } finally {
       setLoading(false)
     }
@@ -65,9 +63,8 @@ export function LiveProjectsSlider() {
 
   const scroll = (direction: "left" | "right") => {
     if (sliderRef.current) {
-      const scrollAmount = 320
       sliderRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
+        left: direction === "left" ? -320 : 320,
         behavior: "smooth",
       })
     }
@@ -75,18 +72,18 @@ export function LiveProjectsSlider() {
 
   if (loading) {
     return (
-      <section id="live-projects" className="py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-sora font-bold mb-6">Live Projects</h2>
+      <section id="live-projects" className="section-shell">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-10 text-center">
+            <h2 className="section-title">Live Projects</h2>
           </div>
           <div className="flex gap-6 overflow-hidden">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex-shrink-0 w-80 glass-card rounded-2xl overflow-hidden animate-pulse">
-                <div className="h-48 bg-gray-300 dark:bg-gray-700"></div>
-                <div className="p-6">
-                  <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>
-                  <div className="h-10 bg-gray-300 dark:bg-gray-700 rounded"></div>
+              <div key={i} className="w-80 flex-shrink-0 overflow-hidden rounded-2xl glass-card animate-pulse">
+                <div className="h-48 bg-slate-300/60 dark:bg-slate-700/70" />
+                <div className="space-y-4 p-6">
+                  <div className="h-5 rounded bg-slate-300/60 dark:bg-slate-700/70" />
+                  <div className="h-10 rounded-xl bg-slate-300/60 dark:bg-slate-700/70" />
                 </div>
               </div>
             ))}
@@ -97,67 +94,61 @@ export function LiveProjectsSlider() {
   }
 
   return (
-    <section id="live-projects" className="py-20 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-sora font-bold mb-6">Live Projects</h2>
-          <p className="text-xl text-opacity-80 max-w-2xl mx-auto">
-            Explore my latest live applications and websites currently running in production.
+    <section id="live-projects" className="section-shell">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12 text-center">
+          <h2 className="section-title">Live Projects</h2>
+          <p className="section-subtitle mx-auto max-w-2xl text-lg">
+            A few products currently running in production and serving real users.
           </p>
         </div>
 
         <div className="relative">
-          {/* Navigation Buttons */}
           <button
             onClick={() => scroll("left")}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-3 glass-card rounded-full hover:scale-110 transition-all duration-300"
+            className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full p-3 btn-secondary"
             aria-label="Scroll left"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="h-5 w-5" />
           </button>
 
           <button
             onClick={() => scroll("right")}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-3 glass-card rounded-full hover:scale-110 transition-all duration-300"
+            className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full p-3 btn-secondary"
             aria-label="Scroll right"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="h-5 w-5" />
           </button>
 
-          {/* Slider */}
-          <div
-            ref={sliderRef}
-            className="flex gap-6 overflow-x-auto hide-scrollbar px-12 py-4"
-            style={{ scrollSnapType: "x mandatory" }}
-          >
-            {projects.map((project, index) => (
-              <div
+          <div ref={sliderRef} className="hide-scrollbar flex gap-6 overflow-x-auto px-12 py-4" style={{ scrollSnapType: "x mandatory" }}>
+            {projects.map((project) => (
+              <article
                 key={project.id}
-                className="flex-shrink-0 w-80 glass-card rounded-2xl overflow-hidden hover:scale-105 transition-all duration-500 group"
-                style={{ scrollSnapAlign: "start", animationDelay: `${index * 0.1}s` }}
+                className="group w-80 flex-shrink-0 overflow-hidden rounded-2xl glass-card transition-transform duration-300 hover:-translate-y-1"
+                style={{ scrollSnapAlign: "start" }}
               >
                 <div className="relative overflow-hidden">
                   <img
                     src={project.thumbnail_url || "/placeholder.svg"}
                     alt={project.name}
-                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/45 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </div>
 
-                <div className="p-6">
-                  <h3 className="text-xl font-sora font-bold mb-4">{project.name}</h3>
+                <div className="space-y-4 p-6">
+                  <h3 className="font-sora text-xl font-bold">{project.name}</h3>
                   <a
                     href={project.live_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-main text-slate-800 shadow-md border border-white/40 rounded-full font-semibold hover:scale-105 transition-all duration-300"
+                    className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold btn-primary"
                   >
                     View Live
-                    <ExternalLink className="w-4 h-4" />
+                    <ExternalLink className="h-4 w-4" />
                   </a>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </div>
