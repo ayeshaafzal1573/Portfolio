@@ -1,3 +1,4 @@
+import Script from "next/script"
 import { Navbar } from "@/components/navbar"
 import { HeroSection } from "@/components/hero-section"
 import { LiveProjectsSlider } from "@/components/live-projects-slider"
@@ -12,6 +13,28 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 export default function Home() {
   return (
     <main className="min-h-screen">
+      <Script
+        id="person-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: "Ayesha Afzal",
+            url: "https://ayeshaafzalqadir.vercel.app",
+            jobTitle: "Full Stack Developer",
+            sameAs: [
+              "https://www.linkedin.com/in/ayeshaafzalqadir/",
+              "https://github.com/ayeshaafzal1573/",
+              "https://www.behance.net/ayeshaafzal14",
+            ],
+            worksFor: {
+              "@type": "Organization",
+              name: "asani.io",
+            },
+          }),
+        }}
+      />
       <Analytics />
       <SpeedInsights />
       <Navbar />

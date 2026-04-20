@@ -37,7 +37,7 @@ export function HeroSection() {
           <div className="space-y-4">
             <p className="text-sm uppercase tracking-[0.28em] text-[color:var(--text-secondary)]">Hi, I&apos;m</p>
             <h1 className="font-sora text-5xl font-semibold leading-tight md:text-6xl lg:text-7xl">
-              Ayesha Afzal
+              Ayesha Afzal - Full Stack Developer Karachi
             </h1>
             <p className="text-xl font-medium md:text-2xl" style={{ color: "var(--accent-primary)" }}>
               Building scalable products with clean design and smart engineering
