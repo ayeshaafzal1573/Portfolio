@@ -79,7 +79,7 @@ export function FeaturedProjectsCards() {
       "A platform that solves all tour related problems being faced by users, tour agencies or individual tour guides comparably!",
     category: "Full-Stack",
     tech_stack: ["Vue JS", "Firebase", "Express", "Node.js"],
-    demo_url: "https://trippy.pk/",
+    demo_url: "https://trippy-website-two.vercel.app/",
     github_url: "#",
     video_url: "/trippy.mp4",
     is_featured: true,

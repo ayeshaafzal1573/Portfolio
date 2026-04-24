@@ -42,7 +42,7 @@ export function LiveProjectsSlider() {
       id: "3",
       name: "Trippy",
       thumbnail_url: "/3.png?height=200&width=300",
-      live_url: "https://trippy.pk/",
+      live_url: "https://trippy-website-two.vercel.app/",
       created_at: new Date().toISOString(),
     },
     {
