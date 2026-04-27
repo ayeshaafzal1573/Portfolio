@@ -28,11 +28,12 @@ export type CategorizedProject = {
   id: string
   title: string
   description: string
-  category: "MERN Stack" | "Full-Stack" | "Mobile Apps" | "UI/UX Designs"
+  category: "MERN Stack" | "Full-Stack" | "Mobile Apps" | "UI/UX Designs" | "Web Development"
   tech_stack: string[]
   demo_url?: string
   github_url?: string
   image_url?: string
+  video_url?: string
   is_featured: boolean
   created_at: string
 }

@@ -55,7 +55,7 @@ export function LiveProjectsSlider() {
     {
       id: "5",
       name: "Hotel Management System",
-      thumbnail_url: "/5.png?height=200&width=300",
+      thumbnail_url: "/hms.png?height=200&width=300",
       live_url: "https://luxurystay-hms.vercel.app/",
       created_at: new Date().toISOString(),
     },

@@ -1,19 +1,8 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter, Sora } from "next/font/google"
 import Script from "next/script"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-})
-
-const sora = Sora({
-  subsets: ["latin"],
-  variable: "--font-sora",
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ayeshaafzalqadir.vercel.app"),
@@ -103,7 +92,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} ${sora.variable} font-inter antialiased`}>
+      <body className="font-inter antialiased">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

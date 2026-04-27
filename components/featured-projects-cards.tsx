@@ -21,12 +21,19 @@ const categoryColors = {
   "Web Development": "bg-gradient-main text-slate-800 border-white/40",
 }
 
+const videoExtensions = [".mp4", ".webm", ".ogg"]
+
+const getMediaSource = (project: CategorizedProject) => project.video_url || project.image_url || ""
+
+const isVideoSource = (source: string) =>
+  videoExtensions.some((extension) => source.toLowerCase().includes(extension))
+
 export function FeaturedProjectsCards() {
   const [projects, setProjects] = useState<CategorizedProject[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState<string>("All")
 
-  const categories = ["All", "MERN Stack", "Full-Stack", "Mobile Apps", "UI/UX Designs"]
+  const categories = ["All", "MERN Stack", "Full-Stack", "Mobile Apps", "UI/UX Designs", "Web Development"]
 
   useEffect(() => {
     fetchCategorizedProjects()
@@ -267,18 +274,18 @@ export function FeaturedProjectsCards() {
     is_featured: true,
     created_at: new Date().toISOString(),
    },
-   {
-     id: "18",
-     title: "KWSC Unified App",
+  {
+    id: "18",
+    title: "KWSC Unified App",
      description:
        "KWSC Unified App lets you access all water-related services in one place.",
-     category: "Full-Stack",
-     tech_stack: ["Fastify", "PostgreSQL", "Node JS"],
-     demo_url: "https://play.google.com/store/apps/details?id=pk.gov.kwsc.kwsc_digital&hl=en",
-     github_url: "#",
-     video_url: "/kwsc.png",
-     is_featured: true,
-     created_at: new Date().toISOString(),
+    category: "Full-Stack",
+    tech_stack: ["Fastify", "PostgreSQL", "Node JS"],
+    demo_url: "https://play.google.com/store/apps/details?id=pk.gov.kwsc.kwsc_digital&hl=en",
+    github_url: "#",
+    image_url: "/kwsc.png",
+    is_featured: true,
+    created_at: new Date().toISOString(),
    },
    {
      id: "19",
@@ -289,7 +296,7 @@ export function FeaturedProjectsCards() {
      tech_stack: ["Redis", "PostgreSQL", "Node JS"],
      demo_url: "asani.io",
      github_url: "#",
-     video_url: "/asani-dashboard.png",
+     image_url: "/asani-dashboard.png",
      is_featured: true,
      created_at: new Date().toISOString(),
    },
@@ -302,7 +309,7 @@ export function FeaturedProjectsCards() {
      tech_stack: ["Next.js", "Node JS"],
      demo_url: "https://asani-website.vercel.app/",
      github_url: "#",
-     video_url: "/web.png",
+     image_url: "/web.png",
      is_featured: true,
      created_at: new Date().toISOString(),
    }
@@ -366,6 +373,8 @@ export function FeaturedProjectsCards() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProjects.map((project, index) => {
             const IconComponent = categoryIcons[project.category]
+            const mediaSource = getMediaSource(project)
+            const shouldRenderVideo = isVideoSource(mediaSource)
             return (
               <div
                 key={project.id}
@@ -373,14 +382,26 @@ export function FeaturedProjectsCards() {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="relative overflow-hidden">
-                <video
-    src={project.video_url}
-    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-    autoPlay
-    muted
-    loop
-    playsInline
-  />
+                  {mediaSource ? (
+                    shouldRenderVideo ? (
+                      <video
+                        src={mediaSource}
+                        className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                      />
+                    ) : (
+                      <img
+                        src={mediaSource}
+                        alt={project.title}
+                        className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    )
+                  ) : (
+                    <div className="h-48 bg-slate-200 dark:bg-slate-800" />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                   {/* Category Badge */}
