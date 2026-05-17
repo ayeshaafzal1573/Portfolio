@@ -56,14 +56,17 @@ export function Navbar() {
           <button onClick={() => scrollToSection("home")} className="nav-link py-3 text-sm font-medium">
             Home
           </button>
+          <button onClick={() => scrollToSection("about")} className="nav-link py-3 text-sm font-medium">
+            About
+          </button>
+          <button onClick={() => scrollToSection("education")} className="nav-link py-3 text-sm font-medium">
+            Education
+          </button>
           <button onClick={() => scrollToSection("live-projects")} className="nav-link py-3 text-sm font-medium">
             Live Projects
           </button>
           <button onClick={() => scrollToSection("projects")} className="nav-link py-3 text-sm font-medium">
             Projects
-          </button>
-          <button onClick={() => scrollToSection("about")} className="nav-link py-3 text-sm font-medium">
-            About
           </button>
           <button onClick={() => scrollToSection("contact")} className="nav-link py-3 text-sm font-medium">
             Contact

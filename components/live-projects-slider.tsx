@@ -1,13 +1,16 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
+import { ExternalLink, ChevronLeft, ChevronRight, Play } from "lucide-react"
 import { type LiveProject } from "@/lib/supabase"
+import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 
 export function LiveProjectsSlider() {
   const [projects, setProjects] = useState<LiveProject[]>([])
   const [loading, setLoading] = useState(true)
   const sliderRef = useRef<HTMLDivElement>(null)
+
+  useScrollReveal()
 
   useEffect(() => {
     fetchLiveProjects()
@@ -94,19 +97,23 @@ export function LiveProjectsSlider() {
   }
 
   return (
-    <section id="live-projects" className="section-shell">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center">
-          <h2 className="section-title">Live Projects</h2>
+    <section id="live-projects" className="section-shell relative overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-12 text-center reveal">
+          <div className="inline-flex items-center gap-2 rounded-full chip px-4 py-1.5 text-xs font-bold uppercase tracking-wider mb-4">
+            <Play className="w-4 h-4 text-[color:var(--accent-primary)] animate-pulse" />
+            Live Deployment
+          </div>
+          <h2 className="section-title">Live Production Apps</h2>
           <p className="section-subtitle mx-auto max-w-2xl text-lg">
-            A few products currently running in production and serving real users.
+            A curated list of functional products currently running in production environments.
           </p>
         </div>
 
-        <div className="relative">
+        <div className="relative reveal-scale">
           <button
             onClick={() => scroll("left")}
-            className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full p-3 btn-secondary"
+            className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full p-3 btn-secondary hover:scale-110 transition-transform duration-200"
             aria-label="Scroll left"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -114,17 +121,21 @@ export function LiveProjectsSlider() {
 
           <button
             onClick={() => scroll("right")}
-            className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full p-3 btn-secondary"
+            className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full p-3 btn-secondary hover:scale-110 transition-transform duration-200"
             aria-label="Scroll right"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
 
-          <div ref={sliderRef} className="hide-scrollbar flex gap-6 overflow-x-auto px-12 py-4" style={{ scrollSnapType: "x mandatory" }}>
+          <div 
+            ref={sliderRef} 
+            className="hide-scrollbar flex gap-6 overflow-x-auto px-12 py-4" 
+            style={{ scrollSnapType: "x mandatory" }}
+          >
             {projects.map((project) => (
               <article
                 key={project.id}
-                className="group w-80 flex-shrink-0 overflow-hidden rounded-2xl glass-card transition-transform duration-300 hover:-translate-y-1"
+                className="group w-80 flex-shrink-0 overflow-hidden rounded-2xl glass-card transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
                 style={{ scrollSnapAlign: "start" }}
               >
                 <div className="relative overflow-hidden">
@@ -137,14 +148,14 @@ export function LiveProjectsSlider() {
                 </div>
 
                 <div className="space-y-4 p-6">
-                  <h3 className="font-sora text-xl font-bold">{project.name}</h3>
+                  <h3 className="font-sora text-xl font-extrabold">{project.name}</h3>
                   <a
                     href={project.live_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold btn-primary"
+                    className="inline-flex items-center justify-center w-full gap-2 rounded-full px-5 py-3 text-sm font-bold btn-primary hover:shadow-lg transition-all duration-300"
                   >
-                    View Live
+                    Launch App
                     <ExternalLink className="h-4 w-4" />
                   </a>
                 </div>
