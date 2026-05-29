@@ -1,6 +1,6 @@
 "use client"
 
-import { Code, Palette, Database, Smartphone, Globe, Zap, User } from "lucide-react"
+import { Code, Palette, Database, Smartphone, Globe, Zap, User, Radio, BarChart2, ShieldCheck, Users } from "lucide-react"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 
 const timeline = [
@@ -42,12 +42,16 @@ const timeline = [
 ]
 
 const skills = [
-  { icon: Code, name: "Frontend Development", level: 95 },
+  { icon: Code, name: "Frontend Development", level: 100 },
   { icon: Database, name: "Backend Development", level: 88 },
-  { icon: Palette, name: "UI/UX Design", level: 90 },
+  { icon: Palette, name: "UI/UX Design", level: 100 },
   { icon: Smartphone, name: "Mobile Development", level: 92 },
   { icon: Globe, name: "eCommerce Systems", level: 90 },
   { icon: Zap, name: "Modern Frameworks", level: 94 },
+  { icon: Radio, name: "IoT & Real-Time Systems", level: 85 },
+  { icon: BarChart2, name: "DevOps & Monitoring", level: 82 },
+  { icon: ShieldCheck, name: "Auth & API Security", level: 87 },
+  { icon: Users, name: "Teaching & Mentoring", level: 88 },
 ]
 
 export function AboutSection() {
