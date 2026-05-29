@@ -72,7 +72,7 @@ export function FeaturedProjectsCards() {
         "Indulge in comfort, elegance, and world-class service. Your perfect stay begins here!",
       category: "MERN Stack",
       tech_stack: ["MongoDB", "Express.js", "React", "Node.js"],
-      demo_url: "https://luxurystay-hms.vercel.app/home",
+      demo_url: "https://luxurystay-hms.vercel.app",
       github_url: "#",
       video_url: "/LuxuryStay.mp4",
       is_featured: true,

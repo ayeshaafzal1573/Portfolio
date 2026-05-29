@@ -93,16 +93,24 @@ export function HeroSection() {
               Ayesha Afzal
             </h1>
 
+            <h2 className="text-2xl md:text-3xl font-bold text-[color:var(--accent-primary)] mb-4">
+              Full‑Stack Developer (React / Next.js / FastAPI)
+            </h2>
+
+            <p className="max-w-2xl text-base text-[color:var(--text-secondary)] md:text-lg">
+              Building scalable IoT &amp; AI‑powered systems that turn messy data into clean decisions.
+            </p>
+
             {/* Dynamic Typing Title */}
-            <div className="h-10 sm:h-12 flex items-center">
+            <div className="h-10 sm:h-12 flex items-center mt-4">
               <span className="text-xl font-bold md:text-3xl font-sora" style={{ color: "var(--accent-secondary)" }}>
                 {typedText}
               </span>
               <span className="ml-1 w-[3px] h-7 bg-[color:var(--accent-secondary)] animate-pulse" />
             </div>
 
-            <p className="max-w-2xl text-base leading-relaxed text-[color:var(--text-secondary)] md:text-lg">
-              Specialized in engineering robust architectures using the <strong className="text-[color:var(--text-primary)]">MERN Stack, Next.js, FastAPI</strong>, and cross-platform mobile apps with <strong className="text-[color:var(--text-primary)]">React Native</strong>. Seamlessly merging clean aesthetics with modern performance practices.
+            <p className="max-w-2xl text-base leading-relaxed text-[color:var(--text-secondary)] md:text-lg mt-2">
+              Specialized in engineering robust architectures using the <strong className="text-[color:var(--text-primary)]">MERN Stack, Next.js, FastAPI</strong>, and cross‑platform mobile apps with <strong className="text-[color:var(--text-primary)]">React Native</strong>. Seamlessly merging clean aesthetics with modern performance practices.
             </p>
           </div>
 
