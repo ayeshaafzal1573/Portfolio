@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { ArrowDown, Sparkles, Terminal, Code, Cpu } from "lucide-react"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
+import Image from "next/image"
 
 export function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -46,23 +47,57 @@ export function HeroSection() {
     return () => clearTimeout(timer)
   }, [typedText, isDeleting, roleIndex])
 
-  // Mouse parallax movement
+  // Mouse parallax movement using requestAnimationFrame & Lerp for buttery smoothness
   useEffect(() => {
+    let animationFrameId: number
+    const targetCoords = { x: 0, y: 0 }
+    const currentCoords = { x: 0, y: 0 }
+
     const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current || window.innerWidth < 1024) return
+      if (window.innerWidth < 1024) return
 
-      const xPos = (e.clientX / window.innerWidth - 0.5) * 20
-      const yPos = (e.clientY / window.innerHeight - 0.5) * 20
+      // Max offset range in pixels (-15px to 15px)
+      const x = (e.clientX / window.innerWidth - 0.5) * 30
+      const y = (e.clientY / window.innerHeight - 0.5) * 30
+      targetCoords.x = x
+      targetCoords.y = y
+    }
 
-      containerRef.current.style.transform = `translate(${xPos}px, ${yPos}px)`
+    const updatePosition = () => {
+      // Linear interpolation to smooth out the movement
+      currentCoords.x += (targetCoords.x - currentCoords.x) * 0.08
+      currentCoords.y += (targetCoords.y - currentCoords.y) * 0.08
+
+      if (containerRef.current) {
+        containerRef.current.style.transform = `translate3d(${currentCoords.x}px, ${currentCoords.y}px, 0)`
+      }
+
+      animationFrameId = requestAnimationFrame(updatePosition)
     }
 
     window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
+    updatePosition()
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove)
+      cancelAnimationFrame(animationFrameId)
+    }
   }, [])
 
   return (
     <section id="home" className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-6 pt-24 pb-4">
+      {/* Styles injection for smooth floating code drifting */}
+      <style>{`
+        @keyframes float-drift {
+          0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+          50% { transform: translateY(-24px) translateX(12px) rotate(4deg); }
+          100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+        }
+        .animate-float-drift {
+          animation: float-drift infinite ease-in-out;
+        }
+      `}</style>
+
       {/* Dynamic background blurs */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-[20%] left-[10%] h-[350px] w-[350px] rounded-full bg-gradient-to-tr from-[var(--accent-primary)] to-[var(--accent-secondary)] opacity-20 blur-[80px] pulse-glow-bg" />
@@ -71,12 +106,24 @@ export function HeroSection() {
         <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]" />
       </div>
 
+      {/* Floating Coding Elements in the Background */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none font-mono text-[9px] sm:text-xs text-[color:var(--text-secondary)] opacity-[0.15]">
+        <div className="absolute top-[12%] left-[8%] animate-float-drift select-none" style={{ animationDuration: '24s' }}>const [data, setData] = useState(null)</div>
+        <div className="absolute top-[18%] right-[12%] animate-float-drift select-none" style={{ animationDuration: '28s', animationDelay: '2s' }}>async function getPayload()</div>
+        <div className="absolute top-[55%] left-[4%] animate-float-drift select-none" style={{ animationDuration: '22s', animationDelay: '4s' }}>import &#123; NextRequest &#125; from &quot;next/server&quot;</div>
+        <div className="absolute top-[72%] right-[15%] animate-float-drift select-none" style={{ animationDuration: '26s', animationDelay: '6s' }}>db.insert(users).values(&#123; name &#125;)</div>
+        <div className="absolute top-[82%] left-[30%] animate-float-drift select-none" style={{ animationDuration: '30s', animationDelay: '8s' }}>return &lt;div className=&quot;flex&quot;&gt;</div>
+        <div className="absolute top-[38%] left-[22%] animate-float-drift select-none" style={{ animationDuration: '25s', animationDelay: '1s' }}>await model.generate(prompt)</div>
+        <div className="absolute top-[48%] right-[8%] animate-float-drift select-none" style={{ animationDuration: '27s', animationDelay: '3s' }}>npm install @supabase/supabase-js</div>
+        <div className="absolute top-[10%] left-[45%] animate-float-drift select-none" style={{ animationDuration: '29s', animationDelay: '5s' }}>git commit -m &quot;feat: ai-copilot&quot;</div>
+      </div>
+
       <div className="floating-dot right-16 top-36 h-24 w-24 opacity-40" style={{ background: "var(--accent-primary)" }} />
       <div className="floating-dot bottom-32 left-10 h-20 w-20 opacity-30" style={{ background: "var(--accent-secondary)", animationDelay: "1.5s" }} />
 
       <div
         ref={containerRef}
-        className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 py-2 transition-transform duration-500 ease-out lg:grid-cols-2"
+        className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 py-2 lg:grid-cols-2"
       >
         {/* Text Area */}
         <div className="space-y-8 text-left reveal-left active">
@@ -92,14 +139,6 @@ export function HeroSection() {
             <h1 className="font-sora text-5xl font-extrabold leading-[1.1] md:text-6xl lg:text-7xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[color:var(--text-primary)] via-[color:var(--text-primary)] to-[color:var(--accent-primary)]">
               Ayesha Afzal
             </h1>
-
-            <h2 className="text-2xl md:text-3xl font-bold text-[color:var(--accent-primary)] mb-4">
-              Full‑Stack Developer (React / Next.js / FastAPI)
-            </h2>
-
-            <p className="max-w-2xl text-base text-[color:var(--text-secondary)] md:text-lg">
-              Building scalable IoT &amp; AI‑powered systems that turn messy data into clean decisions.
-            </p>
 
             {/* Dynamic Typing Title */}
             <div className="h-10 sm:h-12 flex items-center mt-4">
@@ -154,14 +193,14 @@ export function HeroSection() {
             {/* Ambient Backlight */}
             <div className="absolute -inset-4 rounded-[2.5rem] opacity-40 blur-3xl group-hover:opacity-60 transition-opacity duration-500" style={{ background: "var(--gradient-main)" }} />
 
-            {/* Inner frame styling */}
-            <div className="relative h-[28rem] w-72 overflow-hidden rounded-[2rem] p-2.5 glass-card md:h-[32rem] md:w-80 shadow-2xl hover:scale-[1.03] transition-transform duration-300">
-              <img
+            <div className="relative h-[28rem] w-72 overflow-hidden rounded-[2rem] p-2.5 glass-card shadow-2xl hover:scale-[1.03] transition-transform duration-300">
+              <Image
                 src="/ayesha-afzal-qadir.jpeg"
                 width={420}
                 height={560}
                 alt="Ayesha Afzal - Full Stack & Mobile Software Engineer"
                 className="h-full w-full rounded-[1.6rem] object-cover filter brightness-[1.02]"
+                priority // Tells Next.js and Google this is a critical above-the-fold asset
               />
             </div>
           </div>

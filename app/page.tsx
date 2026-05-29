@@ -8,6 +8,7 @@ import { ContactSection } from "@/components/contact-section"
 import { HireMeSection } from "@/components/hire-me-section"
 import { Footer } from "@/components/footer"
 import { ScrollToTop } from "@/components/scroll-to-top"
+import { PortfolioChatbot } from "@/components/portfolio-chatbot"
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
       <ContactSection />
       <Footer />
       <ScrollToTop />
+      <PortfolioChatbot />
     </main>
   )
 }

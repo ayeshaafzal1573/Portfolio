@@ -8,7 +8,7 @@ export function HireMeSection() {
   useScrollReveal()
 
   const mailto = "mailto:ayeshaafzal1573@gmail.com?subject=Collaboration%20Opportunity"
-  const resumeUrl = "/resume.pdf" // place resume in public folder
+  const resumeUrl = "https://drive.google.com/file/d/1GGuBWHrTkwG982hPpZNWLrSMPMc7qOoA/view?usp=sharing"
   const githubUrl = "https://github.com/ayeshaafzal1573"
   const linkedInUrl = "https://www.linkedin.com/in/ayeshaafzalqadir/"
 
@@ -60,7 +60,8 @@ export function HireMeSection() {
               {/* Secondary Download Resume Button */}
               <a 
                 href={resumeUrl} 
-                download
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 btn-secondary font-bold rounded-full shadow-sm hover:scale-[1.05] hover:text-[color:var(--accent-primary)] hover:border-[color:var(--accent-primary)] hover:bg-[color:var(--accent-soft)] transition-all duration-300 group/btn"
               >
                 <FileText className="w-5 h-5 text-[color:var(--accent-primary)] transition-transform duration-300 group-hover/btn:scale-110" />
