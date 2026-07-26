@@ -12,12 +12,12 @@ export async function POST() {
     const supabase = getSupabase()
     const results = []
     for (const fix of fixes) {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("categorized_projects")
         .update({ image_url: fix.image_url, updated_at: new Date().toISOString() })
         .eq("title", fix.title)
-        .is("image_url", "")
-      results.push({ title: fix.title, success: !error })
+        .select()
+      results.push({ title: fix.title, error: error?.message || null, updated: data?.length || 0 })
     }
     return NextResponse.json({ results })
   } catch (error) {
