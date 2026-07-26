@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from "react"
 import { Modal } from "@/components/admin/Modal"
 import { useCategorizedProjects } from "@/lib/useConfig"
 import { showToast } from "@/components/admin/Toast"
-import { Plus, GripVertical, Pencil, Trash2, Image as ImageIcon, Upload, X, Film } from "lucide-react"
+import { Plus, GripVertical, Pencil, Trash2, Image as ImageIcon, Upload, X, Film, FolderKanban } from "lucide-react"
 
 const CATEGORIES = ["MERN Stack", "Full-Stack", "Mobile Apps", "UI/UX Designs", "Web Development"]
 
