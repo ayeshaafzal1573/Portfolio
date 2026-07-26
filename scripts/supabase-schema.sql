@@ -270,9 +270,9 @@ INSERT INTO categorized_projects (title, description, category, tech_stack, demo
   ('Ruya Airline', 'A premier airline website, offering exceptional travel services and a world of destinations.', 'Web Development', ARRAY['HTML', 'CSS', 'JavaScript'], 'https://ruyaairlines.netlify.app/', '#', '/RuyaAirlines.mp4', true, 14),
   ('Wilson Sporting Goods', 'Your source for top-notch sports gear, delivering excellence in equipment and accessories for athletes of all levels.', 'Web Development', ARRAY['HTML', 'CSS', 'JavaScript'], 'https://wilsonsportinggoods.netlify.app/', '#', '/WilsonSportingGoods.mp4', true, 15),
   ('SA Clothing', 'Your ultimate online fashion destination, showcasing a trendy collection of clothing for every style and occasion.', 'Web Development', ARRAY['HTML', 'CSS', 'JavaScript'], 'https://saclothing.netlify.app/', '#', '/SAClothing.mp4', true, 16),
-  ('KWSC Unified App', 'KWSC Unified App lets you access all water-related services in one place.', 'Full-Stack', ARRAY['Fastify', 'PostgreSQL', 'Node JS'], 'https://play.google.com/store/apps/details?id=pk.gov.kwsc.kwsc_digital&hl=en', '#', '', true, 17),
-  ('Asani Dashboard', 'Asani Dashboard is a comprehensive web application designed to provide users with real-time insights and analytics for their projects.', 'Full-Stack', ARRAY['Redis', 'PostgreSQL', 'Node JS'], 'asani.io', '#', '', true, 18),
-  ('Asani Website', 'Asani Website is a modern web application designed to provide users with a seamless and intuitive experience.', 'Full-Stack', ARRAY['Next.js', 'Node JS'], 'https://asani-website.vercel.app/', '#', '', true, 19);
+  ('KWSC Unified App', 'KWSC Unified App lets you access all water-related services in one place.', 'Full-Stack', ARRAY['Fastify', 'PostgreSQL', 'Node JS'], 'https://play.google.com/store/apps/details?id=pk.gov.kwsc.kwsc_digital&hl=en', '#', '/kwsc.png', '', true, 17),
+  ('Asani Dashboard', 'Asani Dashboard is a comprehensive web application designed to provide users with real-time insights and analytics for their projects.', 'Full-Stack', ARRAY['Redis', 'PostgreSQL', 'Node JS'], 'asani.io', '#', '/asani-dashboard.png', '', true, 18),
+  ('Asani Website', 'Asani Website is a modern web application designed to provide users with a seamless and intuitive experience.', 'Full-Stack', ARRAY['Next.js', 'Node JS'], 'https://asani-website.vercel.app/', '#', '/web.png', '', true, 19);
 
 -- Seed contact info
 INSERT INTO contact_info (id, email, phone, heading, subtitle, resume_url)

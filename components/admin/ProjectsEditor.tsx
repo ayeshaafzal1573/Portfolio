@@ -1,10 +1,10 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { Modal } from "@/components/admin/Modal"
 import { useCategorizedProjects } from "@/lib/useConfig"
 import { showToast } from "@/components/admin/Toast"
-import { Plus, GripVertical, Pencil, Trash2, Image as ImageIcon, ExternalLink, Github, FolderKanban, X } from "lucide-react"
+import { Plus, GripVertical, Pencil, Trash2, Image as ImageIcon, Upload, X, Film } from "lucide-react"
 
 const CATEGORIES = ["MERN Stack", "Full-Stack", "Mobile Apps", "UI/UX Designs", "Web Development"]
 
@@ -149,17 +149,34 @@ export default function ProjectsEditor() {
               <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Description</label>
               <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} rows={3} className="input-shell w-full resize-none rounded-xl px-4 py-3 text-sm" placeholder="Project description" />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Category</label>
-                <select value={editing.category} onChange={(e) => setEditing({ ...editing, category: e.target.value })} className="input-shell w-full rounded-xl px-4 py-3 text-sm">
-                  {CATEGORIES.map((c) => (<option key={c} value={c}>{c}</option>))}
-                </select>
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Image URL</label>
-                <input value={editing.image_url} onChange={(e) => setEditing({ ...editing, image_url: e.target.value })} className="input-shell w-full rounded-xl px-4 py-3 text-sm" placeholder="https://..." />
-              </div>
+            <div>
+              <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Category</label>
+              <select value={editing.category} onChange={(e) => setEditing({ ...editing, category: e.target.value })} className="input-shell w-full rounded-xl px-4 py-3 text-sm">
+                {CATEGORIES.map((c) => (<option key={c} value={c}>{c}</option>))}
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Project Image</label>
+              <label className="flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-[color:var(--card-border)] bg-[color:var(--accent-soft)] px-4 py-4 text-center transition-colors hover:border-[color:var(--accent-primary)] hover:bg-[color:var(--accent-primary)]/5">
+                <Upload className="h-5 w-5 text-[color:var(--text-secondary)]" />
+                <span className="text-sm font-semibold text-[color:var(--text-primary)]">Choose image or paste URL</span>
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  const reader = new FileReader()
+                  reader.onload = () => setEditing({ ...editing, image_url: reader.result as string })
+                  reader.readAsDataURL(file)
+                }} />
+              </label>
+              {editing.image_url && (
+                <div className="relative mt-3">
+                  <img src={editing.image_url} alt="Preview" className="h-40 w-full rounded-xl border border-[color:var(--card-border)] object-cover shadow-sm" />
+                  <button onClick={() => setEditing({ ...editing, image_url: "" })} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80 transition-colors">
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              )}
+              <input value={editing.image_url.startsWith("data:") ? "" : editing.image_url} onChange={(e) => setEditing({ ...editing, image_url: e.target.value })} className="input-shell mt-2 w-full rounded-xl px-4 py-2.5 text-xs" placeholder="Or paste image URL here..." />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -172,8 +189,27 @@ export default function ProjectsEditor() {
               </div>
             </div>
             <div>
-              <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Video URL</label>
-              <input value={editing.video_url} onChange={(e) => setEditing({ ...editing, video_url: e.target.value })} className="input-shell w-full rounded-xl px-4 py-3 text-sm" placeholder="https://... or /video.mp4" />
+              <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Project Video</label>
+              <label className="flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-[color:var(--card-border)] bg-[color:var(--accent-soft)] px-4 py-4 text-center transition-colors hover:border-[color:var(--accent-primary)] hover:bg-[color:var(--accent-primary)]/5">
+                <Film className="h-5 w-5 text-[color:var(--text-secondary)]" />
+                <span className="text-sm font-semibold text-[color:var(--text-primary)]">Choose video or paste URL</span>
+                <input type="file" accept="video/*" className="hidden" onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  const reader = new FileReader()
+                  reader.onload = () => setEditing({ ...editing, video_url: reader.result as string })
+                  reader.readAsDataURL(file)
+                }} />
+              </label>
+              {editing.video_url && (
+                <div className="relative mt-3">
+                  <video src={editing.video_url} className="h-40 w-full rounded-xl border border-[color:var(--card-border)] object-cover shadow-sm" muted controls />
+                  <button onClick={() => setEditing({ ...editing, video_url: "" })} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80 transition-colors">
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              )}
+              <input value={editing.video_url.startsWith("data:") ? "" : editing.video_url} onChange={(e) => setEditing({ ...editing, video_url: e.target.value })} className="input-shell mt-2 w-full rounded-xl px-4 py-2.5 text-xs" placeholder="Or paste video URL here..." />
             </div>
             <div>
               <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Tech Stack</label>

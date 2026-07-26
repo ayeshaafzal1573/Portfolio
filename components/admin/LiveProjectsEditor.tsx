@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useLiveProjects } from "@/lib/useConfig"
 import { showToast } from "@/components/admin/Toast"
 import { Modal } from "@/components/admin/Modal"
-import { Plus, Pencil, Trash2, Play, ExternalLink, X } from "lucide-react"
+import { Plus, Pencil, Trash2, Play, ExternalLink, X, Upload } from "lucide-react"
 
 const emptyProject = { name: "", thumbnail_url: "", live_url: "" }
 
@@ -119,8 +119,27 @@ export default function LiveProjectsEditor() {
               <input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className="input-shell w-full rounded-xl px-4 py-3 text-sm" placeholder="Project name" />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Thumbnail URL</label>
-              <input value={editing.thumbnail_url} onChange={(e) => setEditing({ ...editing, thumbnail_url: e.target.value })} className="input-shell w-full rounded-xl px-4 py-3 text-sm" placeholder="https://..." />
+              <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Thumbnail</label>
+              <label className="flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-[color:var(--card-border)] bg-[color:var(--accent-soft)] px-4 py-4 text-center transition-colors hover:border-[color:var(--accent-primary)] hover:bg-[color:var(--accent-primary)]/5">
+                <Upload className="h-5 w-5 text-[color:var(--text-secondary)]" />
+                <span className="text-sm font-semibold text-[color:var(--text-primary)]">Choose image or paste URL</span>
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  const reader = new FileReader()
+                  reader.onload = () => setEditing({ ...editing, thumbnail_url: reader.result as string })
+                  reader.readAsDataURL(file)
+                }} />
+              </label>
+              {editing.thumbnail_url && (
+                <div className="relative mt-3">
+                  <img src={editing.thumbnail_url} alt="Preview" className="h-36 w-full rounded-xl border border-[color:var(--card-border)] object-cover shadow-sm" />
+                  <button onClick={() => setEditing({ ...editing, thumbnail_url: "" })} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80 transition-colors">
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              )}
+              <input value={editing.thumbnail_url.startsWith("data:") ? "" : editing.thumbnail_url} onChange={(e) => setEditing({ ...editing, thumbnail_url: e.target.value })} className="input-shell mt-2 w-full rounded-xl px-4 py-2.5 text-xs" placeholder="Or paste thumbnail URL here..." />
             </div>
             <div>
               <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Live URL <span className="text-red-400">*</span></label>
