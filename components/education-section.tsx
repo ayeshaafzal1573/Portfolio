@@ -1,8 +1,10 @@
 "use client"
 
 import { GraduationCap, Calendar, Award, BookOpen, MapPin } from "lucide-react"
+import type { CSSProperties } from "react"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { useEducationEntries } from "@/lib/useConfig"
+import { TiltCard } from "@/components/three/tilt-card"
 
 const ICON_MAP: Record<string, React.ComponentType<any>> = { GraduationCap, Award, BookOpen, MapPin }
 
@@ -13,8 +15,14 @@ export function EducationSection() {
 
   return (
     <section id="education" className="section-shell relative overflow-hidden bg-gradient-to-b from-transparent to-[color-mix(in_srgb,var(--bg-secondary)_40%,transparent)]">
-      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-72 h-72 rounded-full bg-[color-mix(in_srgb,var(--accent-primary)_15%,transparent)] blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-10 right-0 w-80 h-80 rounded-full bg-[color-mix(in_srgb,var(--accent-secondary)_15%,transparent)] blur-[120px] pointer-events-none" />
+      <div
+        className="glow-orb top-1/2 left-0 -translate-y-1/2 h-72 w-72"
+        style={{ "--orb": "color-mix(in srgb, var(--accent-primary) 18%, transparent)" } as CSSProperties}
+      />
+      <div
+        className="glow-orb bottom-10 right-0 h-80 w-80"
+        style={{ "--orb": "color-mix(in srgb, var(--accent-secondary) 18%, transparent)" } as CSSProperties}
+      />
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-12 reveal">
@@ -52,7 +60,7 @@ export function EducationSection() {
                   <span className="text-xs text-[color:var(--text-secondary)] font-medium mt-1">{edu.grade}</span>
                 </div>
 
-                <div className="glass-card rounded-2xl p-6 md:p-8 hover:scale-[1.01] transition-all duration-300 group shadow-lg hover:shadow-xl relative overflow-hidden">
+                <TiltCard className="glass-card rounded-2xl p-6 md:p-8 group shadow-lg relative overflow-hidden" max={7}>
                   <div className="absolute top-0 left-0 right-0 h-1" style={{ background: `linear-gradient(90deg, ${edu.color}, transparent)` }} />
 
                   <div className="flex md:hidden items-center justify-between gap-2 mb-4 flex-wrap">
@@ -77,7 +85,7 @@ export function EducationSection() {
                       <span key={idx} className="px-3.5 py-1 text-xs font-semibold rounded-full border border-slate-300/30 dark:border-slate-700/30 bg-slate-200/30 dark:bg-slate-800/30 text-[color:var(--text-secondary)] group-hover:border-[color:var(--accent-primary)]/30 transition-colors duration-300">{badge}</span>
                     ))}
                   </div>
-                </div>
+                </TiltCard>
               </div>
             )
           })}

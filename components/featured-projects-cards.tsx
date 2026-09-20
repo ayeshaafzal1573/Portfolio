@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { ExternalLink, Github, Code, Smartphone, Palette, Globe, Layers } from "lucide-react"
 import { useCategorizedProjects } from "@/lib/useConfig"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
+import { TiltCard } from "@/components/three/tilt-card"
 
 const categoryIcons: Record<string, React.ComponentType<any>> = {
   "MERN Stack": Globe,
@@ -75,7 +76,7 @@ export function FeaturedProjectsCards() {
             const mediaSource = getMediaSource(project)
             const shouldRenderVideo = isVideoSource(mediaSource)
             return (
-              <div key={project.id} className="group glass-card rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-xl relative flex flex-col h-full" style={{ animationDelay: `${index * 0.05}s` }}>
+              <TiltCard key={project.id} className="group glass-card rounded-2xl overflow-hidden relative flex flex-col h-full" max={10}>
                 <div className="relative overflow-hidden h-48 shrink-0">
                   {mediaSource ? (
                     shouldRenderVideo ? (
@@ -116,7 +117,7 @@ export function FeaturedProjectsCards() {
                     )}
                   </div>
                 </div>
-              </div>
+              </TiltCard>
             )
           })}
         </div>

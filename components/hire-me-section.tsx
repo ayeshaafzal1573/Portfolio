@@ -14,8 +14,14 @@ export function HireMeSection() {
 
   return (
     <section id="hire-me" className="section-shell relative overflow-hidden py-24">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full bg-[color-mix(in_srgb,var(--accent-primary)_12%,transparent)] blur-[100px] pointer-events-none pulse-glow-bg" style={{ zIndex: -1 }} />
-      <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] md:w-[400px] md:h-[400px] rounded-full bg-[color-mix(in_srgb,var(--accent-secondary)_8%,transparent)] blur-[100px] pointer-events-none pulse-glow-bg" style={{ zIndex: -1, animationDelay: "2s" }} />
+      <div
+        className="glow-orb pulse-glow-bg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[300px] md:h-[500px] md:w-[500px]"
+        style={{ "--orb": "color-mix(in srgb, var(--accent-primary) 16%, transparent)", zIndex: -1 } as React.CSSProperties}
+      />
+      <div
+        className="glow-orb pulse-glow-bg top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 h-[200px] w-[200px] md:h-[400px] md:w-[400px]"
+        style={{ "--orb": "color-mix(in srgb, var(--accent-secondary) 12%, transparent)", zIndex: -1, animationDelay: "2s" } as React.CSSProperties}
+      />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="glass-card rounded-[2.5rem] p-8 md:p-16 text-center relative overflow-hidden group shadow-2xl reveal-scale border border-[color:var(--card-border)] bg-[color-mix(in_srgb,var(--surface)_80%,transparent)]">

@@ -3,6 +3,8 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import { CustomCursor } from "@/components/custom-cursor"
+import { IdleMonitor } from "@/components/idle-monitor"
+import { ThreeBackgroundLazy } from "@/components/three/three-background-lazy"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
@@ -89,7 +91,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <body className="font-inter antialiased">
         <ThemeProvider>
+          <IdleMonitor />
           <CustomCursor />
+          <ThreeBackgroundLazy />
           {children}
         </ThemeProvider>
       </body>

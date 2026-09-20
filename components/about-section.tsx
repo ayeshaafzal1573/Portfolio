@@ -3,6 +3,7 @@
 import { Code, Palette, Database, Smartphone, Globe, Zap, User, Radio, BarChart2, ShieldCheck, Users } from "lucide-react"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { useAbout, useTimelineEntries, useSkills } from "@/lib/useConfig"
+import { TiltCard } from "@/components/three/tilt-card"
 
 const ICON_MAP: Record<string, React.ComponentType<any>> = { Code, Palette, Database, Smartphone, Globe, Zap, Radio, BarChart2, ShieldCheck, Users }
 
@@ -48,7 +49,7 @@ export function AboutSection() {
                         <div className="w-0.5 h-24 mt-2 bg-gradient-to-b from-[color:var(--accent-primary)] to-transparent opacity-30" />
                       )}
                     </div>
-                    <div className="glass-card rounded-2xl p-6 flex-1 hover:scale-[1.02] hover:shadow-lg transition-all duration-300 relative overflow-hidden group">
+                    <TiltCard className="glass-card rounded-2xl p-6 flex-1 relative overflow-hidden group" max={8}>
                       <div className="absolute top-0 left-0 w-1 h-full bg-[color:var(--accent-primary)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       <div className="flex items-center gap-3 mb-2">
                         <span className="text-sm font-extrabold tracking-wider" style={{ color: "var(--accent-primary)" }}>{item.year}</span>
@@ -60,7 +61,7 @@ export function AboutSection() {
                           <span key={skill} className="chip px-3 py-1 text-[10px] font-semibold rounded-full">{skill}</span>
                         ))}
                       </div>
-                    </div>
+                    </TiltCard>
                   </div>
                 </div>
               ))}
@@ -74,7 +75,7 @@ export function AboutSection() {
             </h3>
             <div className="space-y-6">
               {skills.map((skill) => (
-                <div key={skill.id} className="glass-card rounded-2xl p-6 hover:scale-[1.02] hover:shadow-lg transition-all duration-300 group">
+                <TiltCard key={skill.id} className="glass-card rounded-2xl p-6 relative group" max={8}>
                   <div className="flex items-center gap-4">
                     <div className="chip p-3.5 rounded-xl transition-colors duration-300 group-hover:bg-[color:var(--accent-soft)]">
                       <skill.IconComponent className="w-6 h-6 transition-transform duration-300 group-hover:scale-110" style={{ color: "var(--accent-primary)" }} />
@@ -89,7 +90,7 @@ export function AboutSection() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </TiltCard>
               ))}
             </div>
           </div>

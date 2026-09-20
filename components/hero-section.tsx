@@ -1,8 +1,10 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Sparkles, Terminal, Code, Cpu } from "lucide-react"
+import type { CSSProperties } from "react"
+import { Sparkles, Terminal, Code, Cpu, Smartphone, Brain } from "lucide-react"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
+import { TiltCard } from "@/components/three/tilt-card"
 import Image from "next/image"
 import { useProfile, useTypingRoles } from "@/lib/useConfig"
 
@@ -39,12 +41,18 @@ export function HeroSection() {
 
   useEffect(() => {
     let animationFrameId: number
+    let running = false
+    let settled = 0
     const targetCoords = { x: 0, y: 0 }
     const currentCoords = { x: 0, y: 0 }
     const handleMouseMove = (e: MouseEvent) => {
       if (window.innerWidth < 1024) return
       targetCoords.x = (e.clientX / window.innerWidth - 0.5) * 30
       targetCoords.y = (e.clientY / window.innerHeight - 0.5) * 30
+      if (!running && containerRef.current) {
+        running = true
+        animationFrameId = requestAnimationFrame(updatePosition)
+      }
     }
     const updatePosition = () => {
       currentCoords.x += (targetCoords.x - currentCoords.x) * 0.08
@@ -52,10 +60,20 @@ export function HeroSection() {
       if (containerRef.current) {
         containerRef.current.style.transform = `translate3d(${currentCoords.x}px, ${currentCoords.y}px, 0)`
       }
+      if (
+        Math.hypot(currentCoords.x - targetCoords.x, currentCoords.y - targetCoords.y) < 0.2
+      ) {
+        settled += 1
+      } else {
+        settled = 0
+      }
+      if (settled > 8) {
+        running = false
+        return
+      }
       animationFrameId = requestAnimationFrame(updatePosition)
     }
     window.addEventListener("mousemove", handleMouseMove)
-    updatePosition()
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
       cancelAnimationFrame(animationFrameId)
@@ -74,8 +92,14 @@ export function HeroSection() {
       `}</style>
 
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[20%] left-[10%] h-[350px] w-[350px] rounded-full bg-gradient-to-tr from-[var(--accent-primary)] to-[var(--accent-secondary)] opacity-20 blur-[80px] pulse-glow-bg" />
-        <div className="absolute bottom-[20%] right-[10%] h-[400px] w-[400px] rounded-full bg-gradient-to-br from-[var(--accent-secondary)] to-[var(--accent-primary)] opacity-25 blur-[100px] pulse-glow-bg" style={{ animationDelay: "3s" }} />
+        <div
+          className="glow-orb pulse-glow-bg top-[20%] left-[10%] h-[350px] w-[350px]"
+          style={{ "--orb": "color-mix(in srgb, var(--accent-primary) 30%, transparent)" } as CSSProperties}
+        />
+        <div
+          className="glow-orb pulse-glow-bg bottom-[20%] right-[10%] h-[400px] w-[400px]"
+          style={{ "--orb": "color-mix(in srgb, var(--accent-secondary) 35%, transparent)", animationDelay: "3s" } as CSSProperties}
+        />
         <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]" />
       </div>
 
@@ -152,26 +176,42 @@ export function HeroSection() {
           </div>
         </div>
 
-        <div className="flex justify-center lg:justify-end reveal-right active">
-          <div className="relative group animate-float">
-            <div className="absolute -inset-4 rounded-[2.5rem] opacity-40 blur-3xl group-hover:opacity-60 transition-opacity duration-500" style={{ background: "var(--gradient-main)" }} />
-            <div className="relative h-[28rem] w-72 overflow-hidden rounded-[2rem] p-2.5 glass-card shadow-2xl hover:scale-[1.03] transition-transform duration-300">
-              {profile?.profile_image ? (
-                <img
-                  src={profile.profile_image}
-                  alt={`${profile.name} - Full Stack Software Engineer`}
-                  className="h-full w-full rounded-[1.6rem] object-cover filter brightness-[1.02]"
-                />
-              ) : (
-                <Image
-                  src="/ayesha-afzal-qadir.jpeg"
-                  width={420}
-                  height={560}
-                  alt="Ayesha Afzal - Full Stack & Mobile Software Engineer"
-                  className="h-full w-full rounded-[1.6rem] object-cover filter brightness-[1.02]"
-                  priority
-                />
-              )}
+        <div className="flex justify-center lg:justify-end reveal-right active perspective-1600 preserve-3d">
+          <div className="relative preserve-3d">
+            <div className="absolute -inset-6 rounded-[2.5rem] opacity-50 blur-3xl pulse-glow-bg" style={{ background: "var(--gradient-main)" }} />
+            <div className="animate-float">
+            <TiltCard max={16} scale={1.02} className="relative">
+              <div className="relative h-[28rem] w-72 overflow-hidden rounded-[2rem] p-2.5 glass-card shadow-2xl">
+                {profile?.profile_image ? (
+                  <img
+                    src={profile.profile_image}
+                    alt={`${profile.name} - Full Stack Software Engineer`}
+                    className="h-full w-full rounded-[1.6rem] object-cover filter brightness-[1.02]"
+                  />
+                ) : (
+                  <Image
+                    src="/ayesha-afzal-qadir.jpeg"
+                    width={420}
+                    height={560}
+                    alt="Ayesha Afzal - Full Stack & Mobile Software Engineer"
+                    className="h-full w-full rounded-[1.6rem] object-cover filter brightness-[1.02]"
+                    priority
+                  />
+                )}
+              </div>
+              <div className="absolute -left-8 top-8 rounded-2xl glass-card px-4 py-2.5 text-sm font-bold shadow-xl depth-card-sm">
+                <Terminal className="mb-1 h-4 w-4 text-[color:var(--accent-primary)]" />
+                Full-Stack
+              </div>
+              <div className="absolute -right-5 top-1/3 rounded-2xl glass-card px-4 py-2.5 text-sm font-bold shadow-xl depth-card">
+                <Smartphone className="mb-1 h-4 w-4 text-[color:var(--accent-secondary)]" />
+                React Native
+              </div>
+              <div className="absolute -left-12 bottom-16 rounded-2xl glass-card px-4 py-2.5 text-sm font-bold shadow-xl depth-card-sm">
+                <Brain className="mb-1 h-4 w-4 text-[color:var(--accent-primary)]" />
+                AI Integration
+              </div>
+            </TiltCard>
             </div>
           </div>
         </div>

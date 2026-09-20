@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { ExternalLink, ChevronLeft, ChevronRight, Play } from "lucide-react"
 import { useLiveProjects } from "@/lib/useConfig"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
+import { TiltCard } from "@/components/three/tilt-card"
 
 export function LiveProjectsSlider() {
   const { data: projects, loading } = useLiveProjects()
@@ -58,7 +59,7 @@ export function LiveProjectsSlider() {
 
           <div ref={sliderRef} className="hide-scrollbar flex gap-6 overflow-x-auto px-12 py-4" style={{ scrollSnapType: "x mandatory" }}>
             {projectList.map((project) => (
-              <article key={project.id} className="group w-80 flex-shrink-0 overflow-hidden rounded-2xl glass-card transition-all duration-300 hover:-translate-y-2 hover:shadow-xl" style={{ scrollSnapAlign: "start" }}>
+              <TiltCard key={project.id} className="group w-80 flex-shrink-0 overflow-hidden rounded-2xl glass-card" style={{ scrollSnapAlign: "start" }} max={12}>
                 <div className="relative overflow-hidden">
                   <img src={project.thumbnail_url || "/placeholder.svg"} alt={project.name} className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/45 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -69,7 +70,7 @@ export function LiveProjectsSlider() {
                     Launch App <ExternalLink className="h-4 w-4" />
                   </a>
                 </div>
-              </article>
+              </TiltCard>
             ))}
           </div>
         </div>

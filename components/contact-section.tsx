@@ -52,7 +52,10 @@ export function ContactSection() {
 
   return (
     <section id="contact" className="section-shell relative overflow-hidden pb-0">
-      <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-[color-mix(in_srgb,var(--accent-primary)_10%,transparent)] blur-[100px] pointer-events-none" />
+      <div
+        className="glow-orb top-0 right-0 h-64 w-64"
+        style={{ "--orb": "color-mix(in srgb, var(--accent-primary) 14%, transparent)" } as React.CSSProperties}
+      />
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-10 reveal">
           <div className="inline-flex items-center gap-2 rounded-full chip px-4 py-1.5 text-xs font-bold uppercase tracking-wider mb-4">

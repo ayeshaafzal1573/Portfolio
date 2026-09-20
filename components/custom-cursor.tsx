@@ -1,102 +1,99 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef } from "react"
+
+/* ------------------------------------------------------------------ */
+/* Subtle code-emoji hover cursor -------------------------------------- */
+/* One tiny emoji that pops in only over interactive elements, none     */
+/* while just moving around. Direct DOM writes, no per-frame renders.   */
+/* ------------------------------------------------------------------ */
+
+const INTERACTIVE =
+  "a,button,input,textarea,select,[role=button],[class*=btn],.chip,.nav-link,.tilt-card,.social-link,.card,.cursor-pointer"
+
+function pickEmoji(el: Element): string {
+  const cls = el.className || ""
+  const tag = el.tagName.toLowerCase()
+  if (tag === "a" || cls.includes("nav-link") || cls.includes("social")) return "🚀"
+  if (tag === "button" || cls.includes("btn")) return "⚡"
+  if (cls.includes("chip")) return "🧩"
+  if (cls.includes("tilt-card") || cls.includes("card") || tag === "article") return "✨"
+  if (tag === "input" || tag === "textarea" || tag === "select") return "🧠"
+  return "✨"
+}
 
 export function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 })
-  const [trail, setTrail] = useState({ x: 0, y: 0 })
-  const [isHovered, setIsHovered] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
+  const wrapRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Hide default cursor on interactive items optionally or let it float alongside
-    const handleMouseMove = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY })
-      setIsVisible(true)
-    }
+    const wrap = wrapRef.current
+    if (!wrap) return
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return
 
-    const handleMouseLeave = () => {
-      setIsVisible(false)
-    }
+    let targetX = window.innerWidth / 2
+    let targetY = window.innerHeight / 2
+    let curX = targetX
+    let curY = targetY
+    let raf = 0
+    let running = false
+    let settled = 0
+    let visible = false
 
-    window.addEventListener("mousemove", handleMouseMove)
-    document.addEventListener("mouseleave", handleMouseLeave)
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove)
-      document.removeEventListener("mouseleave", handleMouseLeave)
-    }
-  }, [])
-
-  // Smooth trail effect
-  useEffect(() => {
-    let animationFrameId: number
-
-    const updateTrail = () => {
-      setTrail((prev) => {
-        const dx = position.x - prev.x
-        const dy = position.y - prev.y
-        // Adjust speed/inertia factor (0.15 is smooth and responsive)
-        return {
-          x: prev.x + dx * 0.15,
-          y: prev.y + dy * 0.15,
-        }
-      })
-      animationFrameId = requestAnimationFrame(updateTrail)
-    }
-
-    animationFrameId = requestAnimationFrame(updateTrail)
-    return () => cancelAnimationFrame(animationFrameId)
-  }, [position])
-
-  // Hover detection
-  useEffect(() => {
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement
-      if (
-        target.tagName === "BUTTON" ||
-        target.tagName === "A" ||
-        target.closest("button") ||
-        target.closest("a") ||
-        target.classList.contains("cursor-pointer")
-      ) {
-        setIsHovered(true)
-      } else {
-        setIsHovered(false)
+    const setVisible = (v: boolean) => {
+      if (visible === v) return
+      visible = v
+      wrap.classList.toggle("hovering", v)
+      if (v && !running) {
+        running = true
+        raf = requestAnimationFrame(loop)
       }
     }
 
-    window.addEventListener("mouseover", handleMouseOver)
-    return () => window.removeEventListener("mouseover", handleMouseOver)
+    const over = (e: MouseEvent) => {
+      const el = (e.target as HTMLElement).closest(INTERACTIVE)
+      if (el) {
+        wrap.querySelector("span")!.textContent = pickEmoji(el)
+        setVisible(true)
+      } else {
+        setVisible(false)
+      }
+    }
+
+    const loop = () => {
+      curX += (targetX - curX) * 0.4
+      curY += (targetY - curY) * 0.4
+      wrap.style.transform = `translate3d(${curX + 12}px, ${curY - 24}px, 0)`
+      if (Math.hypot(curX - targetX, curY - targetY) < 1.5) settled += 1
+      else settled = 0
+      if (!visible && settled > 4) {
+        running = false
+        return
+      }
+      raf = requestAnimationFrame(loop)
+    }
+
+    const move = (e: MouseEvent) => {
+      targetX = e.clientX
+      targetY = e.clientY
+      if (!running && visible) {
+        running = true
+        raf = requestAnimationFrame(loop)
+      }
+    }
+
+    window.addEventListener("mouseover", over, { passive: true })
+    window.addEventListener("mousemove", move, { passive: true })
+
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener("mouseover", over)
+      window.removeEventListener("mousemove", move)
+    }
   }, [])
 
-  if (!isVisible) return null
-
   return (
-    <>
-      {/* Outer soft trailing circle */}
-      <div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-transform duration-300 ease-out hidden lg:block"
-        style={{
-          left: `${trail.x}px`,
-          top: `${trail.y}px`,
-          background: "radial-gradient(circle, rgba(217, 70, 239, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%)",
-          border: "1px solid rgba(217, 70, 239, 0.3)",
-          transform: `translate3d(-50%, -50%, 0) scale(${isHovered ? 1.5 : 1})`,
-          boxShadow: isHovered ? "0 0 15px rgba(217, 70, 239, 0.3)" : "none",
-        }}
-      />
-      {/* Inner precise vibrant dot */}
-      <div
-        className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-transform duration-100 ease-out hidden lg:block"
-        style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-          background: "linear-gradient(135deg, #d946ef 0%, #ec4899 100%)",
-          transform: `translate3d(-50%, -50%, 0) scale(${isHovered ? 0.5 : 1})`,
-          boxShadow: "0 0 8px rgba(217, 70, 239, 0.8)",
-        }}
-      />
-    </>
+    <div ref={wrapRef} className="cursor-emoji-wrap" aria-hidden="true">
+      <span className="cursor-emoji-main">🚀</span>
+    </div>
   )
 }

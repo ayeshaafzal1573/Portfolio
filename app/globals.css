@@ -86,7 +86,6 @@ body::after {
   position: fixed;
   z-index: -1;
   pointer-events: none;
-  filter: blur(32px);
 }
 
 body::before {
@@ -95,7 +94,7 @@ body::before {
   width: 380px;
   height: 380px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--accent-primary) 42%, transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent-primary) 40%, transparent), transparent 72%);
   opacity: 0.4;
 }
 
@@ -105,7 +104,7 @@ body::after {
   width: 320px;
   height: 320px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--accent-secondary) 45%, transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent-secondary) 42%, transparent), transparent 72%);
   opacity: 0.35;
 }
 
@@ -155,16 +154,6 @@ body::after {
   border: 1px solid var(--card-border);
   background: color-mix(in srgb, var(--accent-soft) 64%, var(--bg-secondary));
   color: var(--text-primary);
-}
-
-.nav-link {
-  color: var(--text-secondary);
-  transition: color 180ms ease, transform 180ms ease;
-}
-
-.nav-link:hover {
-  color: var(--text-primary);
-  transform: translateY(-1px);
 }
 
 .input-shell {
@@ -303,5 +292,302 @@ body::after {
 
 .pulse-glow-bg {
   animation: pulse-glow 10s ease-in-out infinite;
+}
+
+/* Soft glow orb: radial-gradient instead of filter: blur — the same
+   bloom look at a fraction of the GPU cost (no Gaussian re-raster).  */
+.glow-orb {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, var(--orb, #ffffff), transparent 72%);
+}
+
+/* ============================================================
+   3D utilities
+   ============================================================ */
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.perspective-1200 {
+  perspective: 1200px;
+}
+
+.perspective-1600 {
+  perspective: 1600px;
+}
+
+.tilt-card {
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.tilt-card:hover {
+  will-change: transform;
+}
+
+.tilt-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    420px circle at var(--tilt-x, 50%) var(--tilt-y, 50%),
+    rgba(255, 255, 255, 0.18),
+    transparent 45%
+  );
+  opacity: 0;
+  transition: opacity 240ms ease;
+  z-index: 2;
+}
+
+.tilt-card:hover::after {
+  opacity: 1;
+}
+
+.depth-card {
+  transform: translateZ(40px) scale(1.02);
+}
+
+.depth-card-sm {
+  transform: translateZ(20px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt-card,
+  .tilt-card::after,
+  .preserve-3d {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ============================================================
+   Subtle code-emoji hover cursor
+   ============================================================ */
+
+.cursor-emoji-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.cursor-emoji-main {
+  display: inline-block;
+  font-size: 15px;
+  line-height: 1.2;
+  opacity: 0;
+  transform: scale(0.4) rotate(-12deg);
+  transition: opacity 180ms ease, transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.28));
+}
+
+.cursor-emoji-wrap.hovering .cursor-emoji-main {
+  opacity: 0.95;
+  transform: scale(1) rotate(8deg);
+}
+
+/* ============================================================
+   Navbar (clean scroll behaviour)
+   ============================================================ */
+
+.nav-3d-load {
+  animation: nav-drop 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes nav-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-link {
+  position: relative;
+  display: inline-block;
+  color: var(--text-secondary);
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 0;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  transform: translateX(-50%);
+  transition: width 220ms ease;
+}
+
+.nav-link.active {
+  color: var(--text-primary);
+}
+
+.nav-link.active::after {
+  width: 42%;
+}
+
+/* Scroll: the pill becomes a more solid, compact bar */
+
+.nav-pill {
+  background: color-mix(in srgb, var(--bg-secondary) 92%, var(--surface-strong));
+  box-shadow: 0 12px 32px -18px rgba(0, 0, 0, 0.5);
+}
+
+.nav-scrolled .nav-pill {
+  background: color-mix(in srgb, var(--bg-secondary) 96%, var(--surface-strong));
+  box-shadow: 0 18px 48px -20px rgba(0, 0, 0, 0.55);
+}
+
+.nav-scrolled .nav-brand {
+  font-size: 1.05rem;
+}
+
+.nav-brand {
+  transition: font-size 300ms ease;
+}
+
+/* Scroll progress ribbon (matches the pill width, tucked under it) */
+
+.nav-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 3px;
+  max-width: 80rem;
+  margin: 0 auto;
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent-primary) 18%, transparent);
+}
+
+.nav-progress-fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-primary));
+  background-size: 200% 100%;
+  transform-origin: left center;
+  transform: scaleX(var(--p, 0));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent-primary) 70%, transparent);
+  animation: nav-shimmer 4s linear infinite;
+}
+
+@keyframes nav-shimmer {
+  from { background-position: 0% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* ============================================================
+   Pop / springy hover + reveal across the site
+   ============================================================ */
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(6px);
+  }
+  70% {
+    transform: scale(1.05) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.pop-in {
+  animation: pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.pop-hover {
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.pop-hover:hover {
+  transform: translateY(-2px) scale(1.06);
+}
+
+.pop-hover:active {
+  transform: scale(0.96);
+}
+
+.btn-primary,
+.btn-secondary {
+  transform-style: preserve-3d;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible,
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
+  will-change: transform;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+  transform: perspective(800px) rotateX(8deg) translateY(-3px) scale(1.05);
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+  transform: perspective(800px) translateY(1px) scale(0.97);
+}
+
+.chip {
+  transform-style: preserve-3d;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.chip:hover {
+  transform: perspective(600px) translateZ(10px) scale(1.08);
+}
+
+.reveal.active .chip,
+.reveal-scale.active .chip {
+  animation: pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ============================================================
+   Pause decorative loops while the page is idle
+   ============================================================ */
+
+body.is-idle .pulse-glow-bg,
+body.is-idle .floating-dot,
+body.is-idle .animate-float,
+body.is-idle .animate-float-drift,
+body.is-idle .animate-glow {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-emoji-wrap,
+  .cursor-emoji-main,
+  .nav-3d-load,
+  .pop-in {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
