@@ -14,9 +14,21 @@ interface TiltCardProps {
   style?: CSSProperties
   max?: number
   scale?: number
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
+  onClick?: () => void
 }
 
-export function TiltCard({ children, className = "", style, max = 12, scale = 1.03 }: TiltCardProps) {
+export function TiltCard({
+  children,
+  className = "",
+  style,
+  max = 12,
+  scale = 1.03,
+  onMouseEnter,
+  onMouseLeave,
+  onClick,
+}: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -37,6 +49,7 @@ export function TiltCard({ children, className = "", style, max = 12, scale = 1.
     el.style.boxShadow = `0 24px 44px rgba(0,0,0,0.22), 0 0 0 1px var(--card-border)`
     el.style.setProperty("--tilt-x", `${px * 100}%`)
     el.style.setProperty("--tilt-y", `${py * 100}%`)
+    onMouseEnter?.()
   }
 
   const handleLeave = () => {
@@ -45,6 +58,7 @@ export function TiltCard({ children, className = "", style, max = 12, scale = 1.
     el.style.transition = "transform 420ms cubic-bezier(0.22,1,0.36,1), box-shadow 420ms ease"
     el.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)"
     el.style.boxShadow = ""
+    onMouseLeave?.()
   }
 
   return (
@@ -53,6 +67,10 @@ export function TiltCard({ children, className = "", style, max = 12, scale = 1.
       onMouseMove={handleMove}
       onMouseEnter={handleMove}
       onMouseLeave={handleLeave}
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick?.()
+      }}
       className={`tilt-card ${className}`}
       style={style}
     >

@@ -24,10 +24,10 @@ export default function Home() {
       <ScrollDepth tilt={14} depth={140}>
         <EducationSection />
       </ScrollDepth>
-      <ScrollDepth tilt={18} depth={160}>
+      <ScrollDepth mode="pop" amount={52}>
         <LiveProjectsSlider />
       </ScrollDepth>
-      <ScrollDepth tilt={20} depth={180}>
+      <ScrollDepth mode="pop" amount={52}>
         <FeaturedProjectsCards />
       </ScrollDepth>
       <ScrollDepth tilt={14} depth={130}>

@@ -9,11 +9,15 @@ import type { CSSProperties, ReactNode } from "react"
 /* never in a permanent rAF loop.                                        */
 /* ------------------------------------------------------------------ */
 
+type ScrollMode = "tilt" | "pop"
+
 interface ScrollDepthEntry {
   el: HTMLElement
   tilt: number
   depth: number
   fade: boolean
+  mode: ScrollMode
+  amount: number
 }
 
 const registry = new Set<ScrollDepthEntry>()
@@ -47,6 +51,16 @@ function update() {
     if (el.style.willChange !== "transform") el.style.willChange = "transform, opacity"
 
     const absOff = Math.abs(off)
+
+    if (entry.mode === "pop") {
+      const y = off * entry.amount
+      const scale = 1 - absOff * 0.07
+      const fadeAt = Math.max(0, absOff - 0.45) / 0.55
+      el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0) scale(${scale.toFixed(4)})`
+      el.style.opacity = entry.fade ? (1 - fadeAt).toFixed(3) : "1"
+      return
+    }
+
     const rotX = off * tilt
     const z = (1 - absOff) * depth
     const scale = 1 + Math.sin((1 - absOff) * Math.PI * 0.5) * 0.018
@@ -104,6 +118,8 @@ interface ScrollDepthProps {
   tilt?: number
   depth?: number
   fade?: boolean
+  mode?: ScrollMode
+  amount?: number
 }
 
 export function ScrollDepth({
@@ -113,6 +129,8 @@ export function ScrollDepth({
   tilt = 18,
   depth = 130,
   fade = true,
+  mode = "tilt",
+  amount = 46,
 }: ScrollDepthProps) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -120,8 +138,8 @@ export function ScrollDepth({
     const el = ref.current
     if (!el) return
     if (prefersReduced()) return
-    el.style.transformStyle = "preserve-3d"
-    const entry: ScrollDepthEntry = { el, tilt, depth, fade }
+    if (mode === "tilt") el.style.transformStyle = "preserve-3d"
+    const entry: ScrollDepthEntry = { el, tilt, depth, fade, mode, amount }
     registry.add(entry)
     ensureBound()
     requestUpdate()
@@ -129,7 +147,7 @@ export function ScrollDepth({
       registry.delete(entry)
       unbindIfEmpty()
     }
-  }, [tilt, depth, fade])
+  }, [tilt, depth, fade, mode, amount])
 
   return (
     <div ref={ref} className={className} style={style}>
