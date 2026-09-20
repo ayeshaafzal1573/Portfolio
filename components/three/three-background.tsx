@@ -146,8 +146,7 @@ export function ThreeBackground() {
       ensureRunning()
     }
     const onScroll = () => {
-      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
-      scroll = window.scrollY / max
+      scroll = window.scrollY / scrollMax
       renderSuppressedUntil = performance.now() + 150
       touch()
     }
@@ -160,6 +159,7 @@ export function ThreeBackground() {
       camera.aspect = window.innerWidth / window.innerHeight
       camera.updateProjectionMatrix()
       renderer.setSize(window.innerWidth, window.innerHeight, false)
+      measureScrollMax()
       touch()
     }
     const onVisibility = () => {
@@ -175,6 +175,9 @@ export function ThreeBackground() {
     }
     onScroll()
     onResize()
+    const loadReMeasure = () => measureScrollMax()
+    window.addEventListener("load", loadReMeasure)
+    window.addEventListener("portfolioConfigUpdated", loadReMeasure)
 
     /* Theme reactivity ----------------------------------------------------- */
     const applyTheme = () => {
@@ -266,6 +269,8 @@ export function ThreeBackground() {
       window.removeEventListener("mousemove", onMove)
       window.removeEventListener("resize", onResize)
       document.removeEventListener("visibilitychange", onVisibility)
+      window.removeEventListener("load", loadReMeasure)
+      window.removeEventListener("portfolioConfigUpdated", loadReMeasure)
       themeObserver.disconnect()
       starGeometry.dispose()
       starMaterial.dispose()

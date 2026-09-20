@@ -99,7 +99,7 @@ export function Navbar() {
             {settings?.brand_name || "Ayesha."}
           </span>
         </button>
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-4 md:flex">
           <button onClick={() => scrollToSection("home")} className={`nav-link py-3 text-sm font-medium ${active === "home" ? "active" : ""}`}>Home</button>
           <button onClick={() => scrollToSection("about")} className={`nav-link py-3 text-sm font-medium ${active === "about" ? "active" : ""}`}>About</button>
           <button onClick={() => scrollToSection("education")} className={`nav-link py-3 text-sm font-medium ${active === "education" ? "active" : ""}`}>Education</button>
