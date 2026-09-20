@@ -126,6 +126,13 @@ export function ThreeBackground() {
 
     /* Scroll / mouse / resize state --------------------------------------- */
     let scroll = 0
+    let scrollMax = 1
+    const measureScrollMax = () => {
+      scrollMax = Math.max(
+        1,
+        document.documentElement.scrollHeight - window.innerHeight
+      )
+    }
     const mouse = { x: 0, y: 0 }
     let lastInteraction = performance.now()
     let hidden = typeof document !== "undefined" && document.hidden

@@ -15,26 +15,56 @@ export function Navbar() {
   const { data: settings } = useSiteSettings()
 
   useEffect(() => {
-    const onScroll = () => {
-      const scrolled = window.scrollY > 24
+    const sections = NAV_SECTIONS.map((id) => document.getElementById(id)).filter(
+      (el): el is HTMLElement => el !== null
+    )
+    let tops: number[] = []
+    let scrollMax = 1
+    let ticking = false
+    let lastY = window.scrollY
+    let rafId = 0
+
+    const measure = () => {
+      tops = sections.map((el) => el.getBoundingClientRect().top + window.scrollY)
+      scrollMax = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
+    }
+
+    const process = () => {
+      ticking = false
+      const y = lastY
+      const scrolled = y > 24
       setIsScrolled((prev) => (scrolled === prev ? prev : scrolled))
+      navRef.current?.style.setProperty("--p", Math.min(1, Math.max(0, y / scrollMax)).toFixed(4))
 
-      const doc = document.documentElement
-      const max = Math.max(1, doc.scrollHeight - window.innerHeight)
-      const p = Math.min(1, Math.max(0, window.scrollY / max))
-      navRef.current?.style.setProperty("--p", p.toFixed(4))
-
-      const probe = window.scrollY + window.innerHeight * 0.35
+      const probe = y + window.innerHeight * 0.35
       let current = "home"
-      for (const id of NAV_SECTIONS) {
-        const el = document.getElementById(id)
-        if (el && el.getBoundingClientRect().top + window.scrollY <= probe) current = id
+      for (let i = 0; i < tops.length; i++) {
+        if (tops[i] <= probe) current = NAV_SECTIONS[i]
       }
       setActive((prev) => (prev === current ? prev : current))
     }
-    onScroll()
+
+    const onScroll = () => {
+      lastY = window.scrollY
+      if (ticking) return
+      ticking = true
+      rafId = requestAnimationFrame(process)
+    }
+
+    measure()
+    process()
     window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
+    const reMeasure = () => measure()
+    window.addEventListener("resize", reMeasure)
+    window.addEventListener("load", reMeasure)
+    window.addEventListener("portfolioConfigUpdated", reMeasure)
+    return () => {
+      cancelAnimationFrame(rafId)
+      window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("resize", reMeasure)
+      window.removeEventListener("load", reMeasure)
+      window.removeEventListener("portfolioConfigUpdated", reMeasure)
+    }
   }, [])
 
   const scrollToSection = (id: string) => {
