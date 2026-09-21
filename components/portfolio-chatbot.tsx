@@ -487,7 +487,7 @@ export function PortfolioChatbot() {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-8 right-8 z-50 flex h-14 w-14 items-center justify-center rounded-full btn-primary text-white shadow-lg hover:scale-110 transition-all duration-300 animate-pulse hover:shadow-[0_0_20px_var(--accent-primary)] cursor-pointer"
+        className={`fixed bottom-8 right-8 z-50 flex h-14 w-14 items-center justify-center rounded-full btn-primary text-white shadow-lg hover:scale-110 transition-all duration-300 animate-pulse hover:shadow-[0_0_20px_var(--accent-primary)] cursor-pointer ${isOpen ? "pointer-events-none scale-0 opacity-0" : "scale-100 opacity-100"}`}
         aria-label="Toggle AI Chatbot"
       >
         {isOpen ? <X className="h-6 w-6" /> : <MessageSquare className="h-6 w-6" />}
@@ -495,7 +495,7 @@ export function PortfolioChatbot() {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-0 right-4 sm:right-8 z-50 w-[calc(100vw-2rem)] sm:w-[340px] md:w-[340px] h-[70vh] sm:h-[500px] md:h-[560px] max-h-[500px] rounded-3xl glass-card flex flex-col border border-[color:var(--card-border)] bg-[color-mix(in_srgb,var(--surface-strong)_95%,transparent)] backdrop-blur-xl shadow-2xl overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
+        <div className="fixed bottom-4 right-4 sm:bottom-0 sm:right-8 z-50 w-[calc(100vw-2rem)] sm:w-[340px] md:w-[340px] h-[70vh] sm:h-[500px] md:h-[560px] max-h-[500px] rounded-3xl glass-card flex flex-col border border-[color:var(--card-border)] bg-[color-mix(in_srgb,var(--surface-strong)_95%,transparent)] backdrop-blur-xl shadow-2xl overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
 
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-[color:var(--card-border)] bg-gradient-to-r from-[color:var(--accent-primary)] to-[color:var(--accent-secondary)] text-white shrink-0">

@@ -52,6 +52,14 @@ function update() {
 
     const absOff = Math.abs(off)
 
+    /* Skip the 3D tilt on phones: it can distort full-width sections and
+       cause horizontal overflow. Pop mode (translate + scale) stays. */
+    if (entry.mode === "tilt" && window.innerWidth < 768) {
+      el.style.transform = "none"
+      el.style.opacity = "1"
+      return
+    }
+
     if (entry.mode === "pop") {
       const y = off * entry.amount
       const scale = 1 - absOff * 0.07

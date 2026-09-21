@@ -122,6 +122,11 @@ body::after {
   padding: 2rem 1.5rem;
 }
 
+/* Keep anchored sections clear of the fixed navbar */
+section[id] {
+  scroll-margin-top: 5.5rem;
+}
+
 .section-title {
   font-family: var(--font-sora);
   font-size: clamp(2rem, 4vw, 3.2rem);
