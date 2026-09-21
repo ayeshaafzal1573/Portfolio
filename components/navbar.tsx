@@ -1,11 +1,20 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Moon, Sun, Palette, Code2, Check } from "lucide-react"
+import { Moon, Sun, Palette, Code2, Check, Menu, X } from "lucide-react"
 import { useTheme } from "./theme-provider"
 import { useSiteSettings } from "@/lib/useConfig"
 
-const NAV_SECTIONS = ["home", "about", "education", "live-projects", "projects", "contact"]
+const NAV_ITEMS = [
+  { id: "home", label: "Home" },
+  { id: "about", label: "About" },
+  { id: "education", label: "Education" },
+  { id: "live-projects", label: "Live Projects" },
+  { id: "projects", label: "Projects" },
+  { id: "contact", label: "Contact" },
+]
+
+const NAV_SECTIONS = NAV_ITEMS.map((item) => item.id)
 
 const THEME_OPTIONS = [
   { key: "pastel" as const, label: "Light", icon: Sun, swatch: "linear-gradient(135deg,#f6efe4,#a2653c)" },

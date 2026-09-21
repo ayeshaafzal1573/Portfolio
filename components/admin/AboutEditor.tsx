@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useAbout, useSkills } from "@/lib/useConfig"
 import { showToast } from "@/components/admin/Toast"
 import { User, Plus, X, GripVertical, ChevronDown, ChevronUp, Code, Database, Palette, Smartphone, Globe, Zap, Radio, BarChart2, ShieldCheck, Users } from "lucide-react"
@@ -9,19 +9,27 @@ const ICON_OPTIONS = ["Code", "Database", "Palette", "Smartphone", "Globe", "Zap
 
 const ICON_MAP: Record<string, React.ComponentType<any>> = { Code, Database, Palette, Smartphone, Globe, Zap, Radio, BarChart2, ShieldCheck, Users }
 
+const skillsSig = (list: any[]) =>
+  JSON.stringify(list.map((s) => ({ name: s.name, level: s.level, icon: s.icon })))
+
 export default function AboutEditor() {
   const { data: aboutData, loading: aboutLoading } = useAbout()
   const { data: skillsData, loading: skillsLoading } = useSkills()
   const [description, setDescription] = useState("")
   const [skills, setSkills] = useState<any[]>([])
   const [newSkill, setNewSkill] = useState({ name: "", level: 75, icon: "Code" })
+  const loadedSkillsSig = useRef("")
 
   useEffect(() => {
     if (aboutData) setDescription(aboutData.description || "")
   }, [aboutData])
 
   useEffect(() => {
-    if (skillsData) setSkills(skillsData.map((s) => ({ id: s.id, name: s.name, level: s.level, icon: s.icon })))
+    if (skillsData) {
+      const next = skillsData.map((s) => ({ id: s.id, name: s.name, level: s.level, icon: s.icon }))
+      setSkills(next)
+      loadedSkillsSig.current = skillsSig(next)
+    }
   }, [skillsData])
 
   const addSkill = () => {
@@ -39,19 +47,37 @@ export default function AboutEditor() {
   }
 
   const handleSave = async () => {
+    const skillsChanged = skillsSig(skills) !== loadedSkillsSig.current
+    if (skillsChanged && skills.length === 0) {
+      const confirmed = window.confirm(
+        "This will remove ALL core skills. Are you sure you want to save?"
+      )
+      if (!confirmed) return
+    }
+
     try {
-      await Promise.all([
+      const requests: Promise<Response>[] = [
         fetch("/api/about", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ description }),
         }),
-        fetch("/api/skills", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ skills: skills.map((s) => ({ name: s.name, level: s.level, icon: s.icon })) }),
-        }),
-      ])
+      ]
+
+      if (skillsChanged) {
+        requests.push(
+          fetch("/api/skills", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ skills: skills.map((s) => ({ name: s.name, level: s.level, icon: s.icon })) }),
+          })
+        )
+      }
+
+      const responses = await Promise.all(requests)
+      if (responses.some((r) => !r.ok)) throw new Error("Save failed")
+
+      loadedSkillsSig.current = skillsSig(skills)
       window.dispatchEvent(new Event("portfolioConfigUpdated"))
       showToast("About section saved!", "success")
     } catch {

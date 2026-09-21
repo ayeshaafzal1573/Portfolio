@@ -30,12 +30,31 @@ export async function PUT(request: Request) {
     const { getSupabase } = await import("@/lib/supabase")
     const supabase = getSupabase()
     const { skills } = await request.json()
-    await supabase.from("skills").delete().neq("id", "00000000-0000-0000-0000-000000000000")
-    const rows = skills.map((s: any, i: number) => ({ ...s, sort_order: i, id: undefined }))
+
+    if (!Array.isArray(skills) || skills.length === 0) {
+      return NextResponse.json(
+        { error: "Refusing to save an empty skills list. Existing skills were left unchanged." },
+        { status: 400 }
+      )
+    }
+
+    const { error: deleteError } = await supabase
+      .from("skills")
+      .delete()
+      .neq("id", "00000000-0000-0000-0000-000000000000")
+    if (deleteError) throw deleteError
+
+    const rows = skills.map((s: any, i: number) => ({
+      name: s.name,
+      level: s.level,
+      icon: s.icon,
+      sort_order: i,
+    }))
     const { error } = await supabase.from("skills").insert(rows)
     if (error) throw error
     return NextResponse.json({ success: true })
   } catch (error) {
+    console.error("[skills PUT] failed:", error)
     return NextResponse.json({ error: "Failed to save skills" }, { status: 500 })
   }
 }
