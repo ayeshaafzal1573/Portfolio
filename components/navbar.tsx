@@ -26,6 +26,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [active, setActive] = useState("home")
   const [themeOpen, setThemeOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const themeMenuRef = useRef<HTMLDivElement>(null)
   const { theme, setTheme } = useTheme()
@@ -104,6 +105,22 @@ export function Navbar() {
     }
   }, [themeOpen])
 
+  useEffect(() => {
+    if (!menuOpen) return
+    const onResize = () => {
+      if (window.innerWidth >= 768) setMenuOpen(false)
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false)
+    }
+    window.addEventListener("resize", onResize)
+    document.addEventListener("keydown", onKey)
+    return () => {
+      window.removeEventListener("resize", onResize)
+      document.removeEventListener("keydown", onKey)
+    }
+  }, [menuOpen])
+
   const activeOption = THEME_OPTIONS.find((o) => o.key === theme) || THEME_OPTIONS[0]
   const ActiveIcon = activeOption.icon
 
@@ -122,46 +139,82 @@ export function Navbar() {
           </span>
         </button>
         <div className="hidden items-center gap-4 md:flex">
-          <button onClick={() => scrollToSection("home")} className={`nav-link py-3 text-sm font-medium ${active === "home" ? "active" : ""}`}>Home</button>
-          <button onClick={() => scrollToSection("about")} className={`nav-link py-3 text-sm font-medium ${active === "about" ? "active" : ""}`}>About</button>
-          <button onClick={() => scrollToSection("education")} className={`nav-link py-3 text-sm font-medium ${active === "education" ? "active" : ""}`}>Education</button>
-          <button onClick={() => scrollToSection("live-projects")} className={`nav-link py-3 text-sm font-medium ${active === "live-projects" ? "active" : ""}`}>Live Projects</button>
-          <button onClick={() => scrollToSection("projects")} className={`nav-link py-3 text-sm font-medium ${active === "projects" ? "active" : ""}`}>Projects</button>
-          <button onClick={() => scrollToSection("contact")} className={`nav-link py-3 text-sm font-medium ${active === "contact" ? "active" : ""}`}>Contact</button>
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => scrollToSection(item.id)}
+              className={`nav-link py-3 text-sm font-medium ${active === item.id ? "active" : ""}`}
+            >
+              {item.label}
+            </button>
+          ))}
         </div>
-        <div ref={themeMenuRef} className="relative my-2">
+        <div className="my-2 flex items-center gap-2">
+          <div ref={themeMenuRef} className="relative">
+            <button
+              onClick={() => setThemeOpen((v) => !v)}
+              className="flex items-center gap-2 rounded-full px-3 py-2.5 btn-secondary"
+              aria-label="Change theme"
+              aria-expanded={themeOpen}
+            >
+              <ActiveIcon className="h-5 w-5" />
+              <span className="hidden text-xs font-bold sm:inline">{activeOption.label}</span>
+            </button>
+            {themeOpen && (
+              <div className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--surface-strong)] p-1.5 shadow-2xl backdrop-blur-xl">
+                {THEME_OPTIONS.map(({ key, label, icon: Icon, swatch }) => (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      setTheme(key)
+                      setThemeOpen(false)
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-[color:var(--text-primary)] transition-colors hover:bg-[color:var(--accent-soft)]"
+                  >
+                    <span className="h-6 w-6 shrink-0 rounded-full border border-[color:var(--card-border)]" style={{ background: swatch }} />
+                    <span className="flex flex-1 items-center gap-2">
+                      <Icon className="h-4 w-4 text-[color:var(--accent-primary)]" />
+                      {label}
+                    </span>
+                    {theme === key && <Check className="h-4 w-4 text-[color:var(--accent-primary)]" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           <button
-            onClick={() => setThemeOpen((v) => !v)}
-            className="flex items-center gap-2 rounded-full px-3 py-2.5 btn-secondary"
-            aria-label="Change theme"
-            aria-expanded={themeOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+            className="flex items-center justify-center rounded-full p-2.5 btn-secondary md:hidden"
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
           >
-            <ActiveIcon className="h-5 w-5" />
-            <span className="hidden text-xs font-bold sm:inline">{activeOption.label}</span>
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
-          {themeOpen && (
-            <div className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--surface-strong)] p-1.5 shadow-2xl backdrop-blur-xl">
-              {THEME_OPTIONS.map(({ key, label, icon: Icon, swatch }) => (
-                <button
-                  key={key}
-                  onClick={() => {
-                    setTheme(key)
-                    setThemeOpen(false)
-                  }}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-[color:var(--text-primary)] transition-colors hover:bg-[color:var(--accent-soft)]"
-                >
-                  <span className="h-6 w-6 shrink-0 rounded-full border border-[color:var(--card-border)]" style={{ background: swatch }} />
-                  <span className="flex flex-1 items-center gap-2">
-                    <Icon className="h-4 w-4 text-[color:var(--accent-primary)]" />
-                    {label}
-                  </span>
-                  {theme === key && <Check className="h-4 w-4 text-[color:var(--accent-primary)]" />}
-                </button>
-              ))}
-            </div>
-          )}
         </div>
       </div>
+
+      {menuOpen && (
+        <div className="mx-auto mt-2 w-full max-w-7xl px-3 md:hidden">
+          <div className="nav-pill glass-card flex flex-col overflow-hidden rounded-3xl p-2">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  scrollToSection(item.id)
+                  setMenuOpen(false)
+                }}
+                className={`rounded-2xl px-4 py-3 text-left text-sm font-semibold transition-colors ${
+                  active === item.id
+                    ? "bg-[color:var(--accent-soft)] text-[color:var(--text-primary)]"
+                    : "text-[color:var(--text-secondary)] hover:bg-[color:var(--accent-soft)]"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="nav-progress" aria-hidden="true">
         <span className="nav-progress-fill" />
       </div>

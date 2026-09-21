@@ -22,9 +22,9 @@ export function LiveProjectsSlider() {
       <section id="live-projects" className="section-shell">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 text-center"><h2 className="section-title">Live Projects</h2></div>
-          <div className="flex gap-6 overflow-hidden">
+          <div className="flex gap-4 overflow-hidden sm:gap-6">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="w-80 flex-shrink-0 overflow-hidden rounded-2xl glass-card animate-pulse">
+              <div key={i} className="w-[16.5rem] flex-shrink-0 overflow-hidden rounded-2xl glass-card animate-pulse sm:w-80">
                 <div className="h-48 bg-slate-300/60 dark:bg-slate-700/70" />
                 <div className="space-y-4 p-6"><div className="h-5 rounded bg-slate-300/60 dark:bg-slate-700/70" /></div>
               </div>
@@ -50,16 +50,16 @@ export function LiveProjectsSlider() {
         </div>
 
         <div className="relative reveal-scale">
-          <button onClick={() => scroll("left")} className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full p-3 btn-secondary hover:scale-110 transition-transform duration-200" aria-label="Scroll left">
+          <button onClick={() => scroll("left")} className="absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center rounded-full p-3 btn-secondary transition-transform duration-200 hover:scale-110 sm:flex" aria-label="Scroll left">
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <button onClick={() => scroll("right")} className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full p-3 btn-secondary hover:scale-110 transition-transform duration-200" aria-label="Scroll right">
+          <button onClick={() => scroll("right")} className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center rounded-full p-3 btn-secondary transition-transform duration-200 hover:scale-110 sm:flex" aria-label="Scroll right">
             <ChevronRight className="h-5 w-5" />
           </button>
 
-          <div ref={sliderRef} className="hide-scrollbar flex gap-6 overflow-x-auto px-12 py-4" style={{ scrollSnapType: "x mandatory" }}>
+          <div ref={sliderRef} className="hide-scrollbar flex gap-4 overflow-x-auto px-4 py-4 sm:gap-6 sm:px-12" style={{ scrollSnapType: "x mandatory" }}>
             {projectList.map((project) => (
-              <TiltCard key={project.id} className="group w-80 flex-shrink-0 overflow-hidden rounded-2xl glass-card" style={{ scrollSnapAlign: "start" }} max={12}>
+              <TiltCard key={project.id} className="group w-[16.5rem] flex-shrink-0 overflow-hidden rounded-2xl glass-card sm:w-80" style={{ scrollSnapAlign: "start" }} max={12}>
                 <div className="relative overflow-hidden">
                   <img src={project.thumbnail_url || "/placeholder.svg"} alt={project.name} className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/45 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

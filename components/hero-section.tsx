@@ -59,9 +59,9 @@ function HeroStat({ value, suffix, label, delay }: { value: number; suffix: stri
   }, [delay])
   const count = useCountUp(value, active)
   return (
-    <div ref={ref} className="relative flex-1 px-4 text-center sm:px-6">
+    <div ref={ref} className="relative flex-1 px-2 text-center sm:px-6">
       <p
-        className="font-sora text-3xl font-extrabold leading-none md:text-4xl"
+        className="font-sora text-2xl font-extrabold leading-none sm:text-3xl md:text-4xl"
         style={{
           background: "var(--gradient-main)",
           WebkitBackgroundClip: "text",
@@ -216,7 +216,7 @@ export function HeroSection() {
         <div className="absolute top-[10%] left-[45%] animate-float-drift select-none" style={{ animationDuration: '29s', animationDelay: '5s' }}>git commit -m &quot;feat: ai-copilot&quot;</div>
       </div>
 
-      <div className="floating-dot right-16 top-46 h-24 w-24 opacity-40" style={{ background: "var(--accent-primary)" }} />
+      <div className="floating-dot right-16 top-[46%] h-24 w-24 opacity-40" style={{ background: "var(--accent-primary)" }} />
       <div className="floating-dot bottom-32 left-10 h-20 w-20 opacity-30" style={{ background: "var(--accent-secondary)", animationDelay: "1.5s" }} />
 
       <div ref={containerRef} className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 py-2 lg:grid-cols-2">
@@ -236,7 +236,7 @@ export function HeroSection() {
             <p className="text-sm font-bold uppercase tracking-[0.25em] hero-rise" style={{ color: "var(--accent-primary)", animationDelay: "0.05s" }}>
               {profile?.intro_label || "Hi, My Name Is"}
             </p>
-            <h1 className="hero-name-shimmer font-sora text-5xl font-extrabold leading-[1.1] md:text-6xl lg:text-7xl tracking-tight bg-clip-text text-transparent hero-rise" style={{ animationDelay: "0.12s" }}>
+            <h1 className="hero-name-shimmer font-sora text-4xl font-extrabold leading-[1.1] sm:text-5xl md:text-6xl lg:text-7xl tracking-tight bg-clip-text text-transparent hero-rise" style={{ animationDelay: "0.12s" }}>
               {profile?.name || "Ayesha Afzal"}
             </h1>
 
@@ -295,7 +295,7 @@ export function HeroSection() {
             <div className="absolute -inset-6 rounded-[2.5rem] opacity-50 blur-3xl pulse-glow-bg" style={{ background: "var(--gradient-main)" }} />
             <div className="animate-float">
             <TiltCard max={16} scale={1.02} className="relative">
-              <div className="relative h-[28rem] w-72 bg-transparent">
+              <div className="relative h-[22rem] w-56 bg-transparent sm:h-[28rem] sm:w-72">
                 {profile?.profile_image ? (
                   <img
                     src={profile.profile_image}
@@ -313,15 +313,15 @@ export function HeroSection() {
                   />
                 )}
               </div>
-              <div className="absolute -left-79 top-8 rounded-2xl glass-card px-4 py-2.5 text-sm font-bold shadow-xl depth-card-sm">
+              <div className="absolute -left-6 top-8 hidden rounded-2xl glass-card px-4 py-2.5 text-sm font-bold shadow-xl depth-card-sm sm:block">
                 <Terminal className="mb-1 h-4 w-4 text-[color:var(--accent-primary)]" />
                 Full-Stack
               </div>
-              <div className="absolute -right-5 top-1/3 rounded-2xl glass-card px-4 py-2.5 text-sm font-bold shadow-xl depth-card">
+              <div className="absolute -right-5 top-1/3 hidden rounded-2xl glass-card px-4 py-2.5 text-sm font-bold shadow-xl depth-card sm:block">
                 <Smartphone className="mb-1 h-4 w-4 text-[color:var(--accent-secondary)]" />
                 React Native
               </div>
-              <div className="absolute -left-12 bottom-16 rounded-2xl glass-card px-4 py-2.5 text-sm font-bold shadow-xl depth-card-sm">
+              <div className="absolute -left-12 bottom-16 hidden rounded-2xl glass-card px-4 py-2.5 text-sm font-bold shadow-xl depth-card-sm sm:block">
                 <Brain className="mb-1 h-4 w-4 text-[color:var(--accent-primary)]" />
                 AI Integration
               </div>

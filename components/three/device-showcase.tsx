@@ -589,26 +589,26 @@ export function DeviceShowcase() {
         <div ref={cardRef} className="relative h-[24rem] w-full overflow-hidden rounded-[2rem] glass-card sm:h-[28rem] md:h-[31rem]">
           <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden="true" style={{ cursor: "grab" }} />
 
-          <div className="pointer-events-none absolute left-5 top-5 flex items-center gap-2 rounded-2xl glass-card px-3.5 py-2 text-xs font-bold opacity-90">
+          <div className="pointer-events-none absolute left-3 top-3 flex items-center gap-2 rounded-2xl glass-card px-3 py-1.5 text-[10px] font-bold opacity-90 sm:left-5 sm:top-5 sm:px-3.5 sm:py-2 sm:text-xs">
             <Smartphone className="h-4 w-4 text-[color:var(--accent-primary)]" />
             React Native · iOS · Android
           </div>
-          <div className="pointer-events-none absolute right-5 top-5 flex items-center gap-2 rounded-2xl glass-card px-3.5 py-2 text-xs font-bold opacity-90 animate-float">
+          <div className="pointer-events-none absolute right-5 top-5 hidden items-center gap-2 rounded-2xl glass-card px-3.5 py-2 text-xs font-bold opacity-90 animate-float sm:flex">
             <AppWindow className="h-4 w-4 text-[color:var(--accent-secondary)]" />
             Next.js · MERN · FastAPI
           </div>
-          <div className="pointer-events-none absolute bottom-5 left-5 flex items-center gap-2 rounded-2xl glass-card px-3.5 py-2 text-xs font-bold opacity-90">
+          <div className="pointer-events-none absolute bottom-3 left-3 flex items-center gap-2 rounded-2xl glass-card px-3 py-1.5 text-[10px] font-bold opacity-90 sm:bottom-5 sm:left-5 sm:px-3.5 sm:py-2 sm:text-xs">
             <Globe className="h-4 w-4 text-[color:var(--accent-primary)]" />
             Responsive · PWA-ready
           </div>
-          <div className="pointer-events-none absolute bottom-5 right-5 flex items-center gap-2 rounded-2xl glass-card px-3.5 py-2 text-xs font-bold opacity-90 animate-float" style={{ animationDelay: "1.2s" }}>
+          <div className="pointer-events-none absolute bottom-5 right-5 hidden items-center gap-2 rounded-2xl glass-card px-3.5 py-2 text-xs font-bold opacity-90 animate-float sm:flex" style={{ animationDelay: "1.2s" }}>
             <Zap className="h-4 w-4 text-[color:var(--accent-secondary)]" />
             60fps Interactivity
           </div>
 
           <p
             ref={hintRef}
-            className="pointer-events-none absolute inset-x-0 bottom-24 mx-auto flex w-fit items-center gap-2 rounded-full bg-black/45 px-4 py-2 text-xs font-bold text-white backdrop-blur-sm transition-opacity duration-500"
+            className="pointer-events-none absolute inset-x-0 bottom-16 mx-auto flex w-fit items-center gap-2 rounded-full bg-black/45 px-4 py-2 text-xs font-bold text-white backdrop-blur-sm transition-opacity duration-500 sm:bottom-24"
           >
             <Move3d className="h-4 w-4" />
             Drag to orbit · Scroll to zoom
