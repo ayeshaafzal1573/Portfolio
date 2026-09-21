@@ -13,6 +13,7 @@ import {
   makeSlideTexture,
   type SlideProject,
 } from "./devices-models"
+import { createVideoCache } from "./media-textures"
 
 /* ------------------------------------------------------------------ */
 /* Interactive 3D showcase:                                              */
@@ -208,54 +209,9 @@ export function DeviceShowcase() {
     let ready = false
 
     /* Video textures (shared between both screens, cached by URL) ------ */
-    interface VideoEntry { video: HTMLVideoElement; texture: THREE.VideoTexture }
-    const videoCache = new Map<string, VideoEntry>()
+    const videoCache = createVideoCache()
     let activeVideo: HTMLVideoElement | null = null
     let pendingVideo: HTMLVideoElement | null = null
-
-    const getVideoTexture = (url: string): Promise<THREE.VideoTexture | null> => {
-      const cached = videoCache.get(url)
-      if (cached) return Promise.resolve(cached.texture)
-      return new Promise((resolve) => {
-        const video = document.createElement("video")
-        video.crossOrigin = "anonymous"
-        video.muted = true
-        video.loop = true
-        video.playsInline = true
-        video.preload = "auto"
-        video.setAttribute("playsinline", "")
-        let settled = false
-        const onReady = () => {
-          if (settled) return
-          settled = true
-          cleanup()
-          const texture = new THREE.VideoTexture(video)
-          texture.colorSpace = THREE.SRGBColorSpace
-          texture.userData.shared = true
-          videoCache.set(url, { video, texture })
-          video.play().catch(() => {})
-          resolve(texture)
-        }
-        const onError = () => {
-          if (settled) return
-          settled = true
-          cleanup()
-          resolve(null)
-        }
-        const cleanup = () => {
-          video.removeEventListener("loadeddata", onReady)
-          video.removeEventListener("canplay", onReady)
-          video.removeEventListener("error", onError)
-          window.clearTimeout(timeout)
-        }
-        const timeout = window.setTimeout(onError, 8000)
-        video.addEventListener("loadeddata", onReady)
-        video.addEventListener("canplay", onReady)
-        video.addEventListener("error", onError)
-        video.src = url
-        video.load()
-      })
-    }
 
     const assignMap = (mesh: THREE.Mesh, tex: THREE.Texture) => {
       const mat = mesh.material as THREE.MeshBasicMaterial
@@ -296,10 +252,10 @@ export function DeviceShowcase() {
       const token = ++buildToken
       const url = project?.video_url?.trim()
       if (url) {
-        getVideoTexture(url).then((vt) => {
+        videoCache.get(url).then((vt) => {
           if (token !== buildToken) return
           if (vt) {
-            const entry = videoCache.get(url)
+            const entry = videoCache.getEntry(url)
             applyTransition(vt, vt, entry?.video ?? null)
           } else {
             buildCanvasSlide(project, token)
@@ -554,13 +510,7 @@ export function DeviceShowcase() {
       })
       for (const m of extra) m.dispose?.()
       for (const d of build.disposables) d.dispose()
-      for (const { video, texture } of videoCache.values()) {
-        video.pause()
-        video.removeAttribute("src")
-        video.load()
-        texture.dispose()
-      }
-      videoCache.clear()
+      videoCache.disposeAll()
       for (const screen of [build.laptopScreen, build.phoneScreen]) {
         const mat = screen.material as THREE.MeshBasicMaterial
         mat.map?.dispose()
