@@ -1,16 +1,24 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Moon, Sun, Palette, Code2 } from "lucide-react"
+import { Moon, Sun, Palette, Code2, Check } from "lucide-react"
 import { useTheme } from "./theme-provider"
 import { useSiteSettings } from "@/lib/useConfig"
 
 const NAV_SECTIONS = ["home", "about", "education", "live-projects", "projects", "contact"]
 
+const THEME_OPTIONS = [
+  { key: "pastel" as const, label: "Light", icon: Sun, swatch: "linear-gradient(135deg,#f6efe4,#a2653c)" },
+  { key: "dark" as const, label: "Dark", icon: Moon, swatch: "linear-gradient(135deg,#1b130c,#d9a25c)" },
+  { key: "girly-blue" as const, label: "Warm", icon: Palette, swatch: "linear-gradient(135deg,#f9f2e8,#d89a67)" },
+]
+
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [active, setActive] = useState("home")
+  const [themeOpen, setThemeOpen] = useState(false)
   const navRef = useRef<HTMLElement>(null)
+  const themeMenuRef = useRef<HTMLDivElement>(null)
   const { theme, setTheme } = useTheme()
   const { data: settings } = useSiteSettings()
 
@@ -71,19 +79,24 @@ export function Navbar() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
   }
 
-  const cycleTheme = () => {
-    const themes = ["pastel", "dark", "girly-blue"] as const
-    const currentIndex = themes.indexOf(theme)
-    setTheme(themes[(currentIndex + 1) % themes.length])
-  }
-
-  const getThemeIcon = () => {
-    switch (theme) {
-      case "dark": return <Moon className="h-5 w-5" />
-      case "girly-blue": return <Palette className="h-5 w-5" />
-      default: return <Sun className="h-5 w-5" />
+  useEffect(() => {
+    if (!themeOpen) return
+    const onDown = (e: MouseEvent) => {
+      if (themeMenuRef.current && !themeMenuRef.current.contains(e.target as Node)) setThemeOpen(false)
     }
-  }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setThemeOpen(false)
+    }
+    document.addEventListener("mousedown", onDown)
+    document.addEventListener("keydown", onKey)
+    return () => {
+      document.removeEventListener("mousedown", onDown)
+      document.removeEventListener("keydown", onKey)
+    }
+  }, [themeOpen])
+
+  const activeOption = THEME_OPTIONS.find((o) => o.key === theme) || THEME_OPTIONS[0]
+  const ActiveIcon = activeOption.icon
 
   return (
     <nav
@@ -107,9 +120,38 @@ export function Navbar() {
           <button onClick={() => scrollToSection("projects")} className={`nav-link py-3 text-sm font-medium ${active === "projects" ? "active" : ""}`}>Projects</button>
           <button onClick={() => scrollToSection("contact")} className={`nav-link py-3 text-sm font-medium ${active === "contact" ? "active" : ""}`}>Contact</button>
         </div>
-        <button onClick={cycleTheme} className="my-2 rounded-full p-2.5 btn-secondary" aria-label="Toggle theme">
-          {getThemeIcon()}
-        </button>
+        <div ref={themeMenuRef} className="relative my-2">
+          <button
+            onClick={() => setThemeOpen((v) => !v)}
+            className="flex items-center gap-2 rounded-full px-3 py-2.5 btn-secondary"
+            aria-label="Change theme"
+            aria-expanded={themeOpen}
+          >
+            <ActiveIcon className="h-5 w-5" />
+            <span className="hidden text-xs font-bold sm:inline">{activeOption.label}</span>
+          </button>
+          {themeOpen && (
+            <div className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--surface-strong)] p-1.5 shadow-2xl backdrop-blur-xl">
+              {THEME_OPTIONS.map(({ key, label, icon: Icon, swatch }) => (
+                <button
+                  key={key}
+                  onClick={() => {
+                    setTheme(key)
+                    setThemeOpen(false)
+                  }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-[color:var(--text-primary)] transition-colors hover:bg-[color:var(--accent-soft)]"
+                >
+                  <span className="h-6 w-6 shrink-0 rounded-full border border-[color:var(--card-border)]" style={{ background: swatch }} />
+                  <span className="flex flex-1 items-center gap-2">
+                    <Icon className="h-4 w-4 text-[color:var(--accent-primary)]" />
+                    {label}
+                  </span>
+                  {theme === key && <Check className="h-4 w-4 text-[color:var(--accent-primary)]" />}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
       <div className="nav-progress" aria-hidden="true">
         <span className="nav-progress-fill" />

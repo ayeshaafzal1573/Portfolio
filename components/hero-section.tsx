@@ -2,11 +2,83 @@
 
 import { useEffect, useRef, useState } from "react"
 import type { CSSProperties } from "react"
-import { Sparkles, Terminal, Code, Cpu, Smartphone, Brain } from "lucide-react"
+import { Sparkles, Terminal, Code, Cpu, Smartphone, Brain, Award, Briefcase } from "lucide-react"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { TiltCard } from "@/components/three/tilt-card"
 import Image from "next/image"
 import { useProfile, useTypingRoles } from "@/lib/useConfig"
+
+const HERO_STATS = [
+  { value: 4, suffix: "+", label: "Years Experience" },
+  { value: 40, suffix: "+", label: "Projects Shipped" },
+  { value: 15, suffix: "+", label: "Happy Clients" },
+]
+
+const MARQUEE_TECH = [
+  "React", "Next.js", "TypeScript", "Node.js", "MongoDB", "PostgreSQL",
+  "FastAPI", "Python", "React Native", "Tailwind", "Supabase", "AWS",
+  "Docker", "GraphQL", "OpenAI", "Redis",
+]
+
+function useCountUp(target: number, active: boolean, duration = 1400) {
+  const [value, setValue] = useState(0)
+  useEffect(() => {
+    if (!active) return
+    let raf = 0
+    const start = performance.now()
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - start) / duration)
+      const eased = 1 - Math.pow(1 - p, 3)
+      setValue(Math.round(target * eased))
+      if (p < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [target, active, duration])
+  return value
+}
+
+function HeroStat({ value, suffix, label, delay }: { value: number; suffix: string; label: string; delay: number }) {
+  const [active, setActive] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const t = window.setTimeout(() => setActive(true), delay)
+          io.disconnect()
+          return () => window.clearTimeout(t)
+        }
+      },
+      { threshold: 0.4 }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [delay])
+  const count = useCountUp(value, active)
+  return (
+    <div ref={ref} className="relative flex-1 px-4 text-center sm:px-6">
+      <p
+        className="font-sora text-3xl font-extrabold leading-none md:text-4xl"
+        style={{
+          background: "var(--gradient-main)",
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          color: "transparent",
+        }}
+      >
+        {count}
+        {suffix}
+      </p>
+      <p className="mt-1.5 text-[11px] font-semibold uppercase tracking-wider text-[color:var(--text-secondary)]">
+        {label}
+      </p>
+      <span className="mx-auto mt-2 block h-0.5 w-6 rounded-full" style={{ background: "var(--accent-primary)" }} />
+    </div>
+  )
+}
 
 export function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -81,7 +153,7 @@ export function HeroSection() {
   }, [])
 
   return (
-    <section id="home" className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-6 pt-24 pb-4">
+    <section id="home" className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-6 pt-24 pb-24">
       <style>{`
         @keyframes float-drift {
           0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
@@ -89,6 +161,36 @@ export function HeroSection() {
           100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
         }
         .animate-float-drift { animation: float-drift infinite ease-in-out; }
+
+        @keyframes hero-shimmer {
+          0% { background-position: 0% 50%; }
+          100% { background-position: 200% 50%; }
+        }
+        .hero-name-shimmer {
+          background-image: linear-gradient(100deg, var(--text-primary) 0%, var(--text-primary) 35%, var(--accent-primary) 50%, var(--text-primary) 65%, var(--text-primary) 100%);
+          background-size: 200% 100%;
+          animation: hero-shimmer 6s linear infinite;
+        }
+
+        @keyframes hero-marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        .hero-marquee-track { animation: hero-marquee 26s linear infinite; }
+        .hero-marquee:hover .hero-marquee-track { animation-play-state: paused; }
+
+        @keyframes hero-ring-pulse {
+          0% { box-shadow: 0 0 0 0 var(--ring-soft); }
+          70% { box-shadow: 0 0 0 14px transparent; }
+          100% { box-shadow: 0 0 0 0 transparent; }
+        }
+        .hero-badge-pulse { animation: hero-ring-pulse 2.6s ease-out infinite; }
+
+        @keyframes hero-rise {
+          from { opacity: 0; transform: translateY(18px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-rise { animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
       `}</style>
 
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -114,21 +216,27 @@ export function HeroSection() {
         <div className="absolute top-[10%] left-[45%] animate-float-drift select-none" style={{ animationDuration: '29s', animationDelay: '5s' }}>git commit -m &quot;feat: ai-copilot&quot;</div>
       </div>
 
-      <div className="floating-dot right-16 top-36 h-24 w-24 opacity-40" style={{ background: "var(--accent-primary)" }} />
+      <div className="floating-dot right-16 top-46 h-24 w-24 opacity-40" style={{ background: "var(--accent-primary)" }} />
       <div className="floating-dot bottom-32 left-10 h-20 w-20 opacity-30" style={{ background: "var(--accent-secondary)", animationDelay: "1.5s" }} />
 
       <div ref={containerRef} className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 py-2 lg:grid-cols-2">
         <div className="space-y-8 text-left reveal-left active">
-          <div className="inline-flex items-center gap-2 rounded-full chip px-4 py-1.5 text-sm font-semibold tracking-wide backdrop-blur-md shadow-sm">
-            <Sparkles className="h-4 w-4 text-[color:var(--accent-primary)] animate-pulse" />
-            <span>Available for Freelance & Full-time Roles</span>
+          <div className="flex flex-wrap items-center gap-3 hero-rise mt-5">
+            <div className="hero-badge-pulse inline-flex items-center gap-2 rounded-full chip px-4 py-1.5 text-sm font-semibold tracking-wide backdrop-blur-md shadow-sm">
+              <Sparkles className="h-4 w-4 text-[color:var(--accent-primary)] animate-pulse" />
+              <span>Available for Freelance & Full-time Roles</span>
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--card-border)] bg-[color:var(--accent-soft)]/60 px-4 py-1.5 text-sm font-bold tracking-wide backdrop-blur-md">
+              <Award className="h-4 w-4 text-[color:var(--accent-secondary)]" />
+              <span>4+ Years Experience</span>
+            </div>
           </div>
 
           <div className="space-y-4">
-            <p className="text-sm font-bold uppercase tracking-[0.25em]" style={{ color: "var(--accent-primary)" }}>
+            <p className="text-sm font-bold uppercase tracking-[0.25em] hero-rise" style={{ color: "var(--accent-primary)", animationDelay: "0.05s" }}>
               {profile?.intro_label || "Hi, My Name Is"}
             </p>
-            <h1 className="font-sora text-5xl font-extrabold leading-[1.1] md:text-6xl lg:text-7xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[color:var(--text-primary)] via-[color:var(--text-primary)] to-[color:var(--accent-primary)]">
+            <h1 className="hero-name-shimmer font-sora text-5xl font-extrabold leading-[1.1] md:text-6xl lg:text-7xl tracking-tight bg-clip-text text-transparent hero-rise" style={{ animationDelay: "0.12s" }}>
               {profile?.name || "Ayesha Afzal"}
             </h1>
 
@@ -159,6 +267,12 @@ export function HeroSection() {
             </div>
           </div>
 
+          <div className="flex max-w-lg items-stretch divide-x divide-[color:var(--card-border)]">
+            {HERO_STATS.map((stat, i) => (
+              <HeroStat key={stat.label} value={stat.value} suffix={stat.suffix} label={stat.label} delay={i * 150} />
+            ))}
+          </div>
+
           <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center pt-2">
             <button
               onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
@@ -181,25 +295,25 @@ export function HeroSection() {
             <div className="absolute -inset-6 rounded-[2.5rem] opacity-50 blur-3xl pulse-glow-bg" style={{ background: "var(--gradient-main)" }} />
             <div className="animate-float">
             <TiltCard max={16} scale={1.02} className="relative">
-              <div className="relative h-[28rem] w-72 overflow-hidden rounded-[2rem] p-2.5 glass-card shadow-2xl">
+              <div className="relative h-[28rem] w-72 bg-transparent">
                 {profile?.profile_image ? (
                   <img
                     src={profile.profile_image}
                     alt={`${profile.name} - Full Stack Software Engineer`}
-                    className="h-full w-full rounded-[1.6rem] object-cover filter brightness-[1.02]"
+                    className="h-full w-full object-contain drop-shadow-[0_18px_40px_var(--ring-soft)]"
                   />
                 ) : (
                   <Image
-                    src="/ayesha-afzal-qadir.jpeg"
+                    src="/ayesha-afzal-qadir-v2.png"
                     width={420}
                     height={560}
                     alt="Ayesha Afzal - Full Stack & Mobile Software Engineer"
-                    className="h-full w-full rounded-[1.6rem] object-cover filter brightness-[1.02]"
+                    className="h-full w-full object-contain drop-shadow-[0_18px_40px_var(--ring-soft)]"
                     priority
                   />
                 )}
               </div>
-              <div className="absolute -left-8 top-8 rounded-2xl glass-card px-4 py-2.5 text-sm font-bold shadow-xl depth-card-sm">
+              <div className="absolute -left-79 top-8 rounded-2xl glass-card px-4 py-2.5 text-sm font-bold shadow-xl depth-card-sm">
                 <Terminal className="mb-1 h-4 w-4 text-[color:var(--accent-primary)]" />
                 Full-Stack
               </div>
@@ -214,6 +328,20 @@ export function HeroSection() {
             </TiltCard>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="hero-marquee absolute inset-x-0 bottom-0 z-0 overflow-hidden border-y border-[color:var(--card-border)] bg-[color:var(--surface)]/40 py-3 backdrop-blur-sm">
+        <div className="hero-marquee-track flex w-max items-center gap-10 pr-10">
+          {[...MARQUEE_TECH, ...MARQUEE_TECH].map((tech, i) => (
+            <span
+              key={`${tech}-${i}`}
+              className="flex items-center gap-3 font-sora text-sm font-bold uppercase tracking-widest text-[color:var(--text-secondary)]"
+            >
+              <span className="h-1.5 w-1.5 rounded-full" style={{ background: i % 2 === 0 ? "var(--accent-primary)" : "var(--accent-secondary)" }} />
+              {tech}
+            </span>
+          ))}
         </div>
       </div>
     </section>

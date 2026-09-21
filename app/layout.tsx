@@ -52,10 +52,10 @@ export const metadata: Metadata = {
   verification: {
     google: "SgBG-tA1lcg8f1-cJF3YenkDx2VBZv9evORLnIVyN2U",
   },
-  icons: {
-    icon: "/ayesha-afzal-qadir.jpeg",
-    shortcut: "/ayesha-afzal-qadir.jpeg",
-    apple: "/ayesha-afzal-qadir.jpeg",
+icons: {
+    icon: "/ayesha-afzal-qadir-v2.png",
+    shortcut: "/ayesha-afzal-qadir-v2.png",
+    apple: "/ayesha-afzal-qadir-v2.png",
   },
   openGraph: {
     title: "Ayesha Afzal | Full Stack Software Engineer & MERN Specialist",

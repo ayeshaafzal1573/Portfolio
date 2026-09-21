@@ -158,25 +158,25 @@ CREATE TABLE IF NOT EXISTS theme_settings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   theme JSONB NOT NULL DEFAULT '{
     "pastel": {
-      "primaryColor": "#d946ef",
-      "secondaryColor": "#a855f7",
-      "backgroundColor": "#faf5ff",
-      "textColor": "#3b0764",
-      "accentColor": "#d946ef"
+      "primaryColor": "#b0783e",
+      "secondaryColor": "#c68d5c",
+      "backgroundColor": "#f6efe4",
+      "textColor": "#3b2a1c",
+      "accentColor": "#a2653c"
     },
     "dark": {
-      "primaryColor": "#38bdf8",
-      "secondaryColor": "#22d3ee",
-      "backgroundColor": "#0b1220",
-      "textColor": "#e2e8f0",
-      "accentColor": "#38bdf8"
+      "primaryColor": "#b07c40",
+      "secondaryColor": "#c0864a",
+      "backgroundColor": "#1b130c",
+      "textColor": "#eee2d0",
+      "accentColor": "#d9a25c"
     },
     "girly-blue": {
-      "primaryColor": "#2563eb",
-      "secondaryColor": "#0284c7",
-      "backgroundColor": "#f2f7ff",
-      "textColor": "#172554",
-      "accentColor": "#2563eb"
+      "primaryColor": "#c8864e",
+      "secondaryColor": "#d89a67",
+      "backgroundColor": "#f9f2e8",
+      "textColor": "#472e1d",
+      "accentColor": "#b1683b"
     }
   }'::JSONB,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -307,25 +307,25 @@ VALUES (
   '00000000-0000-0000-0000-000000000001',
   '{
     "pastel": {
-      "primaryColor": "#d946ef",
-      "secondaryColor": "#a855f7",
-      "backgroundColor": "#faf5ff",
-      "textColor": "#3b0764",
-      "accentColor": "#d946ef"
+      "primaryColor": "#b0783e",
+      "secondaryColor": "#c68d5c",
+      "backgroundColor": "#f6efe4",
+      "textColor": "#3b2a1c",
+      "accentColor": "#a2653c"
     },
     "dark": {
-      "primaryColor": "#38bdf8",
-      "secondaryColor": "#22d3ee",
-      "backgroundColor": "#0b1220",
-      "textColor": "#e2e8f0",
-      "accentColor": "#38bdf8"
+      "primaryColor": "#b07c40",
+      "secondaryColor": "#c0864a",
+      "backgroundColor": "#1b130c",
+      "textColor": "#eee2d0",
+      "accentColor": "#d9a25c"
     },
     "girly-blue": {
-      "primaryColor": "#2563eb",
-      "secondaryColor": "#0284c7",
-      "backgroundColor": "#f2f7ff",
-      "textColor": "#172554",
-      "accentColor": "#2563eb"
+      "primaryColor": "#c8864e",
+      "secondaryColor": "#d89a67",
+      "backgroundColor": "#f9f2e8",
+      "textColor": "#472e1d",
+      "accentColor": "#b1683b"
     }
   }'::JSONB
 )

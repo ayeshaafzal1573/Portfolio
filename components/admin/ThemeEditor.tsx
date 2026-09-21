@@ -21,6 +21,53 @@ const THEME_LABELS: Record<ThemeKey, { label: string; emoji: string }> = {
   "girly-blue": { label: "Girly Blue", emoji: "💙" },
 }
 
+type Preset = { label: string; colors: Record<string, string> }
+
+const PRESETS: Record<ThemeKey, Preset[]> = {
+  pastel: [
+    {
+      label: "Signature Brown",
+      colors: { primaryColor: "#b0783e", secondaryColor: "#c68d5c", accentColor: "#a2653c", backgroundColor: "#f6efe4", textColor: "#3b2a1c" },
+    },
+    {
+      label: "Cream Latte",
+      colors: { primaryColor: "#c99a63", secondaryColor: "#e0bd8f", accentColor: "#b07c45", backgroundColor: "#fdf8f0", textColor: "#43301f" },
+    },
+    {
+      label: "Espresso",
+      colors: { primaryColor: "#8a5a2f", secondaryColor: "#a9743f", accentColor: "#7a4a22", backgroundColor: "#f3e9db", textColor: "#2f1f12" },
+    },
+  ],
+  dark: [
+    {
+      label: "Mocha Night",
+      colors: { primaryColor: "#b07c40", secondaryColor: "#c0864a", accentColor: "#d9a25c", backgroundColor: "#1b130c", textColor: "#eee2d0" },
+    },
+    {
+      label: "Cocoa",
+      colors: { primaryColor: "#9c6b3a", secondaryColor: "#b4834f", accentColor: "#e0b072", backgroundColor: "#171009", textColor: "#f0e6d6" },
+    },
+    {
+      label: "Caramel",
+      colors: { primaryColor: "#c98f4c", secondaryColor: "#dda868", accentColor: "#f0c184", backgroundColor: "#221710", textColor: "#f6ecdd" },
+    },
+  ],
+  "girly-blue": [
+    {
+      label: "Warm Rose",
+      colors: { primaryColor: "#c8864e", secondaryColor: "#d89a67", accentColor: "#b1683b", backgroundColor: "#f9f2e8", textColor: "#472e1d" },
+    },
+    {
+      label: "Blush Mocha",
+      colors: { primaryColor: "#cf8f6a", secondaryColor: "#e0a884", accentColor: "#b96f45", backgroundColor: "#fdf3ee", textColor: "#4a2c1d" },
+    },
+    {
+      label: "Honey",
+      colors: { primaryColor: "#d9a24a", secondaryColor: "#e6bd74", accentColor: "#c0862f", backgroundColor: "#fbf4e6", textColor: "#463218" },
+    },
+  ],
+}
+
 export default function ThemeEditor() {
   const { data: themeData, loading } = useThemeSettings()
   const [theme, setTheme] = useState<any>(null)
@@ -34,6 +81,13 @@ export default function ThemeEditor() {
     setTheme((prev: any) => ({
       ...prev,
       [editMode]: { ...prev[editMode], [key]: value },
+    }))
+  }
+
+  const applyPreset = (colors: Record<string, string>) => {
+    setTheme((prev: any) => ({
+      ...prev,
+      [editMode]: { ...prev[editMode], ...colors },
     }))
   }
 
@@ -84,6 +138,28 @@ export default function ThemeEditor() {
             {THEME_LABELS[key].emoji} {THEME_LABELS[key].label}
           </button>
         ))}
+      </div>
+
+      <div>
+        <label className="mb-3 block text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">
+          Quick Presets ({THEME_LABELS[editMode].label})
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {PRESETS[editMode].map((preset) => (
+            <button
+              key={preset.label}
+              type="button"
+              onClick={() => applyPreset(preset.colors)}
+              className="flex items-center gap-2 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--surface-strong)] px-3 py-2 text-xs font-bold text-[color:var(--text-primary)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <span
+                className="h-4 w-4 rounded-full border border-black/10"
+                style={{ background: `linear-gradient(135deg, ${preset.colors.primaryColor}, ${preset.colors.accentColor})` }}
+              />
+              {preset.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div>

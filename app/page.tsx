@@ -10,14 +10,18 @@ import { Footer } from "@/components/footer"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { PortfolioChatbot } from "@/components/portfolio-chatbot"
 import { ScrollDepth } from "@/components/three/scroll-depth"
+import { DeviceIntro } from "@/components/three/device-intro"
+import { DeviceShowcase } from "@/components/three/device-showcase"
 
 export default function Home() {
   return (
     <main className="min-h-screen">
+      <DeviceIntro />
       <Navbar />
       <ScrollDepth tilt={8} depth={90}>
         <HeroSection />
       </ScrollDepth>
+      <DeviceShowcase />
       <ScrollDepth tilt={16} depth={150}>
         <AboutSection />
       </ScrollDepth>

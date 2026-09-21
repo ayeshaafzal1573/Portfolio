@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { ExternalLink, Github, Code, Smartphone, Palette, Globe, Layers, X } from "lucide-react"
 import { useCategorizedProjects } from "@/lib/useConfig"
@@ -22,26 +22,11 @@ export function FeaturedProjectsCards() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All")
   type ProjectItem = NonNullable<typeof projectsData>[number]
   const [preview, setPreview] = useState<ProjectItem | null>(null)
-  const closeTimer = useRef<number | null>(null)
   const categories = ["All", "MERN Stack", "Full-Stack", "Mobile Apps", "UI/UX Designs", "Web Development"]
   useScrollReveal()
 
   const openPreview = (project: ProjectItem) => {
-    if (closeTimer.current) {
-      window.clearTimeout(closeTimer.current)
-      closeTimer.current = null
-    }
     setPreview(project)
-  }
-  const scheduleClose = () => {
-    if (closeTimer.current) window.clearTimeout(closeTimer.current)
-    closeTimer.current = window.setTimeout(() => setPreview(null), 400)
-  }
-  const cancelClose = () => {
-    if (closeTimer.current) {
-      window.clearTimeout(closeTimer.current)
-      closeTimer.current = null
-    }
   }
 
   const closePreview = () => setPreview(null)
@@ -115,10 +100,8 @@ export function FeaturedProjectsCards() {
             return (
               <TiltCard
                 key={project.id}
-                className="group glass-card rounded-2xl overflow-hidden relative flex flex-col h-full"
+                className="group glass-card rounded-2xl overflow-hidden relative flex flex-col h-full cursor-pointer"
                 max={10}
-                onMouseEnter={() => openPreview(project)}
-                onMouseLeave={scheduleClose}
                 onClick={() => openPreview(project)}
               >
                 <div className="relative overflow-hidden h-48 shrink-0">
@@ -173,8 +156,6 @@ export function FeaturedProjectsCards() {
             className="fixed inset-0 z-[90] flex items-center justify-center p-4 sm:p-8"
             role="dialog"
             aria-modal="true"
-            onMouseEnter={cancelClose}
-            onMouseLeave={scheduleClose}
           >
             <div
               className="absolute inset-0 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"

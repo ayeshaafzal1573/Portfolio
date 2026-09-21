@@ -133,7 +133,7 @@ export function ProjectsSection() {
                   {project.tech_stack.map((tech) => (
                     <span
                       key={tech}
-                      className="px-3 py-1 text-sm rounded-full pastel:bg-purple-100 pastel:text-purple-700 dark:bg-blue-900 dark:text-blue-300 girly-blue:bg-blue-100 girly-blue:text-blue-700"
+                      className="px-3 py-1 text-sm rounded-full bg-[color:var(--accent-soft)] text-[color:var(--accent-primary)]"
                     >
                       {tech}
                     </span>

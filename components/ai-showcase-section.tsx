@@ -70,7 +70,7 @@ export function AIShowcaseSection() {
                   <div className="space-y-2 mb-6">
                     {project.features.map((feature) => (
                       <div key={feature} className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full pastel:bg-purple-400 dark:bg-blue-400 girly-blue:bg-blue-400" />
+                        <div className="w-2 h-2 rounded-full bg-[color:var(--accent-primary)]" />
                         <span className="text-sm text-opacity-70">{feature}</span>
                       </div>
                     ))}
