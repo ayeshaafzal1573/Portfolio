@@ -43,7 +43,7 @@ function applyThemeColors(colors?: ThemeColors) {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("pastel")
+  const [theme, setThemeState] = useState<Theme>("dark")
   const customThemeRef = useRef<Record<string, ThemeColors> | null>(null)
   const [ready, setReady] = useState(false)
 

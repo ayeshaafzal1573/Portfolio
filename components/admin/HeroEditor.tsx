@@ -151,7 +151,7 @@ export default function HeroEditor() {
 
       <div>
         <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">Profile Photo</label>
-        <input type="file" accept="image/*" onChange={handleImageUpload} className="block w-full text-sm text-[color:var(--text-secondary)] file:mr-3 file:rounded-lg file:border-0 file:bg-[color:var(--accent-soft)] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[color:var(--text-primary)] hover:file:bg-[color:var(--accent-primary)] hover:file:text-white file:transition-colors file:cursor-pointer" />
+        <input type="file" accept="image/*" onChange={handleImageUpload} className="block w-full text-sm text-[color:var(--text-secondary)] file:mr-3 file:rounded-lg file:border-0 file:bg-[color:var(--accent-soft)] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[color:var(--text-primary)] hover:file:bg-[color:var(--accent-primary)] hover:file:text-[color:var(--on-accent)] file:transition-colors file:cursor-pointer" />
         {profileImage && (
           <img src={profileImage} alt="Profile preview" className="mt-3 h-32 w-24 rounded-xl border border-[color:var(--card-border)] object-cover shadow-sm" />
         )}

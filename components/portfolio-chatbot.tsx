@@ -487,7 +487,7 @@ export function PortfolioChatbot() {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-8 right-8 z-50 flex h-14 w-14 items-center justify-center rounded-full btn-primary text-white shadow-lg hover:scale-110 transition-all duration-300 animate-pulse hover:shadow-[0_0_20px_var(--accent-primary)] cursor-pointer ${isOpen ? "pointer-events-none scale-0 opacity-0" : "scale-100 opacity-100"}`}
+        className={`fixed bottom-8 right-8 z-50 flex h-14 w-14 items-center justify-center rounded-full btn-primary text-[color:var(--on-accent)] shadow-lg hover:scale-110 transition-all duration-300 animate-pulse hover:shadow-[0_0_20px_var(--accent-primary)] cursor-pointer ${isOpen ? "pointer-events-none scale-0 opacity-0" : "scale-100 opacity-100"}`}
         aria-label="Toggle AI Chatbot"
       >
         {isOpen ? <X className="h-6 w-6" /> : <MessageSquare className="h-6 w-6" />}
@@ -498,7 +498,7 @@ export function PortfolioChatbot() {
         <div className="fixed bottom-4 right-4 sm:bottom-0 sm:right-8 z-50 w-[calc(100vw-2rem)] sm:w-[340px] md:w-[340px] h-[70vh] sm:h-[500px] md:h-[560px] max-h-[500px] rounded-3xl glass-card flex flex-col border border-[color:var(--card-border)] bg-[color-mix(in_srgb,var(--surface-strong)_95%,transparent)] backdrop-blur-xl shadow-2xl overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
 
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-[color:var(--card-border)] bg-gradient-to-r from-[color:var(--accent-primary)] to-[color:var(--accent-secondary)] text-white shrink-0">
+          <div className="flex items-center justify-between p-4 border-b border-[color:var(--card-border)] bg-gradient-to-r from-[color:var(--accent-primary)] to-[color:var(--accent-secondary)] text-[color:var(--on-accent)] shrink-0">
             <div className="flex items-center gap-3">
               <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-md">
                 <Bot className="h-5 w-5" />
@@ -529,10 +529,10 @@ export function PortfolioChatbot() {
                 key={i}
                 className={`flex gap-2.5 ${msg.sender === "user" ? "ml-auto flex-row-reverse max-w-[88%]" : "mr-auto max-w-[95%]"} animate-in fade-in duration-200`}
               >
-                <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${msg.sender === "user" ? "bg-[color:var(--accent-primary)] text-white" : "chip"}`}>
+                <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${msg.sender === "user" ? "bg-[color:var(--accent-primary)] text-[color:var(--on-accent)]" : "chip"}`}>
                   {msg.sender === "user" ? <User className="h-3.5 w-3.5" /> : <Bot className="h-3.5 w-3.5" />}
                 </div>
-                <div className={`rounded-2xl px-4 py-2.5 ${msg.sender === "user" ? "bg-[color:var(--accent-primary)] text-white rounded-tr-none text-xs font-medium" : "glass-card text-[color:var(--text-primary)] rounded-tl-none border-[color:var(--card-border)]"}`}>
+                <div className={`rounded-2xl px-4 py-2.5 ${msg.sender === "user" ? "bg-[color:var(--accent-primary)] text-[color:var(--on-accent)] rounded-tr-none text-xs font-medium" : "glass-card text-[color:var(--text-primary)] rounded-tl-none border-[color:var(--card-border)]"}`}>
                   {msg.sender === "user"
                     ? <p className="text-xs font-medium">{msg.text}</p>
                     : <FormattedText text={msg.text} />
@@ -594,7 +594,7 @@ export function PortfolioChatbot() {
             <button
               type="submit"
               disabled={!inputValue.trim() || isTyping}
-              className="h-8 w-8 flex items-center justify-center rounded-full btn-primary text-white disabled:opacity-50 hover:scale-110 transition-transform cursor-pointer"
+              className="h-8 w-8 flex items-center justify-center rounded-full btn-primary text-[color:var(--on-accent)] disabled:opacity-50 hover:scale-110 transition-transform cursor-pointer"
             >
               <Send className="h-3.5 w-3.5" />
             </button>

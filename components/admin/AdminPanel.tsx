@@ -93,7 +93,7 @@ export default function AdminPanel() {
                   className="flex h-10 w-10 items-center justify-center rounded-xl shadow-md"
                   style={{ background: "var(--gradient-main)" }}
                 >
-                  <LayoutDashboard className="h-5 w-5 text-white" />
+                  <LayoutDashboard className="h-5 w-5 text-[color:var(--on-accent)]" />
                 </div>
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.15em] text-[color:var(--accent-primary)]">
@@ -136,7 +136,7 @@ export default function AdminPanel() {
                     }`}
                     style={
                       isActive
-                        ? { background: "var(--gradient-main)", color: "#fff" }
+                        ? { background: "var(--gradient-main)", color: "var(--on-accent)" }
                         : undefined
                     }
                   >
@@ -150,21 +150,21 @@ export default function AdminPanel() {
                     >
                       <Icon
                         className={`h-4 w-4 ${
-                          isActive ? "text-white" : "text-[color:var(--accent-primary)]"
+                          isActive ? "text-[color:var(--on-accent)]" : "text-[color:var(--accent-primary)]"
                         }`}
                       />
                     </div>
                     <div className="min-w-0">
                       <p
                         className={`text-sm font-bold ${
-                          isActive ? "text-white" : "text-[color:var(--text-primary)]"
+                          isActive ? "text-[color:var(--on-accent)]" : "text-[color:var(--text-primary)]"
                         }`}
                       >
                         {label}
                       </p>
                       <p
                         className={`text-[10px] truncate ${
-                          isActive ? "text-white/70" : "text-[color:var(--text-secondary)]"
+                          isActive ? "text-[color:color-mix(in_srgb,var(--on-accent)_70%,transparent)]" : "text-[color:var(--text-secondary)]"
                         }`}
                       >
                         {description}

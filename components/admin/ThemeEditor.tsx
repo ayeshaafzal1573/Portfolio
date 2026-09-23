@@ -40,6 +40,10 @@ const PRESETS: Record<ThemeKey, Preset[]> = {
   ],
   dark: [
     {
+      label: "Monochrome",
+      colors: { primaryColor: "#ffffff", secondaryColor: "#d4d4d4", accentColor: "#f5f5f5", backgroundColor: "#050505", textColor: "#f5f5f5" },
+    },
+    {
       label: "Mocha Night",
       colors: { primaryColor: "#b07c40", secondaryColor: "#c0864a", accentColor: "#d9a25c", backgroundColor: "#1b130c", textColor: "#eee2d0" },
     },

@@ -21,11 +21,11 @@ export async function GET() {
           accentColor: "#a2653c",
         },
         dark: {
-          primaryColor: "#d9a25c",
-          secondaryColor: "#c0864a",
-          backgroundColor: "#1b130c",
-          textColor: "#eee2d0",
-          accentColor: "#d9a25c",
+          primaryColor: "#ffffff",
+          secondaryColor: "#d4d4d4",
+          backgroundColor: "#050505",
+          textColor: "#f5f5f5",
+          accentColor: "#f5f5f5",
         },
         "girly-blue": {
           primaryColor: "#c8864e",

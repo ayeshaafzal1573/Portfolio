@@ -165,11 +165,11 @@ CREATE TABLE IF NOT EXISTS theme_settings (
       "accentColor": "#a2653c"
     },
     "dark": {
-      "primaryColor": "#b07c40",
-      "secondaryColor": "#c0864a",
-      "backgroundColor": "#1b130c",
-      "textColor": "#eee2d0",
-      "accentColor": "#d9a25c"
+      "primaryColor": "#ffffff",
+      "secondaryColor": "#d4d4d4",
+      "backgroundColor": "#050505",
+      "textColor": "#f5f5f5",
+      "accentColor": "#f5f5f5"
     },
     "girly-blue": {
       "primaryColor": "#c8864e",
@@ -187,16 +187,17 @@ CREATE TABLE IF NOT EXISTS theme_settings (
 -- ============================================================
 
 -- Seed profiles
-INSERT INTO profiles (id, name, intro_label, subtitle, description, cta_text)
+INSERT INTO profiles (id, name, intro_label, subtitle, description, cta_text, profile_image)
 VALUES (
   '00000000-0000-0000-0000-000000000001',
   'Ayesha Afzal',
   'Hi, My Name Is',
   'Full-Stack Software Engineer & UI/UX Designer',
   'Specialized in engineering robust architectures using the MERN Stack, Next.js, FastAPI, and cross-platform mobile apps with React Native. Seamlessly merging clean aesthetics with modern performance practices.',
-  'Let''s Build Together'
+  'Let''s Build Together',
+  '/ayesha-afzal-qadir.jpeg'
 )
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET profile_image = EXCLUDED.profile_image, updated_at = NOW();
 
 -- Seed typing roles
 INSERT INTO typing_roles (role, sort_order) VALUES
@@ -314,11 +315,11 @@ VALUES (
       "accentColor": "#a2653c"
     },
     "dark": {
-      "primaryColor": "#b07c40",
-      "secondaryColor": "#c0864a",
-      "backgroundColor": "#1b130c",
-      "textColor": "#eee2d0",
-      "accentColor": "#d9a25c"
+      "primaryColor": "#ffffff",
+      "secondaryColor": "#d4d4d4",
+      "backgroundColor": "#050505",
+      "textColor": "#f5f5f5",
+      "accentColor": "#f5f5f5"
     },
     "girly-blue": {
       "primaryColor": "#c8864e",
@@ -329,7 +330,7 @@ VALUES (
     }
   }'::JSONB
 )
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET theme = EXCLUDED.theme, updated_at = NOW();
 
 -- ============================================================
 -- ROW LEVEL SECURITY

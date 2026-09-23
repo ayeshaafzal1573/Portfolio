@@ -279,7 +279,7 @@ export function HeroSection() {
                 />
               ) : (
                 <Image
-                  src="/ayesha-afzal-qadir-v2.png"
+                  src="/ayesha-afzal-qadir.jpeg"
                   width={420}
                   height={560}
                   alt="Ayesha Afzal - Full Stack & Mobile Software Engineer"
