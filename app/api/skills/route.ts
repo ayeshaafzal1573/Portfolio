@@ -51,6 +51,6 @@ export async function PUT(request: Request) {
     const { error } = await supabase.from("skills").insert(rows)
     if (error) throw error
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch {
   }
 }

@@ -20,6 +20,6 @@ export async function POST() {
       results.push({ title: fix.title, error: error?.message || null, updated: data?.length || 0 })
     }
     return NextResponse.json({ results })
-  } catch (error) {
+  } catch {
   }
 }

@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     const { error } = await supabase.from("contact_submissions").insert({ name, email, subject, message })
     if (error) throw error
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch {
   }
 }
 
