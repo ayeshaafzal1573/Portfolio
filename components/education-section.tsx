@@ -6,7 +6,7 @@ import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { useEducationEntries } from "@/lib/useConfig"
 import { SectionHeading } from "@/components/section-heading"
 
-const ICON_MAP: Record<string, React.ComponentType<any>> = { GraduationCap, Award, BookOpen, MapPin }
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = { GraduationCap, Award, BookOpen, MapPin }
 
 export function EducationSection() {
   useScrollReveal()

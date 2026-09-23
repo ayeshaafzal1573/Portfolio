@@ -6,7 +6,7 @@ import { Send, Github, Linkedin, Dribbble, CheckCircle, AlertCircle, Mail } from
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { useContactInfo, useSocialLinks } from "@/lib/useConfig"
 
-const PLATFORM_ICONS: Record<string, React.ComponentType<any>> = { github: Github, linkedin: Linkedin, dribbble: Dribbble }
+const PLATFORM_ICONS: Record<string, React.ComponentType<{ className?: string }>> = { github: Github, linkedin: Linkedin, dribbble: Dribbble }
 
 export function ContactSection() {
   const { data: contactData } = useContactInfo()

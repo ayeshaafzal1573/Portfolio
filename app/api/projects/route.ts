@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     const { data, error } = await supabase.from("categorized_projects").insert(body).select().single()
     if (error) throw error
     return NextResponse.json(data)
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to create project" }, { status: 500 })
   }
 }

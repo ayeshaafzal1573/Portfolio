@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useRef } from "react"
 import { ExternalLink, ChevronLeft, ChevronRight, Play } from "lucide-react"
 import { useLiveProjects } from "@/lib/useConfig"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"

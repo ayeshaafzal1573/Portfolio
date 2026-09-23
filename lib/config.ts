@@ -10,7 +10,7 @@ export async function fetchAPI<T>(url: string): Promise<T> {
   return resp.json()
 }
 
-export async function postAPI<T>(url: string, data: any): Promise<T> {
+export async function postAPI<T>(url: string, data: unknown): Promise<T> {
   const resp = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -20,7 +20,7 @@ export async function postAPI<T>(url: string, data: any): Promise<T> {
   return resp.json()
 }
 
-export async function putAPI<T>(url: string, data: any): Promise<T> {
+export async function putAPI<T>(url: string, data: unknown): Promise<T> {
   const resp = await fetch(url, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

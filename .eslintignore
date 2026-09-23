@@ -1,0 +1,7 @@
+# Legacy, to-be-replaced admin editors + shadcn/ui primitives.
+# These are excluded from lint because they are slated for replacement by the
+# WordPress-style admin panel (see audit block B) — per known-leaking "ignore
+# with documented reason + tracked issue" pattern from audit fix #10.
+components/admin/
+components/ui/
+# (lib/config.ts + lib/useConfig.ts are fixed properly, NOT ignored)

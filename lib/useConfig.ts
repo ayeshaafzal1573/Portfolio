@@ -18,7 +18,7 @@ import {
 } from "@/lib/supabase"
 
 // Generic fetch hook
-function useFetch<T>(url: string, deps: any[] = []) {
+function useFetch<T>(url: string, deps: unknown[] = []) {
   const [data, setData] = useState<T | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -31,7 +31,7 @@ function useFetch<T>(url: string, deps: any[] = []) {
       const json = await resp.json()
       setData(json)
       setError(null)
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message)
     } finally {
       setLoading(false)

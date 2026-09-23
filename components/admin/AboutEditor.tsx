@@ -3,11 +3,11 @@
 import { useState, useEffect, useRef } from "react"
 import { useAbout, useSkills } from "@/lib/useConfig"
 import { showToast } from "@/components/admin/Toast"
-import { User, Plus, X, GripVertical, ChevronDown, ChevronUp, Code, Database, Palette, Smartphone, Globe, Zap, Radio, BarChart2, ShieldCheck, Users } from "lucide-react"
+import { User, Plus, X, Code, Database, Palette, Smartphone, Globe, Zap, Radio, BarChart2, ShieldCheck, Users } from "lucide-react"
 
 const ICON_OPTIONS = ["Code", "Database", "Palette", "Smartphone", "Globe", "Zap", "Radio", "BarChart2", "ShieldCheck", "Users"]
 
-const ICON_MAP: Record<string, React.ComponentType<any>> = { Code, Database, Palette, Smartphone, Globe, Zap, Radio, BarChart2, ShieldCheck, Users }
+const ICON_MAP: Record<string, React.ComponentType> = { Code, Database, Palette, Smartphone, Globe, Zap, Radio, BarChart2, ShieldCheck, Users }
 
 const skillsSig = (list: any[]) =>
   JSON.stringify(list.map((s) => ({ name: s.name, level: s.level, icon: s.icon })))

@@ -9,7 +9,7 @@ import { TiltCard } from "@/components/three/tilt-card"
 import { HoverVideo } from "@/components/hover-video"
 import { projectTopics, resolveProjectTopic, type ProjectTopic } from "@/lib/content"
 
-const topicIcons: Record<ProjectTopic, React.ComponentType<any>> = {
+const topicIcons: Record<ProjectTopic, React.ComponentType<{ className?: string }>> = {
   Web: Globe,
   Mobile: Smartphone,
   Backend: Server,
@@ -104,7 +104,7 @@ export function FeaturedProjectsCards() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 reveal-scale">
-          {filteredProjects.map((project, index) => {
+          {filteredProjects.map((project) => {
             const topic = resolveProjectTopic(project)
             const IconComponent = topicIcons[topic] || Code
             const mediaSource = getMediaSource(project)

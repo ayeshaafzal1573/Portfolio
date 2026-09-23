@@ -44,7 +44,7 @@ export function AboutSection() {
                 What I focus on
               </h3>
               <ul className="space-y-4">
-                {FOCUS.map(({ icon: Icon, text }) => (
+                {FOCUS.map(({ text }) => (
                   <li key={text} className="flex items-start gap-3 text-sm font-medium leading-relaxed">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--accent-primary)]" />
                     <span className="text-[color:var(--text-secondary)]">{text}</span>
