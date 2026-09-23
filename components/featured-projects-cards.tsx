@@ -2,17 +2,19 @@
 
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
-import { ExternalLink, Github, Code, Smartphone, Palette, Globe, Layers, X } from "lucide-react"
+import { ExternalLink, Github, Code, Smartphone, Palette, Globe, Layers, Radio, Server, X } from "lucide-react"
 import { useCategorizedProjects } from "@/lib/useConfig"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { TiltCard } from "@/components/three/tilt-card"
+import { HoverVideo } from "@/components/hover-video"
+import { projectTopics, resolveProjectTopic, type ProjectTopic } from "@/lib/content"
 
-const categoryIcons: Record<string, React.ComponentType<any>> = {
-  "MERN Stack": Globe,
-  "Full-Stack": Code,
-  "Mobile Apps": Smartphone,
-  "UI/UX Designs": Palette,
-  "Web Development": Code,
+const topicIcons: Record<ProjectTopic, React.ComponentType<any>> = {
+  Web: Globe,
+  Mobile: Smartphone,
+  Backend: Server,
+  IoT: Radio,
+  "UI/UX": Palette,
 }
 
 const videoExtensions = [".mp4", ".webm", ".ogg"]
@@ -22,7 +24,6 @@ export function FeaturedProjectsCards() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All")
   type ProjectItem = NonNullable<typeof projectsData>[number]
   const [preview, setPreview] = useState<ProjectItem | null>(null)
-  const categories = ["All", "MERN Stack", "Full-Stack", "Mobile Apps", "UI/UX Designs", "Web Development"]
   useScrollReveal()
 
   const openPreview = (project: ProjectItem) => {
@@ -45,10 +46,20 @@ export function FeaturedProjectsCards() {
   }, [preview])
 
   const projects = projectsData || []
-  const filteredProjects = selectedCategory === "All" ? projects : projects.filter((p) => p.category === selectedCategory)
+  const filteredProjects =
+    selectedCategory === "All"
+      ? projects
+      : projects.filter((p) => resolveProjectTopic(p) === selectedCategory)
 
   const getMediaSource = (project: any) => project.video_url || project.image_url || ""
   const isVideoSource = (source: string) => videoExtensions.some((ext) => source.toLowerCase().includes(ext))
+
+  const normalizeHref = (url?: string | null): string => {
+    if (!url || url === "#") return ""
+    if (/^https?:\/\//.test(url)) return url
+    if (/^[a-z0-9-]+(\.[a-z0-9-]+)+/i.test(url)) return `https://${url}`
+    return ""
+  }
 
   if (loading) {
     return (
@@ -84,7 +95,7 @@ export function FeaturedProjectsCards() {
             Explore my work across different categories, from full-stack applications to vocational designs and mobile apps.
           </p>
           <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {categories.map((category) => (
+            {projectTopics.map((category) => (
               <button key={category} onClick={() => setSelectedCategory(category)} className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 cursor-pointer ${selectedCategory === category ? "btn-primary shadow-md hover:scale-[1.03]" : "btn-secondary hover:scale-[1.03]"}`}>
                 {category}
               </button>
@@ -94,22 +105,22 @@ export function FeaturedProjectsCards() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 reveal-scale">
           {filteredProjects.map((project, index) => {
-            const IconComponent = categoryIcons[project.category] || Code
+            const topic = resolveProjectTopic(project)
+            const IconComponent = topicIcons[topic] || Code
             const mediaSource = getMediaSource(project)
             const shouldRenderVideo = isVideoSource(mediaSource)
             return (
               <TiltCard
                 key={project.id}
                 className="group glass-card rounded-2xl overflow-hidden relative flex flex-col h-full cursor-pointer"
-                max={10}
                 onClick={() => openPreview(project)}
               >
                 <div className="relative overflow-hidden h-48 shrink-0">
                   {mediaSource ? (
                     shouldRenderVideo ? (
-                      <video src={mediaSource} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" autoPlay muted loop playsInline />
+                      <HoverVideo src={mediaSource} poster="/placeholder.svg" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                     ) : (
-                      <img src={mediaSource} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                      <img src={mediaSource} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
                     )
                   ) : (
                     <div className="h-full bg-slate-200 dark:bg-slate-800" />
@@ -118,7 +129,7 @@ export function FeaturedProjectsCards() {
                   <div className="absolute top-4 left-4">
                     <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 border border-slate-200/20 text-xs font-bold shadow-md">
                       <IconComponent className="w-3.5 h-3.5 text-[color:var(--accent-primary)]" />
-                      {project.category}
+                      {topic}
                     </div>
                   </div>
                 </div>
@@ -132,8 +143,8 @@ export function FeaturedProjectsCards() {
                     ))}
                   </div>
                   <div className="flex gap-3 mt-auto">
-                    {project.demo_url && project.demo_url !== "#" && (
-                      <a href={project.demo_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 flex-1 py-2.5 rounded-xl btn-primary text-xs font-bold hover:shadow-md hover:scale-[1.02] transition-all duration-300">
+                    {normalizeHref(project.demo_url) && (
+                      <a href={normalizeHref(project.demo_url)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 flex-1 py-2.5 rounded-xl btn-primary text-xs font-bold hover:shadow-md hover:scale-[1.02] transition-all duration-300">
                         <ExternalLink className="w-3.5 h-3.5" /> Live Demo
                       </a>
                     )}

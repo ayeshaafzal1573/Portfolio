@@ -5,6 +5,7 @@ import { ExternalLink, ChevronLeft, ChevronRight, Play } from "lucide-react"
 import { useLiveProjects } from "@/lib/useConfig"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { TiltCard } from "@/components/three/tilt-card"
+import { prefersReducedMotion } from "@/lib/utils"
 
 export function LiveProjectsSlider() {
   const { data: projects, loading } = useLiveProjects()
@@ -13,7 +14,10 @@ export function LiveProjectsSlider() {
 
   const scroll = (direction: "left" | "right") => {
     if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: direction === "left" ? -320 : 320, behavior: "smooth" })
+      sliderRef.current.scrollBy({
+        left: direction === "left" ? -320 : 320,
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
+      })
     }
   }
 
@@ -59,7 +63,7 @@ export function LiveProjectsSlider() {
 
           <div ref={sliderRef} className="hide-scrollbar flex gap-4 overflow-x-auto px-4 py-4 sm:gap-6 sm:px-12" style={{ scrollSnapType: "x mandatory" }}>
             {projectList.map((project) => (
-              <TiltCard key={project.id} className="group w-[16.5rem] flex-shrink-0 overflow-hidden rounded-2xl glass-card sm:w-80" style={{ scrollSnapAlign: "start" }} max={12}>
+              <TiltCard key={project.id} className="group w-[16.5rem] flex-shrink-0 overflow-hidden rounded-2xl glass-card sm:w-80" style={{ scrollSnapAlign: "start" }}>
                 <div className="relative overflow-hidden">
                   <img src={project.thumbnail_url || "/placeholder.svg"} alt={project.name} className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/45 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

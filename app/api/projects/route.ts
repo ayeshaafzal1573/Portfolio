@@ -7,7 +7,7 @@ export async function GET() {
     const { data, error } = await supabase.from("categorized_projects").select("*").order("sort_order")
     if (error) throw error
     return NextResponse.json(data)
-  } catch (error) {
+  } catch {
     return NextResponse.json([])
   }
 }
@@ -45,7 +45,7 @@ export async function PUT(request: Request) {
       if (error) throw error
     }
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to save project" }, { status: 500 })
   }
 }
@@ -60,7 +60,7 @@ export async function DELETE(request: Request) {
     const { error } = await supabase.from("categorized_projects").delete().eq("id", id)
     if (error) throw error
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 })
   }
 }

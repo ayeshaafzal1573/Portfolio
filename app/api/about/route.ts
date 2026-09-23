@@ -9,7 +9,7 @@ export async function GET() {
     const { data, error } = await supabase.from("about").select("*").eq("id", SINGLETON_ID).single()
     if (error) throw error
     return NextResponse.json(data)
-  } catch (error) {
+  } catch {
     return NextResponse.json({
       id: SINGLETON_ID,
       description: "Full-Stack Developer & UI/UX Designer with 2+ years of experience.",
@@ -28,7 +28,7 @@ export async function PUT(request: Request) {
       .upsert({ ...body, id: SINGLETON_ID, updated_at: new Date().toISOString() }, { onConflict: "id" })
     if (error) throw error
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to save about" }, { status: 500 })
   }
 }

@@ -9,7 +9,7 @@ export async function GET() {
     const { data, error } = await supabase.from("profiles").select("*").eq("id", SINGLETON_ID).single()
     if (error) throw error
     return NextResponse.json(data)
-  } catch (error) {
+  } catch {
     return NextResponse.json({
       id: SINGLETON_ID,
       name: "Ayesha Afzal",
@@ -33,7 +33,7 @@ export async function PUT(request: Request) {
       .upsert({ ...body, id: SINGLETON_ID, updated_at: new Date().toISOString() }, { onConflict: "id" })
     if (error) throw error
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to save profile" }, { status: 500 })
   }
 }

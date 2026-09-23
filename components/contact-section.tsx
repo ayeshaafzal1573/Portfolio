@@ -124,16 +124,32 @@ export function ContactSection() {
               </form>
 
               <div className="mt-8 border-t border-[color:var(--card-border)] pt-8">
-                <div className="flex justify-center gap-4">
-                  {socialLinks.map((link) => {
-                    const Icon = PLATFORM_ICONS[link.platform] || Dribbble
-                    return (
-                      <a key={link.platform} href={link.url} target="_blank" rel="noopener noreferrer" className="group rounded-full p-3 btn-secondary transition-all duration-300 hover:scale-110" aria-label={link.label || link.platform}>
-                        <Icon className="h-5 w-5 transition-colors group-hover:text-[color:var(--accent-primary)]" />
-                      </a>
-                    )
-                  })}
-                </div>
+                {socialLinks.length > 0 ? (
+                  <div className="flex justify-center gap-4">
+                    {socialLinks.map((link) => {
+                      const Icon = PLATFORM_ICONS[link.platform] || Dribbble
+                      return (
+                        <a
+                          key={link.platform}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group rounded-full p-3 btn-secondary transition-all duration-300 hover:scale-110"
+                          aria-label={link.label || link.platform}
+                        >
+                          <Icon className="h-5 w-5 transition-colors group-hover:text-[color:var(--accent-primary)]" />
+                        </a>
+                      )
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-center text-xs text-[color:var(--text-secondary)]">
+                    Quickest way to reach me is email —{" "}
+                    <a href={`mailto:${email}`} className="font-bold text-[color:var(--accent-primary)] hover:underline">
+                      {email}
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
           </div>

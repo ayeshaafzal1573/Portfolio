@@ -7,7 +7,7 @@ export async function GET() {
     const { data, error } = await supabase.from("education_entries").select("*").order("sort_order")
     if (error) throw error
     return NextResponse.json(data)
-  } catch (error) {
+  } catch {
     return NextResponse.json([])
   }
 }
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     const { data, error } = await supabase.from("education_entries").insert(body).select().single()
     if (error) throw error
     return NextResponse.json(data)
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to create entry" }, { status: 500 })
   }
 }
@@ -31,11 +31,11 @@ export async function PUT(request: Request) {
     const supabase = getSupabase()
     const { entries } = await request.json()
     await supabase.from("education_entries").delete().neq("id", "00000000-0000-0000-0000-000000000000")
-    const rows = entries.map((e: any, i: number) => ({ ...e, sort_order: i, id: undefined }))
+    const rows = entries.map((e: Record<string, unknown>) => ({ ...e, sort_order: i, id: undefined }))
     const { error } = await supabase.from("education_entries").insert(rows)
     if (error) throw error
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to save entries" }, { status: 500 })
   }
 }

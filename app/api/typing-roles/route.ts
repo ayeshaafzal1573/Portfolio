@@ -7,7 +7,7 @@ export async function GET() {
     const { data, error } = await supabase.from("typing_roles").select("*").order("sort_order")
     if (error) throw error
     return NextResponse.json(data)
-  } catch (error) {
+  } catch {
     return NextResponse.json([
       { id: "1", role: "Full-Stack Software Engineer", sort_order: 0 },
       { id: "2", role: "MERN Stack Specialist", sort_order: 1 },
@@ -29,7 +29,7 @@ export async function PUT(request: Request) {
     const { error } = await supabase.from("typing_roles").insert(rows)
     if (error) throw error
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to save roles" }, { status: 500 })
   }
 }

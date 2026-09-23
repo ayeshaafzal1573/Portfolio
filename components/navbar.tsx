@@ -4,13 +4,14 @@ import { useState, useEffect, useRef } from "react"
 import { Moon, Sun, Palette, Code2, Check, Menu, X } from "lucide-react"
 import { useTheme } from "./theme-provider"
 import { useSiteSettings } from "@/lib/useConfig"
+import { scrollToId } from "@/lib/utils"
 
 const NAV_ITEMS = [
   { id: "home", label: "Home" },
   { id: "about", label: "About" },
-  { id: "education", label: "Education" },
-  { id: "live-projects", label: "Live Projects" },
-  { id: "projects", label: "Projects" },
+  { id: "work", label: "Work" },
+  { id: "experience", label: "Experience" },
+  { id: "skills", label: "Skills" },
   { id: "contact", label: "Contact" },
 ]
 
@@ -85,9 +86,7 @@ export function Navbar() {
     }
   }, [])
 
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
-  }
+  const scrollToSection = (id: string) => scrollToId(id)
 
   useEffect(() => {
     if (!themeOpen) return
@@ -138,7 +137,7 @@ export function Navbar() {
             {settings?.brand_name || "Ayesha."}
           </span>
         </button>
-        <div className="hidden items-center gap-4 md:flex">
+        <div className="hidden items-center gap-3 md:flex">
           {NAV_ITEMS.map((item) => (
             <button
               key={item.id}
@@ -148,6 +147,12 @@ export function Navbar() {
               {item.label}
             </button>
           ))}
+          <button
+            onClick={() => scrollToSection("contact")}
+            className="nav-cta ml-1 rounded-full px-4 py-2.5 text-sm font-bold transition-all duration-300 hover:scale-[1.03] cursor-pointer"
+          >
+            Let&apos;s Work
+          </button>
         </div>
         <div className="my-2 flex items-center gap-2">
           <div ref={themeMenuRef} className="relative">
@@ -212,6 +217,15 @@ export function Navbar() {
                 {item.label}
               </button>
             ))}
+            <button
+              onClick={() => {
+                scrollToSection("contact")
+                setMenuOpen(false)
+              }}
+              className="nav-cta mt-1 rounded-2xl px-4 py-3 text-left text-sm font-extrabold cursor-pointer"
+            >
+              Let&apos;s Work
+            </button>
           </div>
         </div>
       )}
