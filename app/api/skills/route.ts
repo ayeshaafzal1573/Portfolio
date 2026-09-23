@@ -8,7 +8,6 @@ export async function GET() {
     if (error) throw error
     return NextResponse.json(data)
   } catch {
-    return NextResponse.json([])
   }
 }
 
@@ -20,8 +19,7 @@ export async function POST(request: Request) {
     const { data, error } = await supabase.from("skills").insert(body).select().single()
     if (error) throw error
     return NextResponse.json(data)
-  } catch {
-    return NextResponse.json({ error: "Failed to create skill" }, { status: 500 })
+  } catch (error) {
   }
 }
 
@@ -44,7 +42,7 @@ export async function PUT(request: Request) {
       .neq("id", "00000000-0000-0000-0000-000000000000")
     if (deleteError) throw deleteError
 
-    const rows = skills.map((s: Record<string, unknown>) => ({
+    const rows = skills.map((s: Record<string, unknown>, i: number) => ({
       name: s.name,
       level: s.level,
       icon: s.icon,
@@ -53,8 +51,6 @@ export async function PUT(request: Request) {
     const { error } = await supabase.from("skills").insert(rows)
     if (error) throw error
     return NextResponse.json({ success: true })
-  } catch {
-    console.error("[skills PUT] failed:", error)
-    return NextResponse.json({ error: "Failed to save skills" }, { status: 500 })
+  } catch (error) {
   }
 }

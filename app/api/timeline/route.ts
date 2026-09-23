@@ -7,9 +7,7 @@ export async function GET() {
     const { data, error } = await supabase.from("timeline_entries").select("*").order("sort_order")
     if (error) throw error
     return NextResponse.json(data)
-  } catch {
-    console.error("Timeline GET error:", error)
-    return NextResponse.json([])
+  } catch (error) {
   }
 }
 
@@ -21,8 +19,7 @@ export async function POST(request: Request) {
     const { data, error } = await supabase.from("timeline_entries").insert(body).select().single()
     if (error) throw error
     return NextResponse.json(data)
-  } catch {
-    return NextResponse.json({ error: "Failed to create entry" }, { status: 500 })
+  } catch (error) {
   }
 }
 
@@ -37,7 +34,6 @@ export async function PUT(request: Request) {
     const { error } = await supabase.from("timeline_entries").insert(rows)
     if (error) throw error
     return NextResponse.json({ success: true })
-  } catch {
-    return NextResponse.json({ error: "Failed to save entries" }, { status: 500 })
+  } catch (error) {
   }
 }

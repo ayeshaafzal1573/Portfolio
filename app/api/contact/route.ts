@@ -12,8 +12,7 @@ export async function POST(request: Request) {
     const { error } = await supabase.from("contact_submissions").insert({ name, email, subject, message })
     if (error) throw error
     return NextResponse.json({ success: true })
-  } catch {
-    return NextResponse.json({ error: "Failed to save submission" }, { status: 500 })
+  } catch (error) {
   }
 }
 
@@ -28,6 +27,5 @@ export async function GET() {
     if (error) throw error
     return NextResponse.json(data)
   } catch {
-    return NextResponse.json([])
   }
 }

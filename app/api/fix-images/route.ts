@@ -20,7 +20,6 @@ export async function POST() {
       results.push({ title: fix.title, error: error?.message || null, updated: data?.length || 0 })
     }
     return NextResponse.json({ results })
-  } catch {
-    return NextResponse.json({ error: "Failed to fix images" }, { status: 500 })
+  } catch (error) {
   }
 }
