@@ -7,7 +7,7 @@ import { User, Plus, X, Code, Database, Palette, Smartphone, Globe, Zap, Radio, 
 
 const ICON_OPTIONS = ["Code", "Database", "Palette", "Smartphone", "Globe", "Zap", "Radio", "BarChart2", "ShieldCheck", "Users"]
 
-const ICON_MAP: Record<string, React.ComponentType> = { Code, Database, Palette, Smartphone, Globe, Zap, Radio, BarChart2, ShieldCheck, Users }
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = { Code, Database, Palette, Smartphone, Globe, Zap, Radio, BarChart2, ShieldCheck, Users }
 
 const skillsSig = (list: any[]) =>
   JSON.stringify(list.map((s) => ({ name: s.name, level: s.level, icon: s.icon })))
