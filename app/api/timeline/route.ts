@@ -33,7 +33,7 @@ export async function PUT(request: Request) {
     const { entries } = await request.json()
     // Delete all and re-insert with new sort orders
     await supabase.from("timeline_entries").delete().neq("id", "00000000-0000-0000-0000-000000000000")
-    const rows = entries.map((e: Record<string, unknown>) => ({ ...e, sort_order: i, id: undefined }))
+    const rows = entries.map((e: Record<string, unknown>, i: number) => ({ ...e, sort_order: i, id: undefined }))
     const { error } = await supabase.from("timeline_entries").insert(rows)
     if (error) throw error
     return NextResponse.json({ success: true })
