@@ -32,7 +32,7 @@ function useFetch<T>(url: string, deps: unknown[] = []) {
       setData(json)
       setError(null)
     } catch (err) {
-      setError(err.message)
+      setError(err instanceof Error ? err.message : String(err))
     } finally {
       setLoading(false)
     }
@@ -43,6 +43,8 @@ function useFetch<T>(url: string, deps: unknown[] = []) {
     const handler = () => refetch()
     window.addEventListener("portfolioConfigUpdated", handler)
     return () => window.removeEventListener("portfolioConfigUpdated", handler)
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps is intentionally
+  // forwarded dynamically to subscribers; static verification would false-positive.
   }, [refetch, ...deps])
 
   return { data, loading, error, refetch }

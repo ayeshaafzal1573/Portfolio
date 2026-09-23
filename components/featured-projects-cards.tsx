@@ -51,7 +51,7 @@ export function FeaturedProjectsCards() {
       ? projects
       : projects.filter((p) => resolveProjectTopic(p) === selectedCategory)
 
-  const getMediaSource = (project: any) => project.video_url || project.image_url || ""
+  const getMediaSource = (project: CategorizedProject) => project.video_url || project.image_url || ""
   const isVideoSource = (source: string) => videoExtensions.some((ext) => source.toLowerCase().includes(ext))
 
   const normalizeHref = (url?: string | null): string => {

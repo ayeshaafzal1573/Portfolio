@@ -34,8 +34,8 @@ export function ContactSection() {
       setIsSubmitted(true)
       setFormData({ name: "", email: "", subject: "", message: "" })
       setTimeout(() => setIsSubmitted(false), 6000)
-    } catch (err: any) {
-      setError(err.message || "Something went wrong. Please try again.")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
