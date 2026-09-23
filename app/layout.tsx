@@ -49,9 +49,9 @@ export const metadata: Metadata = {
     google: "SgBG-tA1lcg8f1-cJF3YenkDx2VBZv9evORLnIVyN2U",
   },
   icons: {
-    icon: "/ayesha-afzal-qadir.jpeg",
-    shortcut: "/ayesha-afzal-qadir.jpeg",
-    apple: "/ayesha-afzal-qadir.jpeg",
+    icon: "/ayesha-afzal-qadir.png",
+    shortcut: "/ayesha-afzal-qadir.png",
+    apple: "/ayesha-afzal-qadir.png",
   },
   openGraph: {
     title: "Ayesha Afzal | Full-Stack Web & Mobile Engineer",

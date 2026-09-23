@@ -18,9 +18,9 @@ const NAV_ITEMS = [
 const NAV_SECTIONS = NAV_ITEMS.map((item) => item.id)
 
 const THEME_OPTIONS = [
-  { key: "pastel" as const, label: "Light", icon: Sun, swatch: "linear-gradient(135deg,#f6efe4,#a2653c)" },
-  { key: "dark" as const, label: "Dark", icon: Moon, swatch: "linear-gradient(135deg,#1b130c,#d9a25c)" },
-  { key: "girly-blue" as const, label: "Warm", icon: Palette, swatch: "linear-gradient(135deg,#f9f2e8,#d89a67)" },
+  { key: "pastel" as const, label: "Light", icon: Sun, swatch: "linear-gradient(135deg,#ffffff,#000000)" },
+  { key: "dark" as const, label: "Dark", icon: Moon, swatch: "linear-gradient(135deg,#ffffff,#050505)" },
+  { key: "girly-blue" as const, label: "Warm", icon: Palette, swatch: "linear-gradient(135deg,#f5f5f5,#0d0d0d)" },
 ]
 
 export function Navbar() {

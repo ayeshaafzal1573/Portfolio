@@ -8,8 +8,8 @@ import * as THREE from "three"
 /* ------------------------------------------------------------------ */
 
 function readThemeColor(name: string): string {
-  if (typeof document === "undefined") return "#d946ef"
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#d946ef"
+  if (typeof document === "undefined") return "#ffffff"
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#ffffff"
 }
 
 /* ------------------------------------------------------------------ */
@@ -187,7 +187,7 @@ export function ThreeBackground() {
       lightB.color.set(primary)
       const p = new THREE.Color(primary)
       const s = new THREE.Color(secondary)
-      const neutral = new THREE.Color("#c3c9ff")
+      const neutral = new THREE.Color("#e8e8e8")
       for (let i = 0; i < STAR_COUNT; i++) {
         const pick = i % 3 === 0 ? p : i % 3 === 1 ? s : neutral
         starColors[i * 3] = pick.r

@@ -14,11 +14,11 @@ export async function GET() {
       id: SINGLETON_ID,
       theme: {
         pastel: {
-          primaryColor: "#b0783e",
-          secondaryColor: "#c68d5c",
-          backgroundColor: "#f6efe4",
-          textColor: "#3b2a1c",
-          accentColor: "#a2653c",
+          primaryColor: "#000000",
+          secondaryColor: "#3f3f3f",
+          backgroundColor: "#ffffff",
+          textColor: "#0a0a0a",
+          accentColor: "#0a0a0a",
         },
         dark: {
           primaryColor: "#ffffff",
@@ -28,11 +28,11 @@ export async function GET() {
           accentColor: "#f5f5f5",
         },
         "girly-blue": {
-          primaryColor: "#c8864e",
-          secondaryColor: "#d89a67",
-          backgroundColor: "#f9f2e8",
-          textColor: "#472e1d",
-          accentColor: "#b1683b",
+          primaryColor: "#f5f5f5",
+          secondaryColor: "#8a8a8a",
+          backgroundColor: "#0d0d0d",
+          textColor: "#fafafa",
+          accentColor: "#fafafa",
         },
       },
       updated_at: new Date().toISOString(),

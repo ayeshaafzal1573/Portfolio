@@ -24,20 +24,20 @@
 }
 
 .pastel {
-  --bg-primary: #f6efe4;
-  --bg-secondary: #ffffff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
   --surface: rgba(255, 255, 255, 0.76);
-  --surface-strong: rgba(255, 255, 255, 0.93);
-  --text-primary: #3b2a1c;
-  --text-secondary: #7f5f40;
-  --text-muted: #9c8167;
-  --accent-primary: #a2653c;
-  --accent-secondary: #c68d5c;
-  --accent-soft: #f2e4d3;
-  --ring-soft: rgba(162, 101, 60, 0.28);
-  --card-border: rgba(146, 92, 50, 0.18);
-  --card-border-hover: #8a6538;
-  --gradient-main: linear-gradient(115deg, #8a5a2f 0%, #b0783e 45%, #d3a05a 100%);
+  --surface-strong: rgba(255, 255, 255, 0.94);
+  --text-primary: #0a0a0a;
+  --text-secondary: #4d4d4d;
+  --text-muted: #8a8a8a;
+  --accent-primary: #000000;
+  --accent-secondary: #3f3f3f;
+  --accent-soft: #f0f0f0;
+  --ring-soft: rgba(0, 0, 0, 0.14);
+  --card-border: #e5e5e5;
+  --card-border-hover: #b3b3b3;
+  --gradient-main: linear-gradient(115deg, #000000 0%, #333333 45%, #5c5c5c 100%);
   --on-accent: #ffffff;
 }
 
@@ -60,21 +60,21 @@
 }
 
 .girly-blue {
-  --bg-primary: #f9f2e8;
-  --bg-secondary: #fffcf6;
-  --surface: rgba(255, 255, 255, 0.8);
-  --surface-strong: rgba(255, 255, 255, 0.95);
-  --text-primary: #472e1d;
-  --text-secondary: #8a6a4b;
-  --text-muted: #a98a6d;
-  --accent-primary: #b1683b;
-  --accent-secondary: #d89a67;
-  --accent-soft: #f4e2ce;
-  --ring-soft: rgba(177, 104, 59, 0.32);
-  --card-border: rgba(153, 98, 54, 0.22);
-  --card-border-hover: #9c6a3a;
-  --gradient-main: linear-gradient(115deg, #9c5a2c 0%, #c8864e 50%, #e2ac73 100%);
-  --on-accent: #ffffff;
+  --bg-primary: #0d0d0d;
+  --bg-secondary: #141414;
+  --surface: rgba(20, 20, 20, 0.72);
+  --surface-strong: rgba(20, 20, 20, 0.94);
+  --text-primary: #fafafa;
+  --text-secondary: #ababab;
+  --text-muted: #6e6e6e;
+  --accent-primary: #f5f5f5;
+  --accent-secondary: #8a8a8a;
+  --accent-soft: #1a1a1a;
+  --ring-soft: rgba(245, 245, 245, 0.16);
+  --card-border: #262626;
+  --card-border-hover: #454545;
+  --gradient-main: linear-gradient(115deg, #f5f5f5 0%, #b3b3b3 45%, #737373 100%);
+  --on-accent: #0d0d0d;
 }
 
 html,

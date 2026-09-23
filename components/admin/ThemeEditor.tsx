@@ -26,16 +26,16 @@ type Preset = { label: string; colors: Record<string, string> }
 const PRESETS: Record<ThemeKey, Preset[]> = {
   pastel: [
     {
-      label: "Signature Brown",
-      colors: { primaryColor: "#b0783e", secondaryColor: "#c68d5c", accentColor: "#a2653c", backgroundColor: "#f6efe4", textColor: "#3b2a1c" },
+      label: "Pure Black & White",
+      colors: { primaryColor: "#000000", secondaryColor: "#3f3f3f", accentColor: "#0a0a0a", backgroundColor: "#ffffff", textColor: "#0a0a0a" },
     },
     {
-      label: "Cream Latte",
-      colors: { primaryColor: "#c99a63", secondaryColor: "#e0bd8f", accentColor: "#b07c45", backgroundColor: "#fdf8f0", textColor: "#43301f" },
+      label: "Silver",
+      colors: { primaryColor: "#262626", secondaryColor: "#737373", accentColor: "#171717", backgroundColor: "#fafafa", textColor: "#171717" },
     },
     {
-      label: "Espresso",
-      colors: { primaryColor: "#8a5a2f", secondaryColor: "#a9743f", accentColor: "#7a4a22", backgroundColor: "#f3e9db", textColor: "#2f1f12" },
+      label: "Pearl",
+      colors: { primaryColor: "#111111", secondaryColor: "#4d4d4d", accentColor: "#000000", backgroundColor: "#f6f6f6", textColor: "#111111" },
     },
   ],
   dark: [
@@ -44,30 +44,30 @@ const PRESETS: Record<ThemeKey, Preset[]> = {
       colors: { primaryColor: "#ffffff", secondaryColor: "#d4d4d4", accentColor: "#f5f5f5", backgroundColor: "#050505", textColor: "#f5f5f5" },
     },
     {
-      label: "Mocha Night",
-      colors: { primaryColor: "#b07c40", secondaryColor: "#c0864a", accentColor: "#d9a25c", backgroundColor: "#1b130c", textColor: "#eee2d0" },
+      label: "Pitch Black",
+      colors: { primaryColor: "#ffffff", secondaryColor: "#ffffff", accentColor: "#f5f5f5", backgroundColor: "#000000", textColor: "#ffffff" },
     },
     {
-      label: "Cocoa",
-      colors: { primaryColor: "#9c6b3a", secondaryColor: "#b4834f", accentColor: "#e0b072", backgroundColor: "#171009", textColor: "#f0e6d6" },
+      label: "Soft Grey",
+      colors: { primaryColor: "#e5e5e5", secondaryColor: "#a3a3a3", accentColor: "#a3a3a3", backgroundColor: "#0a0a0a", textColor: "#f5f5f5" },
     },
     {
-      label: "Caramel",
-      colors: { primaryColor: "#c98f4c", secondaryColor: "#dda868", accentColor: "#f0c184", backgroundColor: "#221710", textColor: "#f6ecdd" },
+      label: "High Contrast",
+      colors: { primaryColor: "#ffffff", secondaryColor: "#7a7a7a", accentColor: "#ffffff", backgroundColor: "#0b0b0b", textColor: "#ffffff" },
     },
   ],
   "girly-blue": [
     {
-      label: "Warm Rose",
-      colors: { primaryColor: "#c8864e", secondaryColor: "#d89a67", accentColor: "#b1683b", backgroundColor: "#f9f2e8", textColor: "#472e1d" },
+      label: "Charcoal",
+      colors: { primaryColor: "#f5f5f5", secondaryColor: "#8a8a8a", accentColor: "#fafafa", backgroundColor: "#0d0d0d", textColor: "#fafafa" },
     },
     {
-      label: "Blush Mocha",
-      colors: { primaryColor: "#cf8f6a", secondaryColor: "#e0a884", accentColor: "#b96f45", backgroundColor: "#fdf3ee", textColor: "#4a2c1d" },
+      label: "Graphite",
+      colors: { primaryColor: "#e0e0e0", secondaryColor: "#6f6f6f", accentColor: "#aaaaaa", backgroundColor: "#111111", textColor: "#f0f0f0" },
     },
     {
-      label: "Honey",
-      colors: { primaryColor: "#d9a24a", secondaryColor: "#e6bd74", accentColor: "#c0862f", backgroundColor: "#fbf4e6", textColor: "#463218" },
+      label: "NYC Grey",
+      colors: { primaryColor: "#ffffff", secondaryColor: "#b3b3b3", accentColor: "#d9d9d9", backgroundColor: "#151515", textColor: "#ffffff" },
     },
   ],
 }
