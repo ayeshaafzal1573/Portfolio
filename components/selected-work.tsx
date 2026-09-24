@@ -258,7 +258,7 @@ export function SelectedWork() {
           </article>
         )}
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 reveal-scale">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 reveal-scale stagger">
           {rest.map((project) => {
             const study = caseStudies.find((s) => s.projectTitle === project.title)
             return (

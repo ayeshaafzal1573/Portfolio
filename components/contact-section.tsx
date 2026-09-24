@@ -84,8 +84,8 @@ export function ContactSection() {
           <div className="lg:col-span-8 reveal-right">
             <div className="glass-card rounded-2xl p-6 md:p-8">
               {isSubmitted && (
-                <div className="mb-6 flex items-start gap-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4 text-emerald-800 dark:text-emerald-300">
-                  <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                <div className="mb-6 flex items-start gap-3 rounded-xl bg-[color:var(--accent-soft)] border border-[color:var(--card-border)] p-4 text-[color:var(--text-primary)]">
+                  <CheckCircle className="w-5 h-5 text-[color:var(--accent-primary)] shrink-0 mt-0.5" />
                   <div>
                     <p className="font-bold text-sm">Message Sent Successfully!</p>
                     <p className="text-xs text-[color:var(--text-secondary)] mt-1">I will get back to you shortly.</p>
@@ -93,8 +93,8 @@ export function ContactSection() {
                 </div>
               )}
               {error && (
-                <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center gap-3 text-red-800 dark:text-red-300">
-                  <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
+                <div className="mb-6 p-4 rounded-xl bg-[color:var(--accent-soft)] border border-[color:var(--card-border)] flex items-center gap-3 text-[color:var(--text-primary)]">
+                  <AlertCircle className="w-5 h-5 text-[color:var(--accent-primary)] shrink-0" />
                   <span className="text-sm font-semibold">{error}</span>
                 </div>
               )}

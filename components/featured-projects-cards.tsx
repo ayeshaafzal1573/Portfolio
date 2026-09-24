@@ -70,10 +70,10 @@ export function FeaturedProjectsCards() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="glass-card rounded-2xl overflow-hidden animate-pulse">
-                <div className="h-48 bg-gray-300 dark:bg-gray-700" />
+                <div className="h-48 bg-[color:var(--accent-soft)]" />
                 <div className="p-6 space-y-4">
-                  <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded" />
-                  <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded" />
+                  <div className="h-6 bg-[color:var(--accent-soft)] rounded" />
+                  <div className="h-4 bg-[color:var(--accent-soft)] rounded" />
                 </div>
               </div>
             ))}
@@ -104,7 +104,7 @@ export function FeaturedProjectsCards() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 reveal-scale">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 reveal-scale stagger">
           {filteredProjects.map((project) => {
             const topic = resolveProjectTopic(project)
             const IconComponent = topicIcons[topic] || Code
@@ -124,11 +124,11 @@ export function FeaturedProjectsCards() {
                       <img src={mediaSource} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
                     )
                   ) : (
-                    <div className="h-full bg-slate-200 dark:bg-slate-800" />
+                    <div className="h-full bg-[color:var(--accent-soft)]" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
                   <div className="absolute top-4 left-4">
-                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 border border-slate-200/20 text-xs font-bold shadow-md">
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[color:var(--surface-strong)] text-[color:var(--text-primary)] border border-[color:var(--card-border)] text-xs font-bold shadow-md">
                       <IconComponent className="w-3.5 h-3.5 text-[color:var(--accent-primary)]" />
                       {topic}
                     </div>

@@ -18,7 +18,7 @@ export function ProductionSection() {
           subtitle={productionIntro}
         />
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 reveal-scale">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 reveal-scale stagger">
           {builtForProduction.map(({ icon: Icon, label, detail }) => (
             <article
               key={label}

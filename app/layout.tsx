@@ -1,12 +1,33 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
 import { IdleMonitor } from "@/components/idle-monitor"
+import { ThemeProvider } from "@/components/theme-provider"
 import { ThreeBackgroundLazy } from "@/components/three/three-background-lazy"
+import {
+  DEFAULT_CONFIG,
+  buildThemeVars,
+  normalizeConfig,
+  type ThemeConfig,
+} from "@/lib/theme"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
+
+async function loadThemeConfig(): Promise<ThemeConfig> {
+  try {
+    const { getSupabase } = await import("@/lib/supabase")
+    const supabase = getSupabase()
+    const { data } = await supabase
+      .from("theme_settings")
+      .select("theme")
+      .eq("id", "00000000-0000-0000-0000-000000000001")
+      .maybeSingle()
+    return normalizeConfig(data?.theme)
+  } catch {
+    return DEFAULT_CONFIG
+  }
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ayeshaafzalqadir.vercel.app"),
@@ -108,19 +129,24 @@ const jsonLd = {
   ],
 } as const
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const config = await loadThemeConfig()
+  const themeVars = buildThemeVars(config.modes[config.default])
+  const themeBootScript = `(function(){try{var root=document.documentElement;root.setAttribute("data-theme",${JSON.stringify(config.default)});var vars=${JSON.stringify(themeVars)};for(var k in vars){root.style.setProperty(k,vars[k]);}}catch(e){}})();`
+
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <body className="font-inter antialiased">
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <ThemeProvider>
+        <ThemeProvider config={config}>
           <IdleMonitor />
           <ThreeBackgroundLazy />
           {children}

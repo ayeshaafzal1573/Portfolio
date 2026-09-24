@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react"
 import { Bot, X, Send, Sparkles, User, MessageSquare, RotateCcw } from "lucide-react"
+import { usePortfolioTheme } from "@/components/theme-provider"
+import { DEFAULT_CONFIG } from "@/lib/theme"
 
 interface Message {
   sender: "user" | "bot"
@@ -27,10 +29,10 @@ const KB = {
   website: "ayeshaafzalqadir.vercel.app",
   github: "github.com/ayeshaafzal1573",
   linkedin: "linkedin.com/in/ayeshaafzalqadir",
-  stats: { apps: "8+", years: "3+", companies: "6+" },
+  stats: { apps: "8+", years: "4+", companies: "6+" },
 
   summary:
-    "Results-driven Full Stack Engineer with 3+ years of experience building scalable web applications, cross-platform mobile apps, and real-time IoT systems. Proficient across the entire development lifecycle — from crafting pixel-perfect React Native UIs to architecting high-performance Node.js/Fastify backends. Experienced in PostgreSQL optimization, RESTful API design, and cloud monitoring.",
+    "Results-driven Full Stack Engineer with 4+ years of experience building scalable web applications, cross-platform mobile apps, and real-time IoT systems. Proficient across the entire development lifecycle — from crafting pixel-perfect React Native UIs to architecting high-performance Node.js/Fastify backends. Experienced in PostgreSQL optimization, RESTful API design, and cloud monitoring.",
 
   skills: {
     mobile: ["React Native", "Flutter", "Expo"],
@@ -326,7 +328,7 @@ function generateCompositeResponse(
   }
 
   if (activeIntents.includes("contact") && !activeIntents.includes("pricing")) {
-    responseParts.push(`**Contact & Hiring:**\nYou can hire or get in touch with Ayesha via:\n• **Email:** ${KB.email}\n• **LinkedIn:** ${KB.linkedin}\n• **GitHub:** ${KB.github}\n• \n\nFeel free to fill out the **Get In Touch** form at the bottom of the page!`)
+    responseParts.push(`**Contact & Hiring:**\nYou can hire or get in touch with Ayesha via:\n• **Email:** ${KB.email}\n• **LinkedIn:** ${KB.linkedin}\n• **GitHub:** ${KB.github}\n\nFeel free to fill out the **Get In Touch** form at the bottom of the page!`)
   }
 
   if (activeIntents.includes("availability")) {
@@ -406,11 +408,16 @@ function FormattedText({ text }: { text: string }) {
 
 // ─── Main Component ─────────────────────────────────────────────────────────────
 export function PortfolioChatbot() {
+  const { config } = usePortfolioTheme()
+  const chatbot = config.chatbot
+  const botName = chatbot.botName || DEFAULT_CONFIG.chatbot.botName
+  const welcome = chatbot.welcome || DEFAULT_CONFIG.chatbot.welcome
+
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       sender: "bot",
-      text: "Hi there! 👋 I'm Ayesha's AI Assistant. Ask me anything about her skills, experience, or projects!",
+      text: welcome,
       timestamp: new Date(),
     },
   ])
@@ -418,7 +425,7 @@ export function PortfolioChatbot() {
   const [isTyping, setIsTyping] = useState(false)
   const chatEndRef = useRef<HTMLDivElement>(null)
 
-  // Contextual memory tracking
+  // Contextual memory tracking (used by the offline rule-based fallback)
   const [conversationContext, setConversationContext] = useState<{
     lastIntent: string
     discussedTopics: string[]
@@ -431,46 +438,61 @@ export function PortfolioChatbot() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, isTyping])
 
-  const handleSendMessage = (textToSend: string) => {
+  const setIntent = (newIntent: string) => {
+    setConversationContext((prev) => ({
+      lastIntent: newIntent,
+      discussedTopics: prev.discussedTopics.includes(newIntent)
+        ? prev.discussedTopics
+        : [...prev.discussedTopics, newIntent],
+    }))
+  }
+
+  const handleSendMessage = async (textToSend: string) => {
     if (!textToSend.trim() || isTyping) return
 
     const userMsg: Message = { sender: "user", text: textToSend, timestamp: new Date() }
+    const payload = [...messages.map((m) => ({ role: m.sender === "user" ? "user" as const : "assistant" as const, content: m.text })), { role: "user" as const, content: textToSend }]
+
     setMessages((prev) => [...prev, userMsg])
     setInputValue("")
     setIsTyping(true)
 
-    // Calculate natural delay based on response content length
-    const rawResponse = generateCompositeResponse(
-      textToSend,
-      conversationContext.lastIntent,
-      (newIntent) => {
-        setConversationContext((prev) => ({
-          lastIntent: newIntent,
-          discussedTopics: prev.discussedTopics.includes(newIntent)
-            ? prev.discussedTopics
-            : [...prev.discussedTopics, newIntent],
-        }))
-      }
-    )
+    const startedAt = Date.now()
+    let reply: string | null = null
 
-    const typingDelay = Math.min(2400, Math.max(800, 300 + textToSend.length * 15))
+    // 1) Try the Gemini-backed /api/chat endpoint.
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: payload }),
+      })
+      const data = await res.json()
+      if (data?.text) reply = data.text
+    } catch {
+      // ignore — fall through to local rules
+    }
+
+    // 2) Offline rule-based fallback keeps the assistant working without a key.
+    if (!reply) {
+      reply = generateCompositeResponse(textToSend, conversationContext.lastIntent, setIntent)
+    }
+
+    const elapsed = Date.now() - startedAt
+    const wait = Math.max(0, Math.min(1500, 550 - elapsed))
 
     setTimeout(() => {
-      const botMsg: Message = {
-        sender: "bot",
-        text: rawResponse,
-        timestamp: new Date(),
-      }
+      const botMsg: Message = { sender: "bot", text: reply as string, timestamp: new Date() }
       setMessages((prev) => [...prev, botMsg])
       setIsTyping(false)
-    }, typingDelay)
+    }, wait)
   }
 
   const handleReset = () => {
     setMessages([
       {
         sender: "bot",
-        text: "Hi there! 👋 I'm Ayesha's AI Assistant. Ask me anything about her skills, experience, or projects!",
+        text: welcome,
         timestamp: new Date(),
       },
     ])
@@ -481,6 +503,8 @@ export function PortfolioChatbot() {
   }
 
   const showPresets = messages.length <= 1
+
+  if (chatbot.enabled === false) return null
 
   return (
     <>
@@ -502,12 +526,12 @@ export function PortfolioChatbot() {
             <div className="flex items-center gap-3">
               <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-md">
                 <Bot className="h-5 w-5" />
-                <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-400 border-2 border-white" />
+                <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-[color:var(--on-accent)] border-2 border-white" />
               </div>
               <div>
-                <h3 className="font-sora font-extrabold text-sm tracking-wide">Ayesha&apos;s Copilot</h3>
+                <h3 className="font-sora font-extrabold text-sm tracking-wide">{botName}</h3>
                 <p className="text-[10px] opacity-80 flex items-center gap-1">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-400" />
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--on-accent)]" />
                   AI Assistant • Online
                 </p>
               </div>
@@ -569,7 +593,7 @@ export function PortfolioChatbot() {
                     key={q.query}
                     onClick={() => handleSendMessage(q.query)}
                     disabled={isTyping}
-                    className="text-[10px] font-bold text-[color:var(--text-primary)] bg-white/70 dark:bg-slate-900/60 border border-[color:var(--card-border)] hover:border-[color:var(--accent-primary)] hover:bg-[color:var(--accent-soft)] px-2.5 py-1.5 rounded-full transition-all duration-200 hover:scale-[1.02] cursor-pointer disabled:opacity-50"
+                    className="text-[10px] font-bold text-[color:var(--text-primary)] bg-[color:var(--surface-strong)] border border-[color:var(--card-border)] hover:border-[color:var(--accent-primary)] hover:bg-[color:var(--accent-soft)] px-2.5 py-1.5 rounded-full transition-all duration-200 hover:scale-[1.02] cursor-pointer disabled:opacity-50"
                   >
                     {q.label}
                   </button>

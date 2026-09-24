@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react"
 import { useContactInfo, useSocialLinks } from "@/lib/useConfig"
 import { showToast } from "@/components/admin/Toast"
-import { Mail, Plus, X } from "lucide-react"
+import { Plus, X, Save } from "lucide-react"
+import { Button, IconButton, Card, Field, TextField, TextArea, SelectField } from "@/components/admin/ui"
 
 const PLATFORM_OPTIONS = ["github", "linkedin", "behance", "dribbble", "twitter", "youtube", "instagram", "website"]
 
@@ -16,6 +17,7 @@ export default function ContactEditor() {
   const [subtitle, setSubtitle] = useState("")
   const [resumeUrl, setResumeUrl] = useState("")
   const [socialLinks, setSocialLinks] = useState<any[]>([])
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     if (contactData) {
@@ -44,8 +46,9 @@ export default function ContactEditor() {
   }
 
   const handleSave = async () => {
+    setSaving(true)
     try {
-      await Promise.all([
+      const responses = await Promise.all([
         fetch("/api/contact-info", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -57,83 +60,99 @@ export default function ContactEditor() {
           body: JSON.stringify({ links: socialLinks }),
         }),
       ])
+      if (responses.some((r) => !r.ok)) throw new Error("Save failed")
       window.dispatchEvent(new Event("portfolioConfigUpdated"))
       showToast("Contact section saved!", "success")
     } catch {
       showToast("Failed to save", "error")
+    } finally {
+      setSaving(false)
     }
   }
 
   if (contactLoading || linksLoading) {
-    return <div className="animate-pulse space-y-4"><div className="h-8 w-48 rounded bg-slate-200/50" /><div className="h-64 rounded-xl bg-slate-200/30" /></div>
+    return (
+      <div className="animate-pulse space-y-4">
+        <div className="h-8 w-48 rounded bg-zinc-200" />
+        <div className="h-64 rounded-lg bg-zinc-200/60" />
+      </div>
+    )
   }
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h2 className="font-sora text-2xl font-bold text-[color:var(--text-primary)] flex items-center gap-2">
-          <Mail className="h-6 w-6 text-[color:var(--accent-primary)]" />
-          Contact Section
-        </h2>
-        <p className="mt-1 text-sm text-[color:var(--text-secondary)]">Edit contact details and social links.</p>
-      </div>
+    <div className="space-y-6">
+      <Card title="Contact Details" description="The email and phone number shown to visitors.">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Field label="Email">
+            <TextField type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" />
+          </Field>
+          <Field label="Phone">
+            <TextField value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+92 300 1234567" />
+          </Field>
+        </div>
+      </Card>
 
-      <div className="space-y-4">
-        <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">Contact Details</label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="mb-1.5 block text-sm font-semibold text-[color:var(--text-primary)]">Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" className="input-shell w-full rounded-xl px-4 py-3 text-sm" />
-          </div>
-          <div>
-            <label className="mb-1.5 block text-sm font-semibold text-[color:var(--text-primary)]">Phone</label>
-            <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+92 300 1234567" className="input-shell w-full rounded-xl px-4 py-3 text-sm" />
-          </div>
+      <Card title="Section Text" description="Heading, subtitle and resume link for the contact section.">
+        <div className="space-y-4">
+          <Field label="Heading">
+            <TextField value={heading} onChange={(e) => setHeading(e.target.value)} placeholder="Let's Work Together" />
+          </Field>
+          <Field label="Subtitle">
+            <TextArea value={subtitle} onChange={(e) => setSubtitle(e.target.value)} rows={2} placeholder="Ready to bring your ideas to life?..." />
+          </Field>
+          <Field label="Resume URL">
+            <TextField type="url" value={resumeUrl} onChange={(e) => setResumeUrl(e.target.value)} placeholder="https://drive.google.com/..." />
+          </Field>
         </div>
-      </div>
+      </Card>
 
-      <div className="space-y-4">
-        <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">Section Text</label>
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-[color:var(--text-primary)]">Heading</label>
-          <input type="text" value={heading} onChange={(e) => setHeading(e.target.value)} placeholder="Let's Work Together" className="input-shell w-full rounded-xl px-4 py-3 text-sm" />
-        </div>
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-[color:var(--text-primary)]">Subtitle</label>
-          <textarea value={subtitle} onChange={(e) => setSubtitle(e.target.value)} rows={2} placeholder="Ready to bring your ideas to life?..." className="input-shell w-full resize-none rounded-xl px-4 py-3 text-sm" />
-        </div>
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-[color:var(--text-primary)]">Resume URL</label>
-          <input type="url" value={resumeUrl} onChange={(e) => setResumeUrl(e.target.value)} placeholder="https://drive.google.com/..." className="input-shell w-full rounded-xl px-4 py-3 text-sm" />
-        </div>
-      </div>
-
-      <div>
-        <div className="mb-3 flex items-center justify-between">
-          <label className="block text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">Social Links ({socialLinks.length})</label>
-          <button onClick={addSocialLink} className="btn-secondary flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold">
-            <Plus className="h-3.5 w-3.5" /> Add Link
-          </button>
-        </div>
+      <Card
+        title={`Social Links (${socialLinks.length})`}
+        description="Platforms visitors can reach you on."
+        actions={
+          <Button variant="secondary" onClick={addSocialLink} icon={<Plus className="h-4 w-4" />}>
+            Add Link
+          </Button>
+        }
+      >
         <div className="space-y-3">
           {socialLinks.map((link, i) => (
-            <div key={i} className="flex flex-col gap-3 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--surface-strong)] p-4 sm:flex-row sm:items-center">
-              <select value={link.platform} onChange={(e) => updateSocialLink(i, "platform", e.target.value)} className="input-shell rounded-lg px-3 py-2 text-sm capitalize w-36 shrink-0">
+            <div key={i} className="flex flex-col gap-3 rounded-md border border-zinc-200 bg-zinc-50 p-3 sm:flex-row sm:items-center">
+              <SelectField
+                value={link.platform}
+                onChange={(e) => updateSocialLink(i, "platform", e.target.value)}
+                className="w-full shrink-0 capitalize sm:w-36"
+              >
                 {PLATFORM_OPTIONS.map((p) => (<option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>))}
-              </select>
-              <input value={link.url} onChange={(e) => updateSocialLink(i, "url", e.target.value)} placeholder="https://..." className="input-shell flex-1 rounded-lg px-3 py-2 text-sm" />
-              <input value={link.label} onChange={(e) => updateSocialLink(i, "label", e.target.value)} placeholder="Label" className="input-shell rounded-lg px-3 py-2 text-sm w-28 shrink-0" />
-              <button onClick={() => removeSocialLink(i)} className="shrink-0 rounded-md p-1.5 text-red-400 hover:bg-red-500/10">
+              </SelectField>
+              <input
+                value={link.url}
+                onChange={(e) => updateSocialLink(i, "url", e.target.value)}
+                placeholder="https://..."
+                className="w-full flex-1 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-900 focus:outline-none"
+              />
+              <input
+                value={link.label}
+                onChange={(e) => updateSocialLink(i, "label", e.target.value)}
+                placeholder="Label"
+                className="w-full shrink-0 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-900 focus:outline-none sm:w-28"
+              />
+              <IconButton label="Remove link" tone="danger" onClick={() => removeSocialLink(i)}>
                 <X className="h-4 w-4" />
-              </button>
+              </IconButton>
             </div>
           ))}
+          {socialLinks.length === 0 && (
+            <p className="text-sm text-zinc-400">No social links yet. Click "Add Link" to get started.</p>
+          )}
         </div>
-      </div>
+      </Card>
 
-      <button onClick={handleSave} className="btn-primary rounded-xl px-8 py-3 text-sm font-bold shadow-lg transition-all duration-200 hover:scale-[1.02]">
-        Save Contact Section
-      </button>
+      <div className="flex justify-end">
+        <Button onClick={handleSave} disabled={saving} icon={<Save className="h-4 w-4" />}>
+          {saving ? "Saving…" : "Save Contact Section"}
+        </Button>
+      </div>
     </div>
   )
 }

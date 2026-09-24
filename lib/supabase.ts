@@ -31,7 +31,9 @@ export const isSupabaseConfigured = () => {
 // Export a default client for backward compatibility
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co"
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key"
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: { persistSession: false, autoRefreshToken: false },
+})
 
 // ============================================================
 // Types
@@ -149,24 +151,6 @@ export type SiteSettings = {
   id: string
   brand_name: string
   footer_text: string
-  updated_at: string
-}
-
-export type ThemeColors = {
-  primaryColor: string
-  secondaryColor: string
-  backgroundColor: string
-  textColor: string
-  accentColor: string
-}
-
-export type ThemeSettings = {
-  id: string
-  theme: {
-    pastel: ThemeColors
-    dark: ThemeColors
-    "girly-blue": ThemeColors
-  }
   updated_at: string
 }
 

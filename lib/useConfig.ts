@@ -14,7 +14,6 @@ import {
   type ContactInfo,
   type SocialLink,
   type SiteSettings,
-  type ThemeSettings,
 } from "@/lib/supabase"
 
 // Generic fetch hook
@@ -104,9 +103,4 @@ export function useSocialLinks() {
 // Site settings hook
 export function useSiteSettings() {
   return useFetch<SiteSettings>("/api/site-settings")
-}
-
-// Theme settings hook
-export function useThemeSettings() {
-  return useFetch<ThemeSettings>("/api/theme")
 }

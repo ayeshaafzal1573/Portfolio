@@ -46,47 +46,40 @@ export const Modal: React.FC<ModalProps> = ({
   return ReactDOM.createPortal(
     <div
       className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-250 ${
-        visible ? "bg-black/50 backdrop-blur-md" : "bg-black/0 backdrop-blur-0"
+        visible ? "bg-zinc-900/50" : "bg-zinc-900/0"
       }`}
       onClick={onClose}
     >
       <div
-        className={`relative w-full ${sizeClasses[size]} overflow-hidden rounded-2xl border border-[color:var(--card-border)] shadow-2xl transition-all duration-250 ${
+        className={`relative w-full ${sizeClasses[size]} overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-2xl transition-all duration-250 ${
           visible
             ? "translate-y-0 scale-100 opacity-100"
             : "translate-y-4 scale-95 opacity-0"
         }`}
-        style={{ background: "var(--surface-strong, rgba(255,255,255,0.95))" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div
-          className="h-1 w-full"
-          style={{ background: "var(--gradient-main)" }}
-        />
         {title && (
-          <div className="flex items-center justify-between border-b border-[color:var(--card-border)] px-6 py-4">
-            <h3 className="font-sora text-lg font-bold text-[color:var(--text-primary)]">
-              {title}
-            </h3>
+          <div className="flex items-center justify-between border-b border-zinc-100 bg-zinc-50 px-5 py-4">
+            <h3 className="text-base font-semibold text-zinc-900">{title}</h3>
             <button
-              className="flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-200 hover:bg-black/5 hover:scale-110"
+              className="flex h-8 w-8 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
               onClick={onClose}
               aria-label="Close"
             >
-              <X className="h-5 w-5 text-[color:var(--text-secondary)]" />
+              <X className="h-4 w-4" />
             </button>
           </div>
         )}
         {!title && (
           <button
-            className="absolute right-4 top-5 z-10 flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-200 hover:bg-black/5 hover:scale-110"
+            className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
             onClick={onClose}
             aria-label="Close"
           >
-            <X className="h-5 w-5 text-[color:var(--text-secondary)]" />
+            <X className="h-4 w-4" />
           </button>
         )}
-        <div className="max-h-[75vh] overflow-y-auto p-6">{children}</div>
+        <div className="max-h-[75vh] overflow-y-auto p-5">{children}</div>
       </div>
     </div>,
     document.body

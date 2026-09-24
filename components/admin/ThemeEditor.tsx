@@ -1,260 +1,207 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useThemeSettings } from "@/lib/useConfig"
 import { showToast } from "@/components/admin/Toast"
-import { Palette, Sun, Moon, Sparkles } from "lucide-react"
+import { Save, Palette, Check } from "lucide-react"
+import {
+  Button,
+  Card,
+  Field,
+  SelectField,
+  EmptyState,
+} from "@/components/admin/ui"
+import {
+  DEFAULT_CONFIG,
+  type ThemeConfig,
+  type ThemeMode,
+  type ThemePalette,
+} from "@/lib/theme"
 
-const COLOR_FIELDS = [
-  { key: "primaryColor", label: "Primary Color", description: "Main brand color" },
-  { key: "secondaryColor", label: "Secondary Color", description: "Supporting accent" },
-  { key: "accentColor", label: "Accent Color", description: "Buttons & highlights" },
-  { key: "backgroundColor", label: "Background Color", description: "Page background" },
-  { key: "textColor", label: "Text Color", description: "Heading & body text" },
+const PALETTE_FIELDS: { key: keyof ThemePalette; label: string }[] = [
+  { key: "backgroundColor", label: "Background" },
+  { key: "textColor", label: "Text" },
+  { key: "primaryColor", label: "Primary / Buttons" },
+  { key: "secondaryColor", label: "Secondary text" },
+  { key: "accentColor", label: "Accent" },
 ]
 
-type ThemeKey = "pastel" | "dark" | "girly-blue"
-
-const THEME_LABELS: Record<ThemeKey, { label: string; emoji: string }> = {
-  pastel: { label: "Pastel (Default)", emoji: "🌸" },
-  dark: { label: "Dark Mode", emoji: "🌙" },
-  "girly-blue": { label: "Girly Blue", emoji: "💙" },
-}
-
-type Preset = { label: string; colors: Record<string, string> }
-
-const PRESETS: Record<ThemeKey, Preset[]> = {
-  pastel: [
-    {
-      label: "Pure Black & White",
-      colors: { primaryColor: "#000000", secondaryColor: "#3f3f3f", accentColor: "#0a0a0a", backgroundColor: "#ffffff", textColor: "#0a0a0a" },
-    },
-    {
-      label: "Silver",
-      colors: { primaryColor: "#262626", secondaryColor: "#737373", accentColor: "#171717", backgroundColor: "#fafafa", textColor: "#171717" },
-    },
-    {
-      label: "Pearl",
-      colors: { primaryColor: "#111111", secondaryColor: "#4d4d4d", accentColor: "#000000", backgroundColor: "#f6f6f6", textColor: "#111111" },
-    },
-  ],
-  dark: [
-    {
-      label: "Monochrome",
-      colors: { primaryColor: "#ffffff", secondaryColor: "#d4d4d4", accentColor: "#f5f5f5", backgroundColor: "#050505", textColor: "#f5f5f5" },
-    },
-    {
-      label: "Pitch Black",
-      colors: { primaryColor: "#ffffff", secondaryColor: "#ffffff", accentColor: "#f5f5f5", backgroundColor: "#000000", textColor: "#ffffff" },
-    },
-    {
-      label: "Soft Grey",
-      colors: { primaryColor: "#e5e5e5", secondaryColor: "#a3a3a3", accentColor: "#a3a3a3", backgroundColor: "#0a0a0a", textColor: "#f5f5f5" },
-    },
-    {
-      label: "High Contrast",
-      colors: { primaryColor: "#ffffff", secondaryColor: "#7a7a7a", accentColor: "#ffffff", backgroundColor: "#0b0b0b", textColor: "#ffffff" },
-    },
-  ],
-  "girly-blue": [
-    {
-      label: "Charcoal",
-      colors: { primaryColor: "#f5f5f5", secondaryColor: "#8a8a8a", accentColor: "#fafafa", backgroundColor: "#0d0d0d", textColor: "#fafafa" },
-    },
-    {
-      label: "Graphite",
-      colors: { primaryColor: "#e0e0e0", secondaryColor: "#6f6f6f", accentColor: "#aaaaaa", backgroundColor: "#111111", textColor: "#f0f0f0" },
-    },
-    {
-      label: "NYC Grey",
-      colors: { primaryColor: "#ffffff", secondaryColor: "#b3b3b3", accentColor: "#d9d9d9", backgroundColor: "#151515", textColor: "#ffffff" },
-    },
-  ],
+const MODE_LABEL: Record<ThemeMode, string> = {
+  dark: "Dark",
+  light: "Light",
+  warm: "Warm",
 }
 
 export default function ThemeEditor() {
-  const { data: themeData, loading } = useThemeSettings()
-  const [theme, setTheme] = useState<any>(null)
-  const [editMode, setEditMode] = useState<ThemeKey>("pastel")
+  const [config, setConfig] = useState<ThemeConfig | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [activeMode, setActiveMode] = useState<ThemeMode>("dark")
 
   useEffect(() => {
-    if (themeData?.theme) setTheme(themeData.theme)
-  }, [themeData])
+    const load = async () => {
+      try {
+        const res = await fetch("/api/theme-config")
+        const data = await res.json()
+        setConfig(data.config || DEFAULT_CONFIG)
+      } catch {
+        setConfig(DEFAULT_CONFIG)
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [])
 
-  const handleChange = (key: string, value: string) => {
-    setTheme((prev: any) => ({
-      ...prev,
-      [editMode]: { ...prev[editMode], [key]: value },
-    }))
-  }
-
-  const applyPreset = (colors: Record<string, string>) => {
-    setTheme((prev: any) => ({
-      ...prev,
-      [editMode]: { ...prev[editMode], ...colors },
-    }))
+  const updatePalette = (mode: ThemeMode, key: keyof ThemePalette, value: string) => {
+    if (!config) return
+    setConfig((prev) =>
+      prev
+        ? {
+            ...prev,
+            modes: { ...prev.modes, [mode]: { ...prev.modes[mode], [key]: value } },
+          }
+        : prev
+    )
   }
 
   const handleSave = async () => {
-    if (!theme) return
+    if (!config) return
+    setSaving(true)
     try {
-      await fetch("/api/theme", {
+      const res = await fetch("/api/theme-config", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ theme }),
+        body: JSON.stringify({ config }),
       })
+      if (!res.ok) throw new Error("Save failed")
       window.dispatchEvent(new Event("portfolioConfigUpdated"))
-      showToast("Theme saved!", "success")
+      showToast("Theme saved — site now reflects it", "success")
     } catch {
       showToast("Failed to save theme", "error")
+    } finally {
+      setSaving(false)
     }
   }
 
-  if (loading || !theme) {
-    return <div className="animate-pulse space-y-4"><div className="h-8 w-48 rounded bg-slate-200/50" /><div className="h-64 rounded-xl bg-slate-200/30" /></div>
+  if (loading) {
+    return (
+      <div className="animate-pulse space-y-4">
+        <div className="h-8 w-48 rounded bg-zinc-200" />
+        <div className="h-64 rounded-lg bg-zinc-200/60" />
+      </div>
+    )
   }
 
-  const currentColors = theme[editMode] || {}
+  if (!config) {
+    return (
+      <EmptyState
+        icon={<Palette className="h-5 w-5" />}
+        title="Couldn't load theme config"
+        description="Refresh the page to try again."
+      />
+    )
+  }
+
+  const activePalette = config.modes[activeMode]
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h2 className="font-sora text-2xl font-bold text-[color:var(--text-primary)] flex items-center gap-2">
-          <Palette className="h-6 w-6 text-[color:var(--accent-primary)]" />
-          Theme Settings
-        </h2>
-        <p className="mt-1 text-sm text-[color:var(--text-secondary)]">
-          Customize colors for each theme mode.
-        </p>
-      </div>
-
-      <div className="flex items-center gap-2 rounded-xl bg-slate-200/50 p-1 dark:bg-slate-800/50 w-fit">
-        {(Object.keys(THEME_LABELS) as ThemeKey[]).map((key) => (
-          <button
-            key={key}
-            onClick={() => setEditMode(key)}
-            className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all duration-200 ${
-              editMode === key
-                ? "bg-white text-black shadow-sm dark:bg-slate-700 dark:text-white"
-                : "text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)]"
-            }`}
-          >
-            {THEME_LABELS[key].emoji} {THEME_LABELS[key].label}
-          </button>
-        ))}
-      </div>
-
-      <div>
-        <label className="mb-3 block text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">
-          Quick Presets ({THEME_LABELS[editMode].label})
-        </label>
-        <div className="flex flex-wrap gap-2">
-          {PRESETS[editMode].map((preset) => (
-            <button
-              key={preset.label}
-              type="button"
-              onClick={() => applyPreset(preset.colors)}
-              className="flex items-center gap-2 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--surface-strong)] px-3 py-2 text-xs font-bold text-[color:var(--text-primary)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
-            >
-              <span
-                className="h-4 w-4 rounded-full border border-black/10"
-                style={{ background: `linear-gradient(135deg, ${preset.colors.primaryColor}, ${preset.colors.accentColor})` }}
-              />
-              {preset.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <label className="mb-3 block text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">
-          Custom Colors ({THEME_LABELS[editMode].label})
-        </label>
-        <div className="space-y-3">
-          {COLOR_FIELDS.map(({ key, label, description }) => (
-            <div
-              key={key}
-              className="flex flex-col gap-2 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--surface-strong)] p-4 sm:flex-row sm:items-center"
-            >
-              <div className="w-44 shrink-0">
-                <p className="text-sm font-bold text-[color:var(--text-primary)]">{label}</p>
-                <p className="text-[11px] text-[color:var(--text-secondary)]">{description}</p>
-              </div>
-              <div className="flex flex-1 items-center gap-3">
-                <input
-                  type="color"
-                  value={currentColors[key] || "#000000"}
-                  onChange={(e) => handleChange(key, e.target.value)}
-                  className="h-10 w-14 cursor-pointer rounded-lg border border-[color:var(--card-border)] bg-transparent p-0.5"
-                />
-                <input
-                  type="text"
-                  value={currentColors[key] || ""}
-                  onChange={(e) => handleChange(key, e.target.value)}
-                  className="input-shell flex-1 rounded-lg px-3 py-2 text-sm font-mono"
-                  placeholder="#000000"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <label className="mb-3 block text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">
-          Preview ({THEME_LABELS[editMode].label})
-        </label>
-        <div
-          className="rounded-2xl border p-6 transition-all duration-300"
-          style={{
-            background: currentColors.backgroundColor,
-            borderColor: `${currentColors.accentColor}33`,
-          }}
-        >
-          <div className="flex items-center gap-4 mb-4">
-            <div
-              className="h-12 w-12 rounded-xl"
-              style={{
-                background: `linear-gradient(135deg, ${currentColors.primaryColor}, ${currentColors.secondaryColor})`,
-              }}
-            />
-            <div>
-              <h4 className="text-lg font-bold" style={{ color: currentColors.textColor }}>
-                Sample Heading
-              </h4>
-              <p className="text-sm" style={{ color: currentColors.textColor, opacity: 0.6 }}>
-                This is how text will look
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <button
-              className="rounded-lg px-4 py-2 text-sm font-bold text-white"
-              style={{
-                background: `linear-gradient(115deg, ${currentColors.secondaryColor}, ${currentColors.accentColor})`,
-              }}
-            >
-              Primary Button
-            </button>
-            <button
-              className="rounded-lg border px-4 py-2 text-sm font-bold"
-              style={{
-                borderColor: `${currentColors.accentColor}44`,
-                color: currentColors.textColor,
-              }}
-            >
-              Secondary
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <button
-        onClick={handleSave}
-        className="btn-primary rounded-xl px-8 py-3 text-sm font-bold shadow-lg transition-all duration-200 hover:scale-[1.02]"
+    <div className="space-y-6">
+      <Card
+        title="Theme & Color Modes"
+        description="Customize the three site modes — dark, light and warm. Visitors can switch between them from the navbar."
       >
-        Save & Apply Theme
-      </button>
+        <div className="space-y-6">
+          <div className="flex flex-wrap items-center gap-1 rounded-lg border border-zinc-200 bg-zinc-50 p-1">
+            {(Object.keys(config.modes) as ThemeMode[]).map((mode) => {
+              const isActive = activeMode === mode
+              return (
+                <button
+                  key={mode}
+                  onClick={() => setActiveMode(mode)}
+                  className={`flex items-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium transition-colors ${
+                    isActive ? "bg-zinc-900 text-white shadow-sm" : "text-zinc-700 hover:text-zinc-900"
+                  }`}
+                >
+                  {isActive && <Check className="h-3.5 w-3.5" />}
+                  {MODE_LABEL[mode]} Mode
+                </button>
+              )
+            })}
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {PALETTE_FIELDS.map((field) => (
+              <div key={field.key} className="rounded-lg border border-zinc-200 p-4">
+                <span className="mb-2 block text-sm font-medium text-zinc-900">{field.label}</span>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    value={activePalette[field.key]}
+                    onChange={(e) => updatePalette(activeMode, field.key, e.target.value)}
+                    className="h-10 w-14 shrink-0 cursor-pointer rounded border border-zinc-300 bg-white p-0.5"
+                    aria-label={`${MODE_LABEL[activeMode]} ${field.label}`}
+                  />
+                  <input
+                    type="text"
+                    value={activePalette[field.key]}
+                    onChange={(e) => updatePalette(activeMode, field.key, e.target.value)}
+                    className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 font-mono text-xs uppercase text-zinc-900 focus:border-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900/10"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <Field label="Default mode" hint="Which mode the site opens in for visitors.">
+            <SelectField
+              value={config.default}
+              onChange={(e) =>
+                setConfig((prev) => (prev ? { ...prev, default: e.target.value as ThemeMode } : prev))
+              }
+              className="max-w-xs"
+            >
+              {(Object.keys(config.modes) as ThemeMode[]).map((mode) => (
+                <option key={mode} value={mode}>
+                  {MODE_LABEL[mode]}
+                </option>
+              ))}
+            </SelectField>
+          </Field>
+
+          <div>
+            <span className="mb-2 block text-sm font-medium text-zinc-900">Preview</span>
+            <div
+              className="rounded-lg border border-zinc-200 p-6"
+              style={{
+                background: activePalette.backgroundColor,
+                color: activePalette.textColor,
+              }}
+            >
+              <p className="text-lg font-semibold" style={{ color: activePalette.primaryColor }}>
+                Preview heading
+              </p>
+              <p className="mt-1 text-sm" style={{ color: activePalette.secondaryColor }}>
+                Supporting text in the {MODE_LABEL[activeMode]} mode.
+              </p>
+              <span
+                className="mt-3 inline-block rounded-md px-3 py-1.5 text-sm font-medium"
+                style={{ background: activePalette.primaryColor, color: activePalette.textColor }}
+              >
+                A button
+              </span>{" "}
+              <span className="mt-3 inline-block rounded-md px-3 py-1.5 text-sm font-medium text-white" style={{ background: activePalette.accentColor }}>
+                Accent
+              </span>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <div className="flex justify-end">
+        <Button onClick={handleSave} disabled={saving} icon={<Save className="h-4 w-4" />}>
+          {saving ? "Saving…" : "Save Theme"}
+        </Button>
+      </div>
     </div>
   )
 }

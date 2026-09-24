@@ -1,18 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useEducationEntries } from "@/lib/useConfig"
+import { useTimelineEntries } from "@/lib/useConfig"
 import { showToast } from "@/components/admin/Toast"
-import { Plus, X, ChevronDown, ChevronUp, GripVertical, GraduationCap, Save } from "lucide-react"
-import { Button, IconButton, Card, Field, TextField, TextArea, SelectField } from "@/components/admin/ui"
+import { Plus, X, ChevronDown, ChevronUp, GripVertical, Briefcase, Save } from "lucide-react"
+import { Button, IconButton, Card, Field, TextField, TextArea } from "@/components/admin/ui"
 
-const ICON_OPTIONS = ["GraduationCap", "Award", "BookOpen", "MapPin"]
-
-export default function EducationEditor() {
-  const { data: entriesData, loading } = useEducationEntries()
+export default function ExperienceEditor() {
+  const { data: entriesData, loading } = useTimelineEntries()
   const [entries, setEntries] = useState<any[]>([])
   const [expanded, setExpanded] = useState<number | null>(null)
-  const [newBadge, setNewBadge] = useState("")
+  const [newSkill, setNewSkill] = useState("")
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
@@ -22,14 +20,10 @@ export default function EducationEditor() {
   const addEntry = () => {
     const newEntry = {
       id: `new-${Date.now()}`,
-      degree: "",
-      institution: "",
-      duration: "",
-      grade: "",
+      year: "",
+      title: "",
       description: "",
-      badges: [],
-      icon: "GraduationCap",
-      color: "var(--accent-primary)",
+      skills: [],
       sort_order: entries.length,
     }
     setEntries((prev) => [...prev, newEntry])
@@ -45,29 +39,29 @@ export default function EducationEditor() {
     setExpanded(null)
   }
 
-  const addBadge = (index: number) => {
-    if (!newBadge.trim()) return
+  const addSkill = (index: number) => {
+    if (!newSkill.trim()) return
     const entry = entries[index]
-    updateEntry(index, "badges", [...(entry.badges || []), newBadge.trim()])
-    setNewBadge("")
+    updateEntry(index, "skills", [...(entry.skills || []), newSkill.trim()])
+    setNewSkill("")
   }
 
-  const removeBadge = (entryIndex: number, badgeIndex: number) => {
+  const removeSkill = (entryIndex: number, skillIndex: number) => {
     const entry = entries[entryIndex]
-    updateEntry(entryIndex, "badges", entry.badges.filter((_: string, i: number) => i !== badgeIndex))
+    updateEntry(entryIndex, "skills", entry.skills.filter((_: string, i: number) => i !== skillIndex))
   }
 
   const handleSave = async () => {
     setSaving(true)
     try {
-      const response = await fetch("/api/education", {
+      const response = await fetch("/api/timeline", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ entries: entries.map((e) => ({ ...e, id: undefined })) }),
       })
       if (!response.ok) throw new Error("Save failed")
       window.dispatchEvent(new Event("portfolioConfigUpdated"))
-      showToast("Education saved!", "success")
+      showToast("Experience saved!", "success")
     } catch {
       showToast("Failed to save", "error")
     } finally {
@@ -87,8 +81,8 @@ export default function EducationEditor() {
   return (
     <div className="space-y-6">
       <Card
-        title="Education Entries"
-        description="Manage your academic background."
+        title="Experience Timeline"
+        description="Manage your professional journey. Entries appear chronologically on the site — the more years, the stronger the story (2022 to present)."
         actions={
           <Button variant="secondary" onClick={addEntry} icon={<Plus className="h-4 w-4" />}>
             Add Entry
@@ -106,12 +100,11 @@ export default function EducationEditor() {
                 className="flex w-full cursor-pointer items-center gap-3 bg-zinc-50 p-4 text-left"
               >
                 <GripVertical className="h-4 w-4 shrink-0 text-zinc-400" />
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-zinc-200 text-zinc-900">
-                  <GraduationCap className="h-4 w-4" />
+                <span className="inline-flex shrink-0 items-center rounded-sm border border-zinc-300 bg-white px-2 py-0.5 text-xs font-semibold text-zinc-700">
+                  {entry.year || "—"}
                 </span>
                 <span className="min-w-0 flex-1 truncate text-sm font-semibold text-zinc-900">
-                  {entry.degree || "Untitled"}
-                  {entry.duration ? ` · ${entry.duration}` : ""}
+                  {entry.title || "Untitled entry"}
                 </span>
                 <IconButton label="Remove entry" tone="danger" onClick={(e) => { e.stopPropagation(); removeEntry(i) }}>
                   <X className="h-4 w-4" />
@@ -125,53 +118,53 @@ export default function EducationEditor() {
               {expanded === i && (
                 <div className="space-y-4 border-t border-zinc-200 p-4">
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <Field label="Degree" required>
-                      <TextField value={entry.degree} onChange={(e) => updateEntry(i, "degree", e.target.value)} placeholder="Bachelors in CS" />
+                    <Field label="Year" hint="e.g. 2023 — 2024">
+                      <TextField
+                        value={entry.year}
+                        onChange={(e) => updateEntry(i, "year", e.target.value)}
+                        placeholder="2023 — 2024"
+                      />
                     </Field>
-                    <Field label="Institution">
-                      <TextField value={entry.institution} onChange={(e) => updateEntry(i, "institution", e.target.value)} placeholder="University Name" />
-                    </Field>
-                  </div>
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <Field label="Duration">
-                      <TextField value={entry.duration} onChange={(e) => updateEntry(i, "duration", e.target.value)} placeholder="2022 - 2025" />
-                    </Field>
-                    <Field label="Grade">
-                      <TextField value={entry.grade} onChange={(e) => updateEntry(i, "grade", e.target.value)} placeholder="A+ Grade" />
-                    </Field>
-                    <Field label="Icon">
-                      <SelectField value={entry.icon} onChange={(e) => updateEntry(i, "icon", e.target.value)}>
-                        {ICON_OPTIONS.map((icon) => (<option key={icon} value={icon}>{icon}</option>))}
-                      </SelectField>
+                    <Field label="Title" hint="Role or milestone">
+                      <TextField
+                        value={entry.title}
+                        onChange={(e) => updateEntry(i, "title", e.target.value)}
+                        placeholder="Senior Software Engineer"
+                      />
                     </Field>
                   </div>
-                  <Field label="Description">
-                    <TextArea value={entry.description} onChange={(e) => updateEntry(i, "description", e.target.value)} rows={2} placeholder="What did you study?" />
+                  <Field label="Description" hint="What did you achieve here?">
+                    <TextArea
+                      value={entry.description}
+                      onChange={(e) => updateEntry(i, "description", e.target.value)}
+                      rows={3}
+                      placeholder="Describe the role, company and impact..."
+                    />
                   </Field>
                   <div>
-                    <span className="mb-1.5 block text-sm font-medium text-zinc-900">Badges</span>
+                    <span className="mb-1.5 block text-sm font-medium text-zinc-900">Skills</span>
                     <div className="mb-2 flex flex-wrap gap-2">
-                      {(entry.badges || []).map((badge: string, bi: number) => (
-                        <span key={bi} className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-800">
-                          {badge}
-                          <button onClick={() => removeBadge(i, bi)} className="text-zinc-400 hover:text-zinc-900" aria-label={`Remove ${badge}`}>
+                      {(entry.skills || []).map((skill: string, si: number) => (
+                        <span key={si} className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-800">
+                          {skill}
+                          <button onClick={() => removeSkill(i, si)} className="text-zinc-400 hover:text-zinc-900" aria-label={`Remove ${skill}`}>
                             <X className="h-3 w-3" />
                           </button>
                         </span>
                       ))}
-                      {entry.badges?.length === 0 && (
-                        <span className="text-xs text-zinc-400">No badges added yet.</span>
+                      {entry.skills?.length === 0 && (
+                        <span className="text-xs text-zinc-400">No skills added yet.</span>
                       )}
                     </div>
                     <div className="flex items-center gap-2">
                       <TextField
-                        value={newBadge}
-                        onChange={(e) => setNewBadge(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addBadge(i))}
-                        placeholder="Add badge and press Enter"
+                        value={newSkill}
+                        onChange={(e) => setNewSkill(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill(i))}
+                        placeholder="Add a skill and press Enter"
                         className="max-w-xs"
                       />
-                      <Button variant="secondary" onClick={() => addBadge(i)}>
+                      <Button variant="secondary" onClick={() => addSkill(i)}>
                         <Plus className="h-4 w-4" /> Add
                       </Button>
                     </div>
@@ -182,9 +175,9 @@ export default function EducationEditor() {
           ))}
           {entries.length === 0 && (
             <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 py-14 text-center">
-              <GraduationCap className="mb-3 h-10 w-10 text-zinc-300" />
-              <p className="text-sm font-semibold text-zinc-900">No education entries yet</p>
-              <p className="mt-1 text-sm text-zinc-500">Add your first entry to get started.</p>
+              <Briefcase className="mb-3 h-10 w-10 text-zinc-300" />
+              <p className="text-sm font-semibold text-zinc-900">No experience entries yet</p>
+              <p className="mt-1 text-sm text-zinc-500">Add your first milestone to start building your timeline.</p>
             </div>
           )}
         </div>
@@ -192,7 +185,7 @@ export default function EducationEditor() {
 
       <div className="flex justify-end">
         <Button onClick={handleSave} disabled={saving} icon={<Save className="h-4 w-4" />}>
-          {saving ? "Saving…" : "Save Education"}
+          {saving ? "Saving…" : "Save Experience"}
         </Button>
       </div>
     </div>

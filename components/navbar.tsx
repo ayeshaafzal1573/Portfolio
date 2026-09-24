@@ -1,10 +1,38 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Moon, Sun, Palette, Code2, Check, Menu, X } from "lucide-react"
-import { useTheme } from "./theme-provider"
+import { Code2, Menu, X, Sun, Moon, Flame } from "lucide-react"
 import { useSiteSettings } from "@/lib/useConfig"
+import { usePortfolioTheme } from "@/components/theme-provider"
 import { scrollToId } from "@/lib/utils"
+import type { ThemeMode } from "@/lib/theme"
+
+const MODE_META: { mode: ThemeMode; icon: React.ComponentType<{ className?: string }>; label: string }[] = [
+  { mode: "dark", icon: Moon, label: "Dark mode" },
+  { mode: "light", icon: Sun, label: "Light mode" },
+  { mode: "warm", icon: Flame, label: "Warm mode" },
+]
+
+function ThemeSwitcher({ compact = false }: { compact?: boolean }) {
+  const { mode, setMode, modes } = usePortfolioTheme()
+  return (
+    <div className={`flex items-center rounded-full btn-secondary p-1 ${compact ? "" : "gap-0.5"}`} role="group" aria-label="Theme mode">
+      {MODE_META.filter((m) => modes.includes(m.mode)).map(({ mode: m, icon: Icon, label }) => (
+        <button
+          key={m}
+          onClick={() => setMode(m)}
+          aria-label={label}
+          title={label}
+          className={`flex h-7 w-7 items-center justify-center rounded-full transition-all duration-200 ${
+            mode === m ? "bg-[color:var(--accent-primary)] text-[color:var(--on-accent)] shadow-sm" : "text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)]"
+          }`}
+        >
+          <Icon className="h-3.5 w-3.5" />
+        </button>
+      ))}
+    </div>
+  )
+}
 
 const NAV_ITEMS = [
   { id: "home", label: "Home" },
@@ -17,20 +45,11 @@ const NAV_ITEMS = [
 
 const NAV_SECTIONS = NAV_ITEMS.map((item) => item.id)
 
-const THEME_OPTIONS = [
-  { key: "pastel" as const, label: "Light", icon: Sun, swatch: "linear-gradient(135deg,#ffffff,#000000)" },
-  { key: "dark" as const, label: "Dark", icon: Moon, swatch: "linear-gradient(135deg,#ffffff,#050505)" },
-  { key: "girly-blue" as const, label: "Warm", icon: Palette, swatch: "linear-gradient(135deg,#f5f5f5,#0d0d0d)" },
-]
-
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [active, setActive] = useState("home")
-  const [themeOpen, setThemeOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const navRef = useRef<HTMLElement>(null)
-  const themeMenuRef = useRef<HTMLDivElement>(null)
-  const { theme, setTheme } = useTheme()
   const { data: settings } = useSiteSettings()
 
   useEffect(() => {
@@ -89,22 +108,6 @@ export function Navbar() {
   const scrollToSection = (id: string) => scrollToId(id)
 
   useEffect(() => {
-    if (!themeOpen) return
-    const onDown = (e: MouseEvent) => {
-      if (themeMenuRef.current && !themeMenuRef.current.contains(e.target as Node)) setThemeOpen(false)
-    }
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setThemeOpen(false)
-    }
-    document.addEventListener("mousedown", onDown)
-    document.addEventListener("keydown", onKey)
-    return () => {
-      document.removeEventListener("mousedown", onDown)
-      document.removeEventListener("keydown", onKey)
-    }
-  }, [themeOpen])
-
-  useEffect(() => {
     if (!menuOpen) return
     const onResize = () => {
       if (window.innerWidth >= 768) setMenuOpen(false)
@@ -119,9 +122,6 @@ export function Navbar() {
       document.removeEventListener("keydown", onKey)
     }
   }, [menuOpen])
-
-  const activeOption = THEME_OPTIONS.find((o) => o.key === theme) || THEME_OPTIONS[0]
-  const ActiveIcon = activeOption.icon
 
   return (
     <nav
@@ -147,6 +147,7 @@ export function Navbar() {
               {item.label}
             </button>
           ))}
+          <ThemeSwitcher />
           <button
             onClick={() => scrollToSection("contact")}
             className="nav-cta ml-1 rounded-full px-4 py-2.5 text-sm font-bold transition-all duration-300 hover:scale-[1.03] cursor-pointer"
@@ -155,38 +156,6 @@ export function Navbar() {
           </button>
         </div>
         <div className="my-2 flex items-center gap-2">
-          <div ref={themeMenuRef} className="relative">
-            <button
-              onClick={() => setThemeOpen((v) => !v)}
-              className="flex items-center gap-2 rounded-full px-3 py-2.5 btn-secondary"
-              aria-label="Change theme"
-              aria-expanded={themeOpen}
-            >
-              <ActiveIcon className="h-5 w-5" />
-              <span className="hidden text-xs font-bold sm:inline">{activeOption.label}</span>
-            </button>
-            {themeOpen && (
-              <div className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--surface-strong)] p-1.5 shadow-2xl backdrop-blur-xl">
-                {THEME_OPTIONS.map(({ key, label, icon: Icon, swatch }) => (
-                  <button
-                    key={key}
-                    onClick={() => {
-                      setTheme(key)
-                      setThemeOpen(false)
-                    }}
-                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-[color:var(--text-primary)] transition-colors hover:bg-[color:var(--accent-soft)]"
-                  >
-                    <span className="h-6 w-6 shrink-0 rounded-full border border-[color:var(--card-border)]" style={{ background: swatch }} />
-                    <span className="flex flex-1 items-center gap-2">
-                      <Icon className="h-4 w-4 text-[color:var(--accent-primary)]" />
-                      {label}
-                    </span>
-                    {theme === key && <Check className="h-4 w-4 text-[color:var(--accent-primary)]" />}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
           <button
             onClick={() => setMenuOpen((v) => !v)}
             className="flex items-center justify-center rounded-full p-2.5 btn-secondary md:hidden"
@@ -201,6 +170,12 @@ export function Navbar() {
       {menuOpen && (
         <div className="mx-auto mt-2 w-full max-w-7xl px-3 md:hidden">
           <div className="nav-pill glass-card flex flex-col overflow-hidden rounded-3xl p-2">
+            <div className="flex items-center justify-between px-4 py-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">
+                Theme Mode
+              </span>
+              <ThemeSwitcher />
+            </div>
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}

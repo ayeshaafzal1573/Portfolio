@@ -18,7 +18,7 @@ export function TechStackSection() {
           subtitle="Organized by where each technology fits in the product stack — not by arbitrary percentages."
         />
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 reveal-scale">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 reveal-scale stagger">
           {techStackCategories.map(({ label, icon: Icon, technologies }) => (
             <article
               key={label}

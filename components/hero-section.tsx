@@ -243,7 +243,7 @@ export function HeroSection() {
           <div className="flex flex-col items-start gap-3 pt-1 sm:flex-row sm:items-center">
             <button
               onClick={() => scrollToId("work")}
-              className="btn-primary inline-flex cursor-pointer items-center gap-2 rounded-full px-8 py-4 text-base font-bold transition-all duration-300 hover:shadow-lg"
+              className="btn-primary btn-press inline-flex cursor-pointer items-center gap-2 rounded-full px-8 py-4 text-base font-bold transition-all duration-300 hover:shadow-lg"
             >
               View My Work
               <ArrowRight className="h-4 w-4" />

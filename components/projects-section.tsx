@@ -84,11 +84,11 @@ export function ProjectsSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3].map((i) => (
               <div key={i} className="glass-card rounded-2xl overflow-hidden animate-pulse">
-                <div className="h-48 bg-gray-300 dark:bg-gray-700"></div>
+                <div className="h-48 bg-[color:var(--accent-soft)]"></div>
                 <div className="p-6 space-y-4">
-                  <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded"></div>
-                  <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded"></div>
-                  <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
+                  <div className="h-6 bg-[color:var(--accent-soft)] rounded"></div>
+                  <div className="h-4 bg-[color:var(--accent-soft)] rounded"></div>
+                  <div className="h-4 bg-[color:var(--accent-soft)] rounded w-3/4"></div>
                 </div>
               </div>
             ))}

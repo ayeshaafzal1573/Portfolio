@@ -29,8 +29,8 @@ export function LiveProjectsSlider() {
           <div className="flex gap-4 overflow-hidden sm:gap-6">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="w-[16.5rem] flex-shrink-0 overflow-hidden rounded-2xl glass-card animate-pulse sm:w-80">
-                <div className="h-48 bg-slate-300/60 dark:bg-slate-700/70" />
-                <div className="space-y-4 p-6"><div className="h-5 rounded bg-slate-300/60 dark:bg-slate-700/70" /></div>
+                <div className="h-48 bg-[color:var(--accent-soft)]" />
+                <div className="space-y-4 p-6"><div className="h-5 rounded bg-[color:var(--accent-soft)]" /></div>
               </div>
             ))}
           </div>
@@ -66,7 +66,7 @@ export function LiveProjectsSlider() {
               <TiltCard key={project.id} className="group w-[16.5rem] flex-shrink-0 overflow-hidden rounded-2xl glass-card sm:w-80" style={{ scrollSnapAlign: "start" }}>
                 <div className="relative overflow-hidden">
                   <img src={project.thumbnail_url || "/placeholder.svg"} alt={project.name} className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/45 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </div>
                 <div className="space-y-4 p-6">
                   <h3 className="font-sora text-xl font-extrabold">{project.name}</h3>

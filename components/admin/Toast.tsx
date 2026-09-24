@@ -36,7 +36,7 @@ export function ToastContainer() {
     setToasts((prev) => prev.filter((t) => t.id !== id))
 
   return (
-    <div className="fixed right-4 top-4 z-[9999] flex flex-col gap-3 pointer-events-none">
+    <div className="pointer-events-none fixed right-4 top-4 z-[9999] flex w-full max-w-sm flex-col gap-3 px-4">
       {toasts.map((toast) => (
         <ToastNotification
           key={toast.id}
@@ -68,36 +68,29 @@ function ToastNotification({
   }, [onDismiss])
 
   const icons = {
-    success: <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0" />,
-    error: <AlertCircle className="h-5 w-5 text-red-400 shrink-0" />,
-    info: <Info className="h-5 w-5 text-sky-400 shrink-0" />,
-  }
-
-  const accents = {
-    success: "border-l-emerald-500 bg-emerald-500/8",
-    error: "border-l-red-500 bg-red-500/8",
-    info: "border-l-sky-500 bg-sky-500/8",
+    success: <CheckCircle2 className="h-5 w-5 shrink-0 text-zinc-900" />,
+    error: <AlertCircle className="h-5 w-5 shrink-0 text-zinc-900" />,
+    info: <Info className="h-5 w-5 shrink-0 text-zinc-900" />,
   }
 
   return (
     <div
-      className={`pointer-events-auto flex w-80 items-start gap-3 rounded-xl border border-[color:var(--card-border)] border-l-4 ${accents[item.type]} p-4 shadow-2xl backdrop-blur-xl transition-all duration-300 ${
+      className={`pointer-events-auto flex items-start gap-3 rounded-lg border border-zinc-200 bg-white shadow-lg p-4 transition-all duration-300 ${
         visible && !exiting
           ? "translate-x-0 opacity-100"
           : "translate-x-8 opacity-0"
       }`}
-      style={{ background: "var(--surface-strong, rgba(255,255,255,0.92))" }}
     >
-      {icons[item.type]}
-      <p className="flex-1 text-sm font-semibold text-[color:var(--text-primary)]">
-        {item.message}
-      </p>
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-100">
+        {icons[item.type]}
+      </span>
+      <p className="flex-1 text-sm font-medium text-zinc-900">{item.message}</p>
       <button
         onClick={onDismiss}
-        className="shrink-0 rounded-md p-0.5 transition-colors hover:bg-black/5"
+        className="shrink-0 rounded-md p-0.5 transition-colors hover:bg-zinc-100"
         aria-label="Dismiss"
       >
-        <X className="h-4 w-4 text-[color:var(--text-secondary)]" />
+        <X className="h-4 w-4 text-zinc-500" />
       </button>
     </div>
   )

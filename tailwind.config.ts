@@ -65,65 +65,6 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Soft Pastel Colors overrides
-        purple: {
-          50: '#FDFBFF', 100: '#F5F3FF', 200: '#EDE9FE', 300: '#DDD6FE', 400: '#C4B5FD',
-          500: '#A78BFA', 600: '#8B5CF6', 700: '#7C3AED', 800: '#6D28D9', 900: '#5B21B6',
-        },
-        pink: {
-          50: '#FFF1F2', 100: '#FFE4E6', 200: '#FECDD3', 300: '#FDA4AF', 400: '#FB7185',
-          500: '#F43F5E', 600: '#E11D48', 700: '#BE123C', 800: '#9F1239', 900: '#881337',
-        },
-        blue: {
-          50: '#EFF6FF', 100: '#DBEAFE', 200: '#BFDBFE', 300: '#93C5FD', 400: '#60A5FA',
-          500: '#3B82F6', 600: '#2563EB', 700: '#1D4ED8', 800: '#1E40AF', 900: '#1E3A8A',
-        },
-        yellow: {
-          50: '#FEFCE8', 100: '#FEF9C3', 200: '#FEF08A', 300: '#FDE047', 400: '#FACC15',
-          500: '#EAB308', 600: '#CA8A04', 700: '#A16207', 800: '#854D0E', 900: '#713F12',
-        },
-        mint: {
-          400: '#98FF98',
-          500: '#6EE7B7',
-        },
-        sky: {
-          400: '#87CEEB',
-          500: '#38BDF8',
-        },
-        electric: {
-          500: '#00D4FF',
-        },
-        lime: {
-          500: '#A3E635',
-        },
-        // Legacy customized objects
-        pastel: {
-          primary: "#FFFFFF",
-          secondary: "#F5F5F5",
-          text: "#0A0A0A",
-          lavender: "#E5E5E5",
-          mint: "#D9D9D9",
-          blush: "#F2F2F2",
-          sky: "#BFBFBF",
-        },
-        dark: {
-          primary: "#050505",
-          secondary: "#141414",
-          tertiary: "#2A2A2A",
-          text: "#F5F5F5",
-          electric: "#D4D4D4",
-          purple: "#A3A3A3",
-          lime: "#E5E5E5",
-        },
-        girly: {
-          primary: "#FFFFFF",
-          secondary: "#F5F5F5",
-          text: "#0A0A0A",
-          blue: "#E0E0E0",
-          lightBlue: "#F2F2F2",
-          darkBlue: "#1A1A1A",
-          pink: "#E6E6E6",
-        },
       },
       // Shadcn UI border radius variables
       borderRadius: {
@@ -152,8 +93,8 @@ const config: Config = {
           "50%": { transform: "translateY(-20px)" },
         },
         glow: {
-          from: { boxShadow: "0 0 20px var(--accent-blue)" }, // Ensure --accent-blue is defined in your CSS vars
-          to: { boxShadow: "0 0 30px var(--accent-blue), 0 0 40px var(--accent-blue)" },
+          from: { boxShadow: "0 0 20px var(--accent-primary)" },
+          to: { boxShadow: "0 0 30px var(--accent-primary), 0 0 40px var(--accent-primary)" },
         },
       },
       backgroundImage: {

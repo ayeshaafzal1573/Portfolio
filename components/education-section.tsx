@@ -34,7 +34,7 @@ export function EducationSection() {
           subtitle="Academic background — kept brief, professional in front."
         />
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 reveal-scale">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 reveal-scale stagger">
           {educationList.map((edu, index) => {
             const IconComponent = ICON_MAP[edu.icon] || GraduationCap
             return (

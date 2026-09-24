@@ -1,9 +1,25 @@
 "use client"
 
 import { useState } from "react"
-import dynamic from "next/dynamic"
+import {
+  LayoutDashboard,
+  User,
+  Briefcase,
+  GraduationCap,
+  FolderKanban,
+  Play,
+  Mail,
+  Settings,
+  ImageIcon,
+  ArrowLeft,
+  Menu,
+  X,
+  Eye,
+  Palette,
+  Bot,
+  Inbox,
+} from "lucide-react"
 import { ToastContainer } from "@/components/admin/Toast"
-import ThemeEditor from "@/components/admin/ThemeEditor"
 import HeroEditor from "@/components/admin/HeroEditor"
 import AboutEditor from "@/components/admin/AboutEditor"
 import EducationEditor from "@/components/admin/EducationEditor"
@@ -11,221 +27,224 @@ import ProjectsEditor from "@/components/admin/ProjectsEditor"
 import LiveProjectsEditor from "@/components/admin/LiveProjectsEditor"
 import ContactEditor from "@/components/admin/ContactEditor"
 import SiteEditor from "@/components/admin/SiteEditor"
-import {
-  Palette,
-  ImageIcon,
-  FolderKanban,
-  User,
-  Mail,
-  Settings,
-  ArrowLeft,
-  LayoutDashboard,
-  Menu,
-  X,
-  GraduationCap,
-  Play,
-} from "lucide-react"
+import ExperienceEditor from "@/components/admin/ExperienceEditor"
+import ThemeEditor from "@/components/admin/ThemeEditor"
+import ChatbotEditor from "@/components/admin/ChatbotEditor"
+import MessagesEditor from "@/components/admin/MessagesEditor"
+import Dashboard from "@/components/admin/Dashboard"
+import { PageHeader } from "@/components/admin/ui"
 
-const sections = {
-  theme: { label: "Theme", icon: Palette, description: "Colors & presets" },
-  hero: { label: "Hero", icon: ImageIcon, description: "Landing headline" },
-  about: { label: "About", icon: User, description: "Bio & skills" },
-  education: { label: "Education", icon: GraduationCap, description: "Academic background" },
-  liveProjects: { label: "Live Projects", icon: Play, description: "Production apps" },
-  projects: { label: "Projects", icon: FolderKanban, description: "Portfolio work" },
-  contact: { label: "Contact", icon: Mail, description: "Email & socials" },
-  site: { label: "Site Settings", icon: Settings, description: "Navbar & footer" },
-} as const
+interface SectionDef {
+  key: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  description: string
+  group: string
+}
 
-type SectionKey = keyof typeof sections
+const GROUPS = [
+  {
+    title: "",
+    items: [
+      { key: "dashboard", label: "Dashboard", icon: LayoutDashboard, description: "Overview of your portfolio website.", group: "General" },
+    ],
+  },
+  {
+    title: "Content",
+    items: [
+      { key: "hero", label: "Hero", icon: ImageIcon, description: "Headline, roles and profile photo.", group: "Content" },
+      { key: "about", label: "About & Skills", icon: User, description: "Bio and core skills.", group: "Content" },
+      { key: "experience", label: "Experience", icon: Briefcase, description: "Professional timeline.", group: "Content" },
+      { key: "education", label: "Education", icon: GraduationCap, description: "Academic background.", group: "Content" },
+      { key: "projects", label: "Projects", icon: FolderKanban, description: "Portfolio & featured work.", group: "Content" },
+      { key: "liveProjects", label: "Live Projects", icon: Play, description: "Production apps.", group: "Content" },
+    ],
+  },
+  {
+    title: "Contact",
+    items: [
+      { key: "contact", label: "Contact & Social", icon: Mail, description: "Email, resume and social links.", group: "Contact" },
+      { key: "messages", label: "Messages", icon: Inbox, description: "Contact form submissions from visitors.", group: "Contact" },
+    ],
+  },
+  {
+    title: "Appearance",
+    items: [
+      { key: "theme", label: "Theme & Modes", icon: Palette, description: "Dark, light and warm color themes.", group: "Appearance" },
+      { key: "chatbot", label: "AI Chatbot", icon: Bot, description: "Gemini assistant name, model and welcome text.", group: "Appearance" },
+      { key: "site", label: "Site Settings", icon: Settings, description: "Navbar and footer.", group: "Appearance" },
+    ],
+  },
+]
+
+const ALL_SECTIONS: SectionDef[] = GROUPS.flatMap((g) => g.items)
+
+const DEFAULT_SECTION = "dashboard"
 
 export default function AdminPanel() {
-  const [active, setActive] = useState<SectionKey>("theme")
+  const [active, setActive] = useState<string>(DEFAULT_SECTION)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const current = ALL_SECTIONS.find((s) => s.key === active) || ALL_SECTIONS[0]
 
   const renderEditor = () => {
     switch (active) {
-      case "theme":
-        return <ThemeEditor />
+      case "dashboard":
+        return <Dashboard onNavigate={setActive} />
       case "hero":
         return <HeroEditor />
       case "about":
         return <AboutEditor />
+      case "experience":
+        return <ExperienceEditor />
       case "education":
         return <EducationEditor />
-      case "liveProjects":
-        return <LiveProjectsEditor />
       case "projects":
         return <ProjectsEditor />
+      case "liveProjects":
+        return <LiveProjectsEditor />
       case "contact":
         return <ContactEditor />
+      case "messages":
+        return <MessagesEditor />
+      case "theme":
+        return <ThemeEditor />
+      case "chatbot":
+        return <ChatbotEditor />
       case "site":
         return <SiteEditor />
       default:
-        return null
+        return <Dashboard onNavigate={setActive} />
     }
   }
 
   return (
-    <div className="flex min-h-screen bg-[color:var(--bg-primary)]">
+    <div className="flex min-h-screen flex-col bg-[#f0f0f1]">
       <ToastContainer />
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-      <aside
-        className={`fixed left-0 top-0 z-40 flex h-screen w-72 flex-col overflow-y-auto border-r border-[color:var(--card-border)] shadow-2xl transition-transform duration-300 lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-        style={{ background: "var(--surface-strong, rgba(255,255,255,0.95))" }}
-      >
-        <div className="relative overflow-hidden px-6 pb-6 pt-8">
-          <div
-            className="absolute inset-0 opacity-[0.06]"
-            style={{ background: "var(--gradient-main)" }}
-          />
-          <div className="relative">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div
-                  className="flex h-10 w-10 items-center justify-center rounded-xl shadow-md"
-                  style={{ background: "var(--gradient-main)" }}
-                >
-                  <LayoutDashboard className="h-5 w-5 text-[color:var(--on-accent)]" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.15em] text-[color:var(--accent-primary)]">
-                    Portfolio
-                  </p>
-                  <h2 className="font-sora text-lg font-bold text-[color:var(--text-primary)]">
-                    Admin Panel
-                  </h2>
-                </div>
+
+      {/* Dark admin bar (WordPress-style) */}
+      <div className="z-30 border-b border-black/40 bg-zinc-900 text-white">
+        <div className="mx-auto flex h-14 max-w-[1600px] items-center justify-between gap-4 px-4 sm:px-6">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="-ml-1 flex h-9 w-9 items-center justify-center rounded-md text-white/70 hover:bg-white/10 hover:text-white lg:hidden"
+              aria-label="Toggle admin menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white text-sm font-bold text-zinc-900">
+                A
               </div>
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="rounded-lg p-1.5 transition-colors hover:bg-black/5 lg:hidden"
-              >
-                <X className="h-5 w-5" />
-              </button>
+              <div className="leading-tight">
+                <p className="text-sm font-semibold tracking-wide text-white">Portfolio Admin</p>
+                <p className="text-[11px] font-medium uppercase tracking-widest text-white/60">Site Dashboard</p>
+              </div>
             </div>
           </div>
-        </div>
-        <nav className="flex-1 px-4 pb-4">
-          <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-[color:var(--text-secondary)]">
-            Sections
-          </p>
-          <div className="space-y-1">
-            {(Object.entries(sections) as [SectionKey, (typeof sections)[SectionKey]][]).map(
-              ([key, { label, icon: Icon, description }]) => {
-                const isActive = active === key
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => {
-                      setActive(key)
-                      setSidebarOpen(false)
-                    }}
-                    className={`group relative flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-all duration-200 ${
-                      isActive
-                        ? "shadow-md"
-                        : "hover:bg-[color:var(--accent-soft)] hover:shadow-sm"
-                    }`}
-                    style={
-                      isActive
-                        ? { background: "var(--gradient-main)", color: "var(--on-accent)" }
-                        : undefined
-                    }
-                  >
-                    {isActive && (
-                      <div className="absolute -left-4 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-white/80" />
-                    )}
-                    <div
-                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors ${
-                        isActive ? "bg-white/20" : "bg-[color:var(--accent-soft)]"
-                      }`}
-                    >
-                      <Icon
-                        className={`h-4 w-4 ${
-                          isActive ? "text-[color:var(--on-accent)]" : "text-[color:var(--accent-primary)]"
-                        }`}
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      <p
-                        className={`text-sm font-bold ${
-                          isActive ? "text-[color:var(--on-accent)]" : "text-[color:var(--text-primary)]"
-                        }`}
-                      >
-                        {label}
-                      </p>
-                      <p
-                        className={`text-[10px] truncate ${
-                          isActive ? "text-[color:color-mix(in_srgb,var(--on-accent)_70%,transparent)]" : "text-[color:var(--text-secondary)]"
-                        }`}
-                      >
-                        {description}
-                      </p>
-                    </div>
-                  </button>
-                )
-              }
-            )}
+
+          <div className="flex shrink-0 items-center gap-3 text-xs">
+            <a
+              href="/"
+              target="_blank"
+              rel="noreferrer"
+              className="hidden items-center gap-1 font-medium text-white/70 hover:text-white sm:inline-flex"
+            >
+              <Eye className="h-3.5 w-3.5" />
+              View Site
+            </a>
+            <div className="hidden h-6 w-px bg-white/15 md:block" />
+            <span className="hidden items-center gap-2 text-white/80 md:flex">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-[10px] font-semibold text-white">
+                A
+              </span>
+              Howdy, Ayesha
+            </span>
+            <a
+              href="/"
+              className="rounded-md border border-white/20 px-3 py-1.5 font-medium text-white hover:border-white hover:bg-white hover:text-zinc-900"
+            >
+              Back to Site
+            </a>
           </div>
-        </nav>
-        <div className="border-t border-[color:var(--card-border)] p-4">
-          <a
-            href="/"
-            className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold text-[color:var(--text-secondary)] transition-all duration-200 hover:bg-[color:var(--accent-soft)] hover:text-[color:var(--text-primary)]"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Portfolio
-          </a>
         </div>
-      </aside>
-      <main className="min-h-screen flex-1 lg:ml-72">
-        <div
-          className="sticky top-0 z-20 flex items-center gap-3 border-b border-[color:var(--card-border)] px-4 py-3 backdrop-blur-xl lg:hidden"
-          style={{ background: "var(--surface-strong, rgba(255,255,255,0.92))" }}
+      </div>
+
+      <div className="mx-auto flex w-full max-w-[1600px] flex-1">
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
+        {/* Grouped sidebar */}
+        <aside
+          className={`fixed bottom-0 left-0 top-14 z-30 w-64 shrink-0 overflow-y-auto border-r border-zinc-200 bg-white px-3 py-5 transition-transform duration-300 lg:sticky lg:top-14 lg:h-[calc(100vh-3.5rem)] lg:translate-x-0 ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
         >
           <button
-            onClick={() => setSidebarOpen(true)}
-            className="rounded-lg p-2 btn-secondary"
+            onClick={() => setSidebarOpen(false)}
+            className="mb-2 flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100 lg:hidden"
           >
-            <Menu className="h-5 w-5" />
+            <X className="h-4 w-4" />
+            Close menu
           </button>
-          <div className="flex items-center gap-2">
-            {(() => {
-              const Icon = sections[active].icon
-              return <Icon className="h-4 w-4 text-[color:var(--accent-primary)]" />
-            })()}
-            <span className="font-sora text-sm font-bold text-[color:var(--text-primary)]">
-              {sections[active].label}
-            </span>
+
+          <nav className="space-y-6">
+            {GROUPS.map((group) => (
+              <div key={group.title || "menu"}>
+                {group.title && (
+                  <p className="mb-1.5 px-2.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-400">
+                    {group.title}
+                  </p>
+                )}
+                <div className="space-y-0.5">
+                  {group.items.map((item) => {
+                    const isActive = active === item.key
+                    const Icon = item.icon
+                    return (
+                      <button
+                        key={item.key}
+                        type="button"
+                        onClick={() => {
+                          setActive(item.key)
+                          setSidebarOpen(false)
+                        }}
+                        className={`flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm font-medium transition-colors ${
+                          isActive
+                            ? "bg-zinc-900 text-white"
+                            : "text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
+                        }`}
+                      >
+                        <Icon className="h-4 w-4 shrink-0" />
+                        <span>{item.label}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </nav>
+
+          <div className="mt-8 border-t border-zinc-200 pt-4">
+            <a
+              href="/"
+              className="flex items-center gap-2 rounded-md px-2.5 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Portfolio
+            </a>
           </div>
-        </div>
-        <div className="p-5 md:p-8 lg:p-10">
-          <div className="mb-6 hidden lg:block">
-            <div className="flex items-center gap-2 text-sm text-[color:var(--text-secondary)]">
-              <LayoutDashboard className="h-4 w-4" />
-              <span>Admin</span>
-              <span className="text-[color:var(--card-border)]">/</span>
-              <span className="font-semibold text-[color:var(--text-primary)]">
-                {sections[active].label}
-              </span>
-            </div>
-          </div>
-          <div
-            className="mx-auto max-w-4xl rounded-2xl border border-[color:var(--card-border)] p-6 shadow-lg md:p-8"
-            style={{ background: "var(--surface-strong, rgba(255,255,255,0.92))" }}
-          >
-            {renderEditor()}
-          </div>
-        </div>
-      </main>
+        </aside>
+
+        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8">
+          <PageHeader title={current.label} description={current.description} />
+          {renderEditor()}
+        </main>
+      </div>
     </div>
   )
 }

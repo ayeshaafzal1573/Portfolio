@@ -33,7 +33,7 @@ export interface PortfolioStat {
 }
 
 export const stats: PortfolioStat[] = [
-  { value: 4, suffix: "+", label: "Years Building" },
+  { value: 4, suffix: "+", label: "Years Experience" },
   { value: 40, suffix: "+", label: "Projects" },
   { value: 15, suffix: "+", label: "Production Systems" },
 ]

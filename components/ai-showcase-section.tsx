@@ -51,7 +51,7 @@ export function AIShowcaseSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 reveal-scale stagger">
           {aiProjects.map((project, index) => (
             <div
               key={project.title}
@@ -59,8 +59,8 @@ export function AIShowcaseSection() {
               style={{ animationDelay: `${index * 0.5}s` }}
             >
               <div className="flex items-start gap-6">
-                <div className="p-4 rounded-2xl bg-gradient-main text-slate-800 shadow-md border border-white/40 group-hover:animate-glow">
-                  <project.icon className="w-8 h-8 text-slate-800" />
+                <div className="p-4 rounded-2xl bg-gradient-main text-neutral-900 shadow-md border border-white/40 group-hover:animate-glow">
+                  <project.icon className="w-8 h-8 text-neutral-900" />
                 </div>
 
                 <div className="flex-1">

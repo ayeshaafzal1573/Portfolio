@@ -29,7 +29,7 @@ export function AboutSection() {
           <div className="lg:col-span-3 reveal-left">
             <p className="mb-6 max-w-3xl text-base leading-relaxed text-[color:var(--text-secondary)] md:text-lg">
               {aboutData?.description ||
-                "Full-Stack Developer & UI/UX Designer with 2+ years of experience building modern web and mobile applications. Specialized in scalable platforms, admin dashboards, and intuitive user interfaces using Next.js, React Native, and FastAPI."}
+                "Full-Stack Developer & UI/UX Designer with 4+ years of experience (2022\u20132026) building modern web and mobile applications. Specialized in scalable platforms, admin dashboards, and intuitive user interfaces using Next.js, React Native, and FastAPI."}
             </p>
             <p className="max-w-3xl text-base leading-relaxed text-[color:var(--text-secondary)] md:text-lg">
               I work across the full product stack — from idea and Figma to interface, API, database and

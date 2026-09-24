@@ -1,10 +1,32 @@
 "use client"
 
-import React, { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import { Modal } from "@/components/admin/Modal"
 import { useCategorizedProjects } from "@/lib/useConfig"
 import { showToast } from "@/components/admin/Toast"
-import { Plus, GripVertical, Pencil, Trash2, Image as ImageIcon, Upload, X, Film, FolderKanban } from "lucide-react"
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  Image as ImageIcon,
+  Upload,
+  X,
+  Film,
+  Save,
+  FolderKanban,
+} from "lucide-react"
+import {
+  Button,
+  IconButton,
+  Badge,
+  Toggle,
+  TextField,
+  TextArea,
+  SelectField,
+  Field,
+  EmptyState,
+  ConfirmDialog,
+} from "@/components/admin/ui"
 
 const CATEGORIES = ["MERN Stack", "Full-Stack", "Mobile Apps", "UI/UX Designs", "Web Development"]
 
@@ -25,7 +47,9 @@ export default function ProjectsEditor() {
   const [projects, setProjects] = useState<any[]>([])
   const [editing, setEditing] = useState<any>(null)
   const [isOpen, setIsOpen] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<any>(null)
   const [newTech, setNewTech] = useState("")
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     if (projectsData) setProjects(projectsData)
@@ -46,25 +70,31 @@ export default function ProjectsEditor() {
       showToast("Title is required", "error")
       return
     }
+    setSaving(true)
     try {
       const method = editing.id ? "PUT" : "POST"
-      await fetch("/api/projects", {
+      const response = await fetch("/api/projects", {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editing),
       })
+      if (!response.ok) throw new Error("Save failed")
       window.dispatchEvent(new Event("portfolioConfigUpdated"))
       closeEditor()
       showToast("Project saved!", "success")
     } catch {
       showToast("Failed to save", "error")
+    } finally {
+      setSaving(false)
     }
   }
 
   const deleteProject = async (id: string) => {
     try {
-      await fetch(`/api/projects?id=${id}`, { method: "DELETE" })
+      const response = await fetch(`/api/projects?id=${id}`, { method: "DELETE" })
+      if (!response.ok) throw new Error("Delete failed")
       window.dispatchEvent(new Event("portfolioConfigUpdated"))
+      setDeleteTarget(null)
       showToast("Project deleted", "info")
     } catch {
       showToast("Failed to delete", "error")
@@ -77,89 +107,102 @@ export default function ProjectsEditor() {
     setNewTech("")
   }
 
+  const removeTech = (index: number) => {
+    setEditing({ ...editing, tech_stack: editing.tech_stack.filter((_: string, i: number) => i !== index) })
+  }
+
   if (loading) {
-    return <div className="animate-pulse space-y-4"><div className="h-8 w-48 rounded bg-slate-200/50" /><div className="h-64 rounded-xl bg-slate-200/30" /></div>
+    return (
+      <div className="animate-pulse space-y-4">
+        <div className="h-8 w-48 rounded bg-zinc-200" />
+        <div className="h-64 rounded-lg bg-zinc-200/60" />
+      </div>
+    )
   }
 
   return (
     <div className="space-y-6">
-      <div className="mb-4 flex items-center justify-between gap-4">
-        <div>
-          <h2 className="font-sora text-2xl font-bold text-[color:var(--text-primary)] flex items-center gap-2">
-            <FolderKanban className="h-6 w-6 text-[color:var(--accent-primary)]" />
-            Featured Projects
-          </h2>
-          <p className="mt-1 text-sm text-[color:var(--text-secondary)]">
-            {projects.length} project{projects.length !== 1 ? "s" : ""} total.
-          </p>
-        </div>
-        <button onClick={() => openEditor()} className="btn-primary shrink-0 flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-md">
-          <Plus className="h-4 w-4" /> Add Project
-        </button>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-zinc-500">
+          {projects.length} project{projects.length !== 1 ? "s" : ""} total.
+        </p>
+        <Button onClick={() => openEditor()} icon={<Plus className="h-4 w-4" />}>
+          Add Project
+        </Button>
       </div>
 
-      {projects.length === 0 && (
-        <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[color:var(--card-border)] py-16 text-center">
-          <FolderKanban className="h-12 w-12 text-[color:var(--text-secondary)] opacity-40 mb-4" />
-          <p className="text-lg font-bold text-[color:var(--text-primary)]">No projects yet</p>
-          <p className="mt-1 text-sm text-[color:var(--text-secondary)]">Click "Add Project" to showcase your work.</p>
+      {projects.length === 0 ? (
+        <EmptyState
+          icon={<FolderKanban className="h-6 w-6" />}
+          title="No projects yet"
+          description='Click "Add Project" to showcase your work.'
+          action={<Button onClick={() => openEditor()} icon={<Plus className="h-4 w-4" />}>Add Project</Button>}
+        />
+      ) : (
+        <div className="space-y-3">
+          {projects.map((proj) => (
+            <div key={proj.id} className="flex items-center gap-4 rounded-lg border border-zinc-200 bg-white p-3 shadow-sm">
+              <div className="h-14 w-14 shrink-0 overflow-hidden rounded-md border border-zinc-200">
+                {proj.video_url ? (
+                  <video src={proj.video_url} className="h-full w-full object-cover" muted />
+                ) : proj.image_url ? (
+                  <img src={proj.image_url} alt={proj.title} className="h-full w-full object-cover" />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-zinc-100">
+                    <ImageIcon className="h-5 w-5 text-zinc-400" />
+                  </div>
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <p className="truncate text-sm font-semibold text-zinc-900">{proj.title}</p>
+                  {proj.is_featured && <Badge tone="dark">Featured</Badge>}
+                </div>
+                <p className="truncate text-xs text-zinc-500">{proj.category}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-1">
+                <IconButton label="Edit" onClick={() => openEditor(proj)}>
+                  <Pencil className="h-4 w-4" />
+                </IconButton>
+                <IconButton label="Delete" tone="danger" onClick={() => setDeleteTarget(proj)}>
+                  <Trash2 className="h-4 w-4" />
+                </IconButton>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
-      <div className="space-y-3">
-        {projects.map((proj) => (
-          <div key={proj.id} className="flex items-center gap-4 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--surface-strong)] p-3 shadow-sm hover:shadow-md transition-all">
-            <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-[color:var(--card-border)]">
-              {(proj.image_url || proj.video_url) ? (
-                proj.video_url ? (
-                  <video src={proj.video_url} className="h-full w-full object-cover" muted />
-                ) : (
-                  <img src={proj.image_url} alt={proj.title} className="h-full w-full object-cover" />
-                )
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-[color:var(--accent-soft)]">
-                  <ImageIcon className="h-5 w-5 text-[color:var(--text-secondary)]" />
-                </div>
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-[color:var(--text-primary)] truncate">{proj.title}</p>
-              <p className="text-[11px] text-[color:var(--text-secondary)] truncate">{proj.category} &middot; {proj.tech_stack?.length || 0} tech</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <button onClick={() => openEditor(proj)} className="rounded-lg p-2 text-[color:var(--text-secondary)] hover:bg-[color:var(--accent-soft)] hover:text-[color:var(--accent-primary)]">
-                <Pencil className="h-4 w-4" />
-              </button>
-              <button onClick={() => deleteProject(proj.id)} className="rounded-lg p-2 text-red-400 hover:bg-red-500/10">
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <Modal isOpen={isOpen} onClose={closeEditor} title={editing?.id ? "Edit Project" : "Add Project"}>
+      <Modal isOpen={isOpen} onClose={closeEditor} size="lg" title={editing?.id ? "Edit Project" : "Add Project"}>
         {editing && (
           <div className="space-y-4">
-            <div>
-              <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Title <span className="text-red-400">*</span></label>
-              <input value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} className="input-shell w-full rounded-xl px-4 py-3 text-sm" placeholder="Project title" />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Description</label>
-              <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} rows={3} className="input-shell w-full resize-none rounded-xl px-4 py-3 text-sm" placeholder="Project description" />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Category</label>
-              <select value={editing.category} onChange={(e) => setEditing({ ...editing, category: e.target.value })} className="input-shell w-full rounded-xl px-4 py-3 text-sm">
+            <Field label="Title" required>
+              <TextField value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} placeholder="Project title" />
+            </Field>
+
+            <Field label="Description">
+              <TextArea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} rows={3} placeholder="Project description" />
+            </Field>
+
+            <Field label="Category">
+              <SelectField value={editing.category} onChange={(e) => setEditing({ ...editing, category: e.target.value })}>
                 {CATEGORIES.map((c) => (<option key={c} value={c}>{c}</option>))}
-              </select>
+              </SelectField>
+            </Field>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <Field label="Demo URL">
+                <TextField value={editing.demo_url} onChange={(e) => setEditing({ ...editing, demo_url: e.target.value })} placeholder="https://..." />
+              </Field>
+              <Field label="GitHub URL">
+                <TextField value={editing.github_url} onChange={(e) => setEditing({ ...editing, github_url: e.target.value })} placeholder="https://..." />
+              </Field>
             </div>
-            <div>
-              <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Project Image</label>
-              <label className="flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-[color:var(--card-border)] bg-[color:var(--accent-soft)] px-4 py-4 text-center transition-colors hover:border-[color:var(--accent-primary)] hover:bg-[color:var(--accent-primary)]/5">
-                <Upload className="h-5 w-5 text-[color:var(--text-secondary)]" />
-                <span className="text-sm font-semibold text-[color:var(--text-primary)]">Choose image or paste URL</span>
+
+            <Field label="Project Image" hint="Choose a file or paste a URL below.">
+              <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-zinc-300 bg-zinc-50 px-4 py-5 text-center transition-colors hover:border-zinc-900">
+                <Upload className="h-5 w-5 text-zinc-500" />
+                <span className="text-sm font-medium text-zinc-700">Choose image or paste URL</span>
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => {
                   const file = e.target.files?.[0]
                   if (!file) return
@@ -170,29 +213,24 @@ export default function ProjectsEditor() {
               </label>
               {editing.image_url && (
                 <div className="relative mt-3">
-                  <img src={editing.image_url} alt="Preview" className="h-40 w-full rounded-xl border border-[color:var(--card-border)] object-cover shadow-sm" />
-                  <button onClick={() => setEditing({ ...editing, image_url: "" })} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80 transition-colors">
+                  <img src={editing.image_url} alt="Preview" className="h-40 w-full rounded-md border border-zinc-200 object-cover shadow-sm" />
+                  <button onClick={() => setEditing({ ...editing, image_url: "" })} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white transition-colors hover:bg-black/80" aria-label="Remove image">
                     <X className="h-3.5 w-3.5" />
                   </button>
                 </div>
               )}
-              <input value={editing.image_url.startsWith("data:") ? "" : editing.image_url} onChange={(e) => setEditing({ ...editing, image_url: e.target.value })} className="input-shell mt-2 w-full rounded-xl px-4 py-2.5 text-xs" placeholder="Or paste image URL here..." />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Demo URL</label>
-                <input value={editing.demo_url} onChange={(e) => setEditing({ ...editing, demo_url: e.target.value })} className="input-shell w-full rounded-xl px-4 py-3 text-sm" placeholder="https://..." />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">GitHub URL</label>
-                <input value={editing.github_url} onChange={(e) => setEditing({ ...editing, github_url: e.target.value })} className="input-shell w-full rounded-xl px-4 py-3 text-sm" placeholder="https://..." />
-              </div>
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Project Video</label>
-              <label className="flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-[color:var(--card-border)] bg-[color:var(--accent-soft)] px-4 py-4 text-center transition-colors hover:border-[color:var(--accent-primary)] hover:bg-[color:var(--accent-primary)]/5">
-                <Film className="h-5 w-5 text-[color:var(--text-secondary)]" />
-                <span className="text-sm font-semibold text-[color:var(--text-primary)]">Choose video or paste URL</span>
+              <TextField
+                value={editing.image_url.startsWith("data:") ? "" : editing.image_url}
+                onChange={(e) => setEditing({ ...editing, image_url: e.target.value })}
+                placeholder="Or paste image URL here..."
+                className="mt-2"
+              />
+            </Field>
+
+            <Field label="Project Video">
+              <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-zinc-300 bg-zinc-50 px-4 py-5 text-center transition-colors hover:border-zinc-900">
+                <Film className="h-5 w-5 text-zinc-500" />
+                <span className="text-sm font-medium text-zinc-700">Choose video or paste URL</span>
                 <input type="file" accept="video/*" className="hidden" onChange={(e) => {
                   const file = e.target.files?.[0]
                   if (!file) return
@@ -203,41 +241,74 @@ export default function ProjectsEditor() {
               </label>
               {editing.video_url && (
                 <div className="relative mt-3">
-                  <video src={editing.video_url} className="h-40 w-full rounded-xl border border-[color:var(--card-border)] object-cover shadow-sm" muted controls />
-                  <button onClick={() => setEditing({ ...editing, video_url: "" })} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80 transition-colors">
+                  <video src={editing.video_url} className="h-40 w-full rounded-md border border-zinc-200 object-cover shadow-sm" muted controls />
+                  <button onClick={() => setEditing({ ...editing, video_url: "" })} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white transition-colors hover:bg-black/80" aria-label="Remove video">
                     <X className="h-3.5 w-3.5" />
                   </button>
                 </div>
               )}
-              <input value={editing.video_url.startsWith("data:") ? "" : editing.video_url} onChange={(e) => setEditing({ ...editing, video_url: e.target.value })} className="input-shell mt-2 w-full rounded-xl px-4 py-2.5 text-xs" placeholder="Or paste video URL here..." />
-            </div>
+              <TextField
+                value={editing.video_url.startsWith("data:") ? "" : editing.video_url}
+                onChange={(e) => setEditing({ ...editing, video_url: e.target.value })}
+                placeholder="Or paste video URL here..."
+                className="mt-2"
+              />
+            </Field>
+
             <div>
-              <label className="mb-1 block text-sm font-semibold text-[color:var(--text-primary)]">Tech Stack</label>
-              <div className="flex flex-wrap gap-2 mb-2">
+              <span className="mb-1.5 block text-sm font-medium text-zinc-900">Tech Stack</span>
+              <div className="mb-2 flex flex-wrap gap-2">
                 {(editing.tech_stack || []).map((tech: string, ti: number) => (
-                  <div key={ti} className="flex items-center gap-1 rounded-full chip px-2.5 py-1">
-                    <span className="text-xs font-semibold">{tech}</span>
-                    <button onClick={() => setEditing({ ...editing, tech_stack: editing.tech_stack.filter((_: string, i: number) => i !== ti) })} className="text-red-400 hover:text-red-500">
+                  <span key={ti} className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-800">
+                    {tech}
+                    <button onClick={() => removeTech(ti)} className="text-zinc-400 hover:text-zinc-900" aria-label={`Remove ${tech}`}>
                       <X className="h-3 w-3" />
                     </button>
-                  </div>
+                  </span>
                 ))}
+                {editing.tech_stack?.length === 0 && (
+                  <span className="text-xs text-zinc-400">No tech added yet.</span>
+                )}
               </div>
-              <div className="flex gap-2">
-                <input value={newTech} onChange={(e) => setNewTech(e.target.value)} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTech())} placeholder="Add tech" className="input-shell flex-1 rounded-lg px-3 py-2 text-sm" />
-                <button onClick={addTech} className="text-xs font-semibold text-[color:var(--accent-primary)] hover:underline">+ Add</button>
+              <div className="flex items-center gap-2">
+                <TextField
+                  value={newTech}
+                  onChange={(e) => setNewTech(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTech())}
+                  placeholder="Add tech and press Enter"
+                  className="max-w-xs"
+                />
+                <Button variant="secondary" onClick={addTech}>
+                  <Plus className="h-4 w-4" /> Add
+                </Button>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <input type="checkbox" checked={editing.is_featured} onChange={(e) => setEditing({ ...editing, is_featured: e.target.checked })} className="accent-[color:var(--accent-primary)]" />
-              <label className="text-sm font-semibold text-[color:var(--text-primary)]">Featured</label>
+
+            <div className="flex items-center justify-between rounded-md border border-zinc-200 bg-zinc-50 px-4 py-3">
+              <div>
+                <p className="text-sm font-semibold text-zinc-900">Featured Project</p>
+                <p className="text-xs text-zinc-500">Featured projects stand out on your landing page.</p>
+              </div>
+              <Toggle checked={!!editing.is_featured} onChange={(v) => setEditing({ ...editing, is_featured: v })} />
             </div>
-            <button onClick={handleSave} className="btn-primary w-full rounded-xl px-8 py-3 text-sm font-bold shadow-lg transition-all duration-200 hover:scale-[1.02]">
-              Save Project
-            </button>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="secondary" onClick={closeEditor}>Cancel</Button>
+              <Button onClick={handleSave} disabled={saving} icon={<Save className="h-4 w-4" />}>
+                {saving ? "Saving…" : "Save Project"}
+              </Button>
+            </div>
           </div>
         )}
       </Modal>
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Delete project?"
+        message={`This will permanently remove "${deleteTarget?.title}" from your portfolio. This cannot be undone.`}
+        onConfirm={() => deleteTarget && deleteProject(deleteTarget.id)}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   )
 }

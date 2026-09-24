@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react"
 import { useProfile, useTypingRoles } from "@/lib/useConfig"
 import { showToast } from "@/components/admin/Toast"
-import { ImageIcon, Plus, X, Eye } from "lucide-react"
+import { Plus, X, Eye, Save } from "lucide-react"
+import { Button, IconButton, Field, TextField, TextArea, Badge } from "@/components/admin/ui"
 
 export default function HeroEditor() {
   const { data: profile, loading: profileLoading } = useProfile()
@@ -17,6 +18,7 @@ export default function HeroEditor() {
   const [roles, setRoles] = useState<string[]>([])
   const [newRole, setNewRole] = useState("")
   const [showPreview, setShowPreview] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     if (profile) {
@@ -57,8 +59,9 @@ export default function HeroEditor() {
       showToast("Name is required", "error")
       return
     }
+    setSaving(true)
     try {
-      await Promise.all([
+      const responses = await Promise.all([
         fetch("/api/profile", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -70,113 +73,127 @@ export default function HeroEditor() {
           body: JSON.stringify({ roles }),
         }),
       ])
+      if (responses.some((r) => !r.ok)) throw new Error("Save failed")
       window.dispatchEvent(new Event("portfolioConfigUpdated"))
       showToast("Hero section saved!", "success")
     } catch {
       showToast("Failed to save", "error")
+    } finally {
+      setSaving(false)
     }
   }
 
   if (profileLoading || rolesLoading) {
-    return <div className="animate-pulse space-y-4"><div className="h-8 w-48 rounded bg-slate-200/50" /><div className="h-64 rounded-xl bg-slate-200/30" /></div>
+    return (
+      <div className="animate-pulse space-y-4">
+        <div className="h-8 w-48 rounded bg-zinc-200" />
+        <div className="h-64 rounded-lg bg-zinc-200/60" />
+      </div>
+    )
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="font-sora text-2xl font-bold text-[color:var(--text-primary)] flex items-center gap-2">
-            <ImageIcon className="h-6 w-6 text-[color:var(--accent-primary)]" />
-            Hero Section
-          </h2>
-          <p className="mt-1 text-sm text-[color:var(--text-secondary)]">
-            Edit the headline, roles, description, and images.
-          </p>
-        </div>
-        <button
-          onClick={() => setShowPreview(!showPreview)}
-          className="btn-secondary flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold"
-        >
-          <Eye className="h-4 w-4" />
-          {showPreview ? "Hide" : "Show"} Preview
-        </button>
-      </div>
-
-      <div className="space-y-4">
-        <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">Identity</label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="space-y-6">
+      <section className="rounded-lg border border-zinc-200 bg-white shadow-sm">
+        <header className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 px-5 py-4">
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-[color:var(--text-primary)]">Full Name <span className="text-red-400">*</span></label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ayesha Afzal" className="input-shell w-full rounded-xl px-4 py-3 text-sm" />
+            <h2 className="text-base font-semibold text-zinc-900">Identity</h2>
+            <p className="mt-0.5 text-sm text-zinc-500">Name, headline and the text shown at the top of your page.</p>
           </div>
-          <div>
-            <label className="mb-1.5 block text-sm font-semibold text-[color:var(--text-primary)]">Intro Label</label>
-            <input type="text" value={introLabel} onChange={(e) => setIntroLabel(e.target.value)} placeholder="Hi, My Name Is" className="input-shell w-full rounded-xl px-4 py-3 text-sm" />
+          <Button variant="secondary" onClick={() => setShowPreview(!showPreview)} icon={<Eye className="h-4 w-4" />}>
+            {showPreview ? "Hide" : "Show"} Preview
+          </Button>
+        </header>
+        <div className="space-y-4 p-5">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <Field label="Full Name" required>
+              <TextField value={name} onChange={(e) => setName(e.target.value)} placeholder="Ayesha Afzal" />
+            </Field>
+            <Field label="Intro Label" hint="Replaces the default 'Hi, My Name Is'">
+              <TextField value={introLabel} onChange={(e) => setIntroLabel(e.target.value)} placeholder="Hi, My Name Is" />
+            </Field>
           </div>
+          <Field label="Subtitle / Tagline">
+            <TextField value={subtitle} onChange={(e) => setSubtitle(e.target.value)} placeholder="Full-Stack Software Engineer" />
+          </Field>
+          <Field label="Description">
+            <TextArea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="A brief paragraph about your expertise..." />
+          </Field>
+          <Field label="CTA Button Text">
+            <TextField value={ctaText} onChange={(e) => setCtaText(e.target.value)} placeholder="Let's Build Together" />
+          </Field>
         </div>
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-[color:var(--text-primary)]">Subtitle / Tagline</label>
-          <input type="text" value={subtitle} onChange={(e) => setSubtitle(e.target.value)} placeholder="Full-Stack Software Engineer" className="input-shell w-full rounded-xl px-4 py-3 text-sm" />
-        </div>
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-[color:var(--text-primary)]">Description</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="A brief paragraph about your expertise..." className="input-shell w-full resize-none rounded-xl px-4 py-3 text-sm" />
-        </div>
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-[color:var(--text-primary)]">CTA Button Text</label>
-          <input type="text" value={ctaText} onChange={(e) => setCtaText(e.target.value)} placeholder="Let's Build Together" className="input-shell w-full rounded-xl px-4 py-3 text-sm" />
-        </div>
-      </div>
+      </section>
 
-      <div>
-        <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">Typing Animation Roles</label>
-        <p className="mb-3 text-[11px] text-[color:var(--text-secondary)]">These cycle in the hero with a typewriter effect.</p>
-        <div className="space-y-2">
+      <section className="rounded-lg border border-zinc-200 bg-white shadow-sm">
+        <header className="border-b border-zinc-100 px-5 py-4">
+          <h2 className="text-base font-semibold text-zinc-900">Typing Animation Roles</h2>
+          <p className="mt-0.5 text-sm text-zinc-500">These cycle in the hero with a typewriter effect.</p>
+        </header>
+        <div className="space-y-2 p-5">
           {roles.map((role, i) => (
-            <div key={i} className="flex items-center gap-2 rounded-lg border border-[color:var(--card-border)] bg-[color:var(--surface-strong)] px-3 py-2">
-              <span className="flex-1 text-sm text-[color:var(--text-primary)]">{role}</span>
-              <button onClick={() => removeRole(i)} className="shrink-0 rounded-md p-1 text-red-400 hover:bg-red-500/10 hover:text-red-500">
+            <div key={i} className="flex items-center gap-2 rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2">
+              <span className="flex-1 truncate text-sm text-zinc-900">{role}</span>
+              <IconButton label={`Remove ${role}`} tone="danger" onClick={() => removeRole(i)}>
                 <X className="h-4 w-4" />
-              </button>
+              </IconButton>
             </div>
           ))}
-        </div>
-        <div className="mt-2 flex gap-2">
-          <input type="text" value={newRole} onChange={(e) => setNewRole(e.target.value)} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addRole())} placeholder="e.g. MERN Stack Specialist" className="input-shell flex-1 rounded-lg px-3 py-2 text-sm" />
-          <button onClick={addRole} className="btn-secondary flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold">
-            <Plus className="h-4 w-4" /> Add
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">Profile Photo</label>
-        <input type="file" accept="image/*" onChange={handleImageUpload} className="block w-full text-sm text-[color:var(--text-secondary)] file:mr-3 file:rounded-lg file:border-0 file:bg-[color:var(--accent-soft)] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[color:var(--text-primary)] hover:file:bg-[color:var(--accent-primary)] hover:file:text-[color:var(--on-accent)] file:transition-colors file:cursor-pointer" />
-        {profileImage && (
-          <img src={profileImage} alt="Profile preview" className="mt-3 h-32 w-24 rounded-xl border border-[color:var(--card-border)] object-cover shadow-sm" />
-        )}
-      </div>
-
-      {showPreview && (
-        <div>
-          <label className="mb-3 block text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">Preview</label>
-          <div className="rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--surface-strong)] p-6 overflow-hidden">
-            <div className="flex items-start gap-6">
-              {profileImage && <img src={profileImage} alt="Preview" className="h-24 w-20 shrink-0 rounded-xl object-cover shadow-md" />}
-              <div className="space-y-2">
-                <p className="text-xs font-bold uppercase tracking-widest text-[color:var(--accent-primary)]">{introLabel || "Hi, My Name Is"}</p>
-                <h3 className="font-sora text-2xl font-extrabold text-[color:var(--text-primary)]">{name || "Your Name"}</h3>
-                <p className="text-sm font-bold text-[color:var(--accent-secondary)]">{roles[0] || "Your Role"}</p>
-                <p className="text-xs text-[color:var(--text-secondary)] line-clamp-2">{description || "Your description..."}</p>
-              </div>
+          {roles.length === 0 && <p className="text-sm text-zinc-400">No roles yet. Add one below.</p>}
+          <div className="flex items-end gap-2">
+            <div className="w-full max-w-sm">
+              <TextField
+                value={newRole}
+                onChange={(e) => setNewRole(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addRole())}
+                placeholder="e.g. MERN Stack Specialist"
+              />
             </div>
+            <Button variant="secondary" onClick={addRole}>
+              <Plus className="h-4 w-4" /> Add
+            </Button>
           </div>
         </div>
+      </section>
+
+      <section className="rounded-lg border border-zinc-200 bg-white shadow-sm">
+        <header className="border-b border-zinc-100 px-5 py-4">
+          <h2 className="text-base font-semibold text-zinc-900">Profile Photo</h2>
+          <p className="mt-0.5 text-sm text-zinc-500">Upload a photo or paste an image URL.</p>
+        </header>
+        <div className="space-y-4 p-5">
+          <TextField value={profileImage} onChange={(e) => setProfileImage(e.target.value)} placeholder="https://... or upload below" />
+          <label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-zinc-300 bg-zinc-50 px-4 py-6 text-center transition-colors hover:border-zinc-900">
+            <span className="text-sm font-medium text-zinc-700">Choose an image file</span>
+            <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+          </label>
+          {profileImage && (
+            <img src={profileImage} alt="Profile preview" className="h-32 w-24 rounded-md border border-zinc-200 object-cover shadow-sm" />
+          )}
+        </div>
+      </section>
+
+      {showPreview && (
+        <section className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-zinc-400">Preview</p>
+          <div className="flex items-start gap-6 rounded-md border border-zinc-200 bg-zinc-50 p-6">
+            {profileImage && <img src={profileImage} alt="Preview" className="h-24 w-20 shrink-0 rounded-md object-cover shadow" />}
+            <div className="space-y-2">
+              <p className="text-xs font-bold uppercase tracking-widest text-zinc-600">{introLabel || "Hi, My Name Is"}</p>
+              <h3 className="text-2xl font-extrabold text-zinc-900">{name || "Your Name"}</h3>
+              <p className="text-sm font-bold text-zinc-700">{roles[0] || "Your Role"}</p>
+              <p className="line-clamp-2 text-xs text-zinc-500">{description || "Your description..."}</p>
+              <Badge tone="dark">{ctaText || "Let's Build Together"}</Badge>
+            </div>
+          </div>
+        </section>
       )}
 
-      <button onClick={handleSave} className="btn-primary rounded-xl px-8 py-3 text-sm font-bold shadow-lg transition-all duration-200 hover:scale-[1.02]">
-        Save Hero Section
-      </button>
+      <div className="flex justify-end">
+        <Button onClick={handleSave} disabled={saving} icon={<Save className="h-4 w-4" />}>
+          {saving ? "Saving…" : "Save Hero Section"}
+        </Button>
+      </div>
     </div>
   )
 }

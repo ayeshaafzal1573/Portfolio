@@ -18,7 +18,7 @@ export function WhatIBuild() {
           subtitle="Full-stack products across the entire delivery path — from interface to infrastructure."
         />
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 reveal-scale">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 reveal-scale stagger">
           {whatIBuild.map(({ icon: Icon, title, description, tags }) => (
             <article
               key={title}
