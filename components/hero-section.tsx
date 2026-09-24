@@ -160,7 +160,7 @@ export function HeroSection() {
   const rolesSentence = roles.join(", ")
 
   return (
-    <section id="home" className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-6 pb-28 pt-24">
+    <section id="home" className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-6 pb-32 pt-40">
       <style>{`
         @keyframes hero-marquee {
           from { transform: translateX(0); }
@@ -187,7 +187,7 @@ export function HeroSection() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 py-2 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 py-2 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="space-y-7 text-left reveal-left active">
           <div className="flex flex-wrap items-center gap-3 hero-rise">
             <div className="inline-flex items-center gap-2 rounded-full chip px-4 py-1.5 text-sm font-semibold tracking-wide backdrop-blur-md shadow-sm">

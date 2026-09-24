@@ -126,7 +126,7 @@ export function Navbar() {
       ref={navRef}
       className={`nav-3d-load fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${isScrolled ? "nav-scrolled py-3" : "py-5"}`}
     >
-      <div className="nav-pill mx-auto flex max-w-7xl items-center justify-between rounded-full px-5 sm:px-6 md:px-8 backdrop-blur-xl glass-card">
+      <div className="nav-pill relative mx-auto flex max-w-7xl items-center justify-between rounded-full px-5 sm:px-6 md:px-8 backdrop-blur-xl glass-card">
         <button onClick={() => scrollToSection("home")} className="group flex items-center gap-2.5 py-3 font-sora text-xl font-semibold tracking-tight">
             <span className="inline-flex items-center justify-center rounded-lg border border-black/10 bg-white/90 px-2 py-1 text-base shadow-sm transition-transform duration-300 group-hover:scale-110">
               <Code2 className="h-5 w-5 text-black" />
@@ -135,7 +135,7 @@ export function Navbar() {
               {settings?.brand_name || "Ayesha."}
             </span>
         </button>
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 md:absolute md:left-1/2 md:flex md:-translate-x-1/2">
           {NAV_ITEMS.map((item) => (
             <button
               key={item.id}
@@ -145,15 +145,15 @@ export function Navbar() {
               {item.label}
             </button>
           ))}
+        </div>
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={() => scrollToSection("contact")}
-            className="nav-cta ml-1 rounded-full px-4 py-2.5 text-sm font-bold transition-all duration-300 hover:scale-[1.03] cursor-pointer"
+            className="nav-cta hidden rounded-full px-4 py-2.5 text-sm font-bold transition-all duration-300 hover:scale-[1.03] cursor-pointer md:inline-flex"
           >
             Let&apos;s Work
           </button>
           <ThemeSwitcher />
-        </div>
-        <div className="my-2 flex items-center gap-2">
           <button
             onClick={() => setMenuOpen((v) => !v)}
             className="flex items-center justify-center rounded-full bg-zinc-900/5 p-2.5 text-zinc-700 hover:text-zinc-900 md:hidden"
@@ -168,12 +168,6 @@ export function Navbar() {
       {menuOpen && (
         <div className="mx-auto mt-2 w-full max-w-7xl px-3 md:hidden">
           <div className="nav-pill glass-card flex flex-col overflow-hidden rounded-3xl p-2">
-            <div className="flex items-center justify-between px-4 py-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
-                Theme Mode
-              </span>
-              <ThemeSwitcher />
-            </div>
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}

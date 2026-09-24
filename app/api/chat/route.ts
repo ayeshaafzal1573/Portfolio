@@ -24,6 +24,16 @@ interface Knowledge {
   chatbot: ChatbotConfig
 }
 
+const KNOWLEDGE_TTL = 180_000
+let knowledgeCache: { at: number; data: Knowledge } | null = null
+
+async function getKnowledge(): Promise<Knowledge> {
+  if (knowledgeCache && Date.now() - knowledgeCache.at < KNOWLEDGE_TTL) return knowledgeCache.data
+  const data = await buildKnowledge()
+  knowledgeCache = { at: Date.now(), data }
+  return data
+}
+
 const EMPTY_KNOWLEDGE: Knowledge = {
   name: "Ayesha Afzal",
   roles: [],
@@ -159,6 +169,7 @@ async function callGemini(
       ...(isApiKey ? {} : { Authorization: `Bearer ${apiKey}` }),
     },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(25_000),
   })
 
   if (!res.ok) {
@@ -182,7 +193,12 @@ export async function POST(request: Request) {
     const messages: ChatMessage[] = Array.isArray(body?.messages) ? body.messages : []
     const apiKey = process.env.GEMINI_API_KEY
 
-    const knowledge = await buildKnowledge()
+    // No key configured — client falls back to its local rule-based brain.
+    if (!apiKey) {
+      return NextResponse.json({ fallback: true })
+    }
+
+    const knowledge = await getKnowledge()
 
     // Build the knowledge + system instruction.
     const persona = knowledge.chatbot.botName || DEFAULT_CONFIG.chatbot.botName
@@ -196,11 +212,6 @@ export async function POST(request: Request) {
       "KNOWLEDGE:",
       renderKnowledge(knowledge),
     ].join("\n")
-
-    // No key configured — client falls back to its local rules.
-    if (!apiKey) {
-      return NextResponse.json({ fallback: true })
-    }
 
     const lastUser = messages.filter((m) => m.role === "user").slice(-1)[0]?.content || "hi"
     const history = messages.slice(-12).reduce<ChatMessage[]>((acc, m) => {

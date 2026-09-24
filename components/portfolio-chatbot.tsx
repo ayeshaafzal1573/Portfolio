@@ -460,17 +460,25 @@ export function PortfolioChatbot() {
     const startedAt = Date.now()
     let reply: string | null = null
 
-    // 1) Try the Gemini-backed /api/chat endpoint.
+    // 1) Try the Gemini-backed /api/chat endpoint with a hard timeout so the
+    // chat can never hang forever (spinner stuck) if the route is slow.
+    let controller: AbortController | null = null
     try {
+      controller = new AbortController()
+      const timer = setTimeout(() => controller?.abort(), 8000)
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: payload }),
+        signal: controller.signal,
       })
+      clearTimeout(timer)
       const data = await res.json()
       if (data?.text) reply = data.text
     } catch {
       // ignore — fall through to local rules
+    } finally {
+      controller = null
     }
 
     // 2) Offline rule-based fallback keeps the assistant working without a key.
