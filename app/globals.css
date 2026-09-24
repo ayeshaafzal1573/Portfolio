@@ -47,39 +47,39 @@
 
 /* Light mode — fallback palette used before JS applies the admin config */
 :root[data-theme="light"] {
-  --bg-primary: #f7f7f8;
-  --bg-secondary: #eeeeef;
-  --surface: rgba(255, 255, 255, 0.8);
-  --surface-strong: rgba(255, 255, 255, 0.97);
-  --text-primary: #18181b;
-  --text-secondary: #4c4c52;
-  --text-muted: #838389;
-  --accent-primary: #18181b;
-  --accent-secondary: #52525b;
-  --accent-soft: #e9e9ec;
-  --ring-soft: rgba(24, 24, 27, 0.16);
-  --card-border: #d9d9dd;
-  --card-border-hover: #b0b0b6;
-  --gradient-main: linear-gradient(115deg, #18181b 0%, #3f3f46 45%, #52525b 100%);
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f5f0;
+  --surface: rgba(239, 235, 227, 0.8);
+  --surface-strong: rgba(239, 235, 227, 0.97);
+  --text-primary: #24221e;
+  --text-secondary: #6f6a61;
+  --text-muted: #8f897f;
+  --accent-primary: #000000;
+  --accent-secondary: #24221e;
+  --accent-soft: #efebe3;
+  --ring-soft: rgba(0, 0, 0, 0.16);
+  --card-border: #e5e0d6;
+  --card-border-hover: #c4beb0;
+  --gradient-main: linear-gradient(115deg, #000000 0%, #24221e 45%, #6f6a61 100%);
   --on-accent: #ffffff;
 }
 
-/* Warm mode — warm neutrals, still in the black/white/grey family */
+/* Warm mode — warm neutrals from the palette */
 :root[data-theme="warm"] {
-  --bg-primary: #f5efe6;
-  --bg-secondary: #efe8dc;
-  --surface: rgba(253, 249, 242, 0.82);
-  --surface-strong: rgba(253, 249, 242, 0.97);
-  --text-primary: #261f18;
-  --text-secondary: #5c5246;
-  --text-muted: #8f8372;
-  --accent-primary: #1c1917;
-  --accent-secondary: #5b534a;
-  --accent-soft: #ece3d4;
-  --ring-soft: rgba(28, 25, 23, 0.16);
-  --card-border: #dccfc0;
-  --card-border-hover: #b8ab98;
-  --gradient-main: linear-gradient(115deg, #1c1917 0%, #3d352b 45%, #5b534a 100%);
+  --bg-primary: #f7f5f0;
+  --bg-secondary: #efebe3;
+  --surface: rgba(239, 235, 227, 0.82);
+  --surface-strong: rgba(239, 235, 227, 0.97);
+  --text-primary: #24221e;
+  --text-secondary: #6f6a61;
+  --text-muted: #8f897f;
+  --accent-primary: #24221e;
+  --accent-secondary: #6f6a61;
+  --accent-soft: #e5e0d6;
+  --ring-soft: rgba(36, 34, 30, 0.16);
+  --card-border: #d9d3c7;
+  --card-border-hover: #b8b0a0;
+  --gradient-main: linear-gradient(115deg, #24221e 0%, #6f6a61 45%, #a3a3a3 100%);
   --on-accent: #ffffff;
 }
 
@@ -638,6 +638,23 @@ section[id] {
 
 .shine-sweep:hover::after {
   transform: translateX(120%);
+}
+
+/* Extruded 3D lettering — monochrome, theme-aware */
+.text-3d {
+  letter-spacing: -0.02em;
+  text-shadow:
+    1px 1px 0 var(--accent-soft),
+    2px 2px 0 var(--card-border),
+    3px 3px 0 var(--card-border-hover),
+    4px 4px 8px rgba(0, 0, 0, 0.28);
+  transform: translateZ(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-3d {
+    text-shadow: 1px 1px 0 var(--card-border), 2px 2px 4px rgba(0, 0, 0, 0.18);
+  }
 }
 
 /* ============================================================

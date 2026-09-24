@@ -19,17 +19,12 @@ export function TechStackSection() {
         />
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 reveal-scale stagger">
-          {techStackCategories.map(({ label, icon: Icon, technologies }) => (
+          {techStackCategories.map(({ label, technologies }) => (
             <article
               key={label}
               className="glass-card group rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
-              <div className="mb-4 flex items-center gap-3">
-                <span className="inline-flex rounded-xl chip p-2.5 transition-transform duration-300 group-hover:scale-110">
-                  <Icon className="h-4 w-4 text-[color:var(--accent-primary)]" />
-                </span>
-                <h3 className="font-sora text-base font-extrabold">{label}</h3>
-              </div>
+              <h3 className="text-3d mb-4 font-sora text-xl font-extrabold leading-tight">{label}</h3>
               <ul className="flex flex-wrap gap-1.5">
                 {technologies.map((tech) => (
                   <li key={tech} className="chip px-3 py-1 text-xs font-semibold">

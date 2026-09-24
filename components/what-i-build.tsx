@@ -19,16 +19,13 @@ export function WhatIBuild() {
         />
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 reveal-scale stagger">
-          {whatIBuild.map(({ icon: Icon, title, description, tags }) => (
+          {whatIBuild.map(({ title, description, tags }) => (
             <article
               key={title}
               className="group glass-card relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div className="absolute left-0 top-0 h-full w-1 bg-[color:var(--accent-primary)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <div className="mb-4 inline-flex rounded-xl chip p-3 transition-transform duration-300 group-hover:scale-110">
-                <Icon className="h-5 w-5 text-[color:var(--accent-primary)]" />
-              </div>
-              <h3 className="mb-2 font-sora text-lg font-extrabold">{title}</h3>
+              <h3 className="text-3d mb-3 font-sora text-2xl font-extrabold leading-tight">{title}</h3>
               <p className="mb-4 text-sm leading-relaxed text-[color:var(--text-secondary)]">{description}</p>
               <div className="flex flex-wrap gap-1.5">
                 {tags.map((tag) => (

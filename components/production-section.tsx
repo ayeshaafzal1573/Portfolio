@@ -19,18 +19,13 @@ export function ProductionSection() {
         />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 reveal-scale stagger">
-          {builtForProduction.map(({ icon: Icon, label, detail }) => (
+          {builtForProduction.map(({ label, detail }) => (
             <article
               key={label}
-              className="group glass-card flex items-start gap-4 rounded-2xl p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+              className="group glass-card flex flex-col gap-1 rounded-2xl p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
             >
-              <span className="inline-flex shrink-0 rounded-xl chip p-2.5 transition-transform duration-300 group-hover:scale-110">
-                <Icon className="h-4 w-4 text-[color:var(--accent-primary)]" />
-              </span>
-              <div>
-                <h3 className="font-sora text-sm font-extrabold">{label}</h3>
-                <p className="mt-1 text-xs leading-relaxed text-[color:var(--text-secondary)]">{detail}</p>
-              </div>
+              <h3 className="text-3d font-sora text-lg font-extrabold leading-tight">{label}</h3>
+              <p className="mt-1 text-xs leading-relaxed text-[color:var(--text-secondary)]">{detail}</p>
             </article>
           ))}
         </div>
