@@ -187,7 +187,7 @@ export function HeroSection() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 py-2 lg:grid-cols-2">
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 py-2 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-7 text-left reveal-left active">
           <div className="flex flex-wrap items-center gap-3 hero-rise">
             <div className="inline-flex items-center gap-2 rounded-full chip px-4 py-1.5 text-sm font-semibold tracking-wide backdrop-blur-md shadow-sm">
@@ -204,8 +204,10 @@ export function HeroSection() {
             <p className="hero-rise text-sm font-bold uppercase tracking-[0.25em] text-[color:var(--text-primary)]" style={{ animationDelay: "0.05s" }}>
               {profile?.name || "Ayesha Afzal"}
             </p>
-            <h1 className="font-sora text-3xl font-extrabold leading-[1.12] tracking-tight text-[color:var(--text-primary)] hero-rise sm:text-4xl md:text-5xl lg:text-6xl" style={{ animationDelay: "0.12s" }}>
-              {heroHeadline}
+            <h1 className="font-sora text-3xl font-extrabold leading-[1.08] tracking-tight text-[color:var(--text-primary)] hero-rise sm:text-4xl md:text-5xl lg:text-[2.75rem] xl:text-[3.25rem]" style={{ animationDelay: "0.12s" }}>
+              {heroHeadline.slice(0, 20)}
+              <br className="hidden sm:inline" />
+              {heroHeadline.slice(20)}
             </h1>
 
             <div className="mt-2 flex h-10 items-center sm:h-12" aria-hidden="true">

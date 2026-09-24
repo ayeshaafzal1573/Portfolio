@@ -3,7 +3,6 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { IdleMonitor } from "@/components/idle-monitor"
 import { ThemeProvider } from "@/components/theme-provider"
-import { ThreeBackgroundLazy } from "@/components/three/three-background-lazy"
 import {
   DEFAULT_CONFIG,
   buildThemeVars,
@@ -13,6 +12,9 @@ import {
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
+
+const SITE_URL = "https://ayeshaafzalqadir.vercel.app"
+const PORTRAIT_URL = `${SITE_URL}/ayesha-afzal-qadir.png`
 
 async function loadThemeConfig(): Promise<ThemeConfig> {
   try {
@@ -29,14 +31,33 @@ async function loadThemeConfig(): Promise<ThemeConfig> {
   }
 }
 
+async function loadSocialProfiles(): Promise<string[]> {
+  try {
+    const { getSupabase } = await import("@/lib/supabase")
+    const supabase = getSupabase()
+    const { data } = await supabase
+      .from("social_links")
+      .select("url")
+      .not("url", "eq", "#")
+      .not("url", "is", null)
+      .limit(12)
+    return (data || [])
+      .map((row: { url: string }) => row.url)
+      .filter((u) => /^https?:\/\//.test(u))
+  } catch {
+    return []
+  }
+}
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ayeshaafzalqadir.vercel.app"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Ayesha Afzal | Full-Stack Web & Mobile Engineer",
     template: "%s | Ayesha Afzal",
   },
   description:
     "Portfolio of Ayesha Afzal — a full-stack web & mobile engineer in Karachi building production web apps, mobile apps, real-time and IoT systems with Next.js, React Native, Node.js, FastAPI and PostgreSQL.",
+  applicationName: "Ayesha Afzal Portfolio",
   keywords: [
     "Ayesha Afzal",
     "Ayesha Afzal Qadir",
@@ -50,10 +71,10 @@ export const metadata: Metadata = {
     "Karachi Tech Portfolio",
     "Web & Mobile Engineer",
   ],
-  authors: [{ name: "Ayesha Afzal", url: "https://ayeshaafzalqadir.vercel.app" }],
+  authors: [{ name: "Ayesha Afzal", url: SITE_URL }],
   creator: "Ayesha Afzal",
   alternates: {
-    canonical: "https://ayeshaafzalqadir.vercel.app",
+    canonical: SITE_URL,
   },
   robots: {
     index: true,
@@ -78,13 +99,15 @@ export const metadata: Metadata = {
     title: "Ayesha Afzal | Full-Stack Web & Mobile Engineer",
     description:
       "Full-stack engineer building production web apps, mobile apps, real-time and IoT systems with Next.js, React Native, Node.js, FastAPI and PostgreSQL.",
-    url: "https://ayeshaafzalqadir.vercel.app",
+    url: SITE_URL,
     siteName: "Ayesha Afzal Portfolio",
     images: [
       {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
+        url: PORTRAIT_URL,
+        width: 420,
+        height: 560,
+        alt: "Ayesha Afzal — Full-Stack Web & Mobile Engineer",
+        type: "image/png",
       },
     ],
     locale: "en_PK",
@@ -95,46 +118,51 @@ export const metadata: Metadata = {
     title: "Ayesha Afzal | Full-Stack Web & Mobile Engineer",
     description:
       "Production web apps, mobile apps, real-time & IoT systems — Next.js, React Native, Node.js, FastAPI, PostgreSQL.",
-    images: ["/og.png"],
+    images: [{ url: PORTRAIT_URL, alt: "Ayesha Afzal — Full-Stack Web & Mobile Engineer" }],
   },
 }
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Person",
-      name: "Ayesha Afzal",
-      jobTitle: "Full-Stack Web & Mobile Engineer",
-      url: "https://ayeshaafzalqadir.vercel.app",
-      image: "/og.png",
-      email: "mailto:ayeshaafzal1573@gmail.com",
-      address: { "@type": "PostalAddress", addressLocality: "Karachi", addressCountry: "PK" },
-      knowsAbout: [
-        "Next.js",
-        "React",
-        "React Native",
-        "Node.js",
-        "FastAPI",
-        "PostgreSQL",
-        "IoT",
-        "Real-time systems",
-      ],
-    },
-    {
-      "@type": "WebSite",
-      name: "Ayesha Afzal Portfolio",
-      url: "https://ayeshaafzalqadir.vercel.app",
-    },
-  ],
-} as const
+function buildJsonLd(sameAs: string[]) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        name: "Ayesha Afzal",
+        jobTitle: "Full-Stack Web & Mobile Engineer",
+        description:
+          "Full-stack web & mobile software engineer from Karachi building production web apps, mobile apps, real-time and IoT systems with Next.js, React Native, Node.js, FastAPI and PostgreSQL.",
+        url: SITE_URL,
+        image: PORTRAIT_URL,
+        email: "mailto:ayeshaafzal1573@gmail.com",
+        address: { "@type": "PostalAddress", addressLocality: "Karachi", addressCountry: "PK" },
+        sameAs: sameAs,
+        knowsAbout: [
+          "Next.js",
+          "React",
+          "React Native",
+          "Node.js",
+          "FastAPI",
+          "PostgreSQL",
+          "IoT",
+          "Real-time systems",
+        ],
+      },
+      {
+        "@type": "WebSite",
+        name: "Ayesha Afzal Portfolio",
+        url: SITE_URL,
+      },
+    ],
+  }
+}
 
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const config = await loadThemeConfig()
+  const [config, socialProfiles] = await Promise.all([loadThemeConfig(), loadSocialProfiles()])
   const themeVars = buildThemeVars(config.modes[config.default])
   const themeBootScript = `(function(){try{var root=document.documentElement;root.setAttribute("data-theme",${JSON.stringify(config.default)});var vars=${JSON.stringify(themeVars)};for(var k in vars){root.style.setProperty(k,vars[k]);}}catch(e){}})();`
 
@@ -144,11 +172,10 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd(socialProfiles)) }}
         />
         <ThemeProvider config={config}>
           <IdleMonitor />
-          <ThreeBackgroundLazy />
           {children}
         </ThemeProvider>
       </body>

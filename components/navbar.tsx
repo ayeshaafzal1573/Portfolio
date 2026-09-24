@@ -128,7 +128,7 @@ export function Navbar() {
     >
       <div className="nav-pill mx-auto flex max-w-7xl items-center justify-between rounded-full px-5 sm:px-6 md:px-8 backdrop-blur-xl glass-card">
         <button onClick={() => scrollToSection("home")} className="group flex items-center gap-2.5 py-3 font-sora text-xl font-semibold tracking-tight">
-            <span className="inline-flex rounded-lg chip px-2 py-1 text-base transition-transform duration-300 group-hover:scale-110">
+            <span className="inline-flex items-center justify-center rounded-lg border border-black/10 bg-white/90 px-2 py-1 text-base shadow-sm transition-transform duration-300 group-hover:scale-110">
               <Code2 className="h-5 w-5 text-black" />
             </span>
             <span className="nav-brand transition-colors duration-300 group-hover:text-black">

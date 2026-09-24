@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { prefersReducedMotion } from "@/lib/utils"
 
 interface HoverVideoProps {
   src: string
@@ -15,20 +14,37 @@ export function HoverVideo({ src, poster, className }: HoverVideoProps) {
   useEffect(() => {
     const video = ref.current
     if (!video) return
-    if (prefersReducedMotion()) return
 
-    const tryPlay = () => video.play().catch(() => {})
+    let inView = false
+    const tryPlay = () => {
+      const p = video.play()
+      if (p) p.catch(() => {})
+    }
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) tryPlay()
+          inView = entry.isIntersecting
+          if (inView) tryPlay()
           else video.pause()
         })
       },
-      { threshold: 0.2, rootMargin: "120px 0px" }
+      { threshold: 0.2, rootMargin: "140px 0px" }
     )
     io.observe(video)
-    return () => io.disconnect()
+
+    // If the first play() raced the file still loading, retry as soon as data is ready.
+    const onReady = () => {
+      if (inView) tryPlay()
+    }
+    video.addEventListener("canplay", onReady)
+    video.addEventListener("loadeddata", onReady)
+
+    return () => {
+      io.disconnect()
+      video.removeEventListener("canplay", onReady)
+      video.removeEventListener("loadeddata", onReady)
+    }
   }, [src])
 
   return (
@@ -43,7 +59,6 @@ export function HoverVideo({ src, poster, className }: HoverVideoProps) {
       preload="auto"
       className={className}
       onMouseEnter={(e) => {
-        if (prefersReducedMotion()) return
         e.currentTarget.play().catch(() => {})
       }}
       onMouseLeave={(e) => {
