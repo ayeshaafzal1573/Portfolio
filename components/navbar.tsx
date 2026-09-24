@@ -145,13 +145,13 @@ export function Navbar() {
               {item.label}
             </button>
           ))}
-          <ThemeSwitcher />
           <button
             onClick={() => scrollToSection("contact")}
             className="nav-cta ml-1 rounded-full px-4 py-2.5 text-sm font-bold transition-all duration-300 hover:scale-[1.03] cursor-pointer"
           >
             Let&apos;s Work
           </button>
+          <ThemeSwitcher />
         </div>
         <div className="my-2 flex items-center gap-2">
           <button
