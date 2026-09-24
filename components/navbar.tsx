@@ -13,19 +13,17 @@ const MODE_META: { mode: ThemeMode; icon: React.ComponentType<{ className?: stri
   { mode: "warm", icon: Flame, label: "Warm mode" },
 ]
 
-function ThemeSwitcher({ compact = false }: { compact?: boolean }) {
+function ThemeSwitcher() {
   const { mode, setMode, modes } = usePortfolioTheme()
   return (
-    <div className={`flex items-center rounded-full btn-secondary p-1 ${compact ? "" : "gap-0.5"}`} role="group" aria-label="Theme mode">
+    <div className="theme-switcher" role="group" aria-label="Theme mode">
       {MODE_META.filter((m) => modes.includes(m.mode)).map(({ mode: m, icon: Icon, label }) => (
         <button
           key={m}
           onClick={() => setMode(m)}
           aria-label={label}
           title={label}
-          className={`flex h-7 w-7 items-center justify-center rounded-full transition-all duration-200 ${
-            mode === m ? "bg-[color:var(--accent-primary)] text-[color:var(--on-accent)] shadow-sm" : "text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)]"
-          }`}
+          data-active={mode === m}
         >
           <Icon className="h-3.5 w-3.5" />
         </button>
@@ -130,12 +128,12 @@ export function Navbar() {
     >
       <div className="nav-pill mx-auto flex max-w-7xl items-center justify-between rounded-full px-5 sm:px-6 md:px-8 backdrop-blur-xl glass-card">
         <button onClick={() => scrollToSection("home")} className="group flex items-center gap-2.5 py-3 font-sora text-xl font-semibold tracking-tight">
-          <span className="inline-flex rounded-lg chip px-2 py-1 text-base transition-transform duration-300 group-hover:scale-110">
-            <Code2 className="h-5 w-5 text-[color:var(--accent-primary)]" />
-          </span>
-          <span className="nav-brand transition-colors duration-300 group-hover:text-[color:var(--accent-primary)]">
-            {settings?.brand_name || "Ayesha."}
-          </span>
+            <span className="inline-flex rounded-lg chip px-2 py-1 text-base transition-transform duration-300 group-hover:scale-110">
+              <Code2 className="h-5 w-5 text-black" />
+            </span>
+            <span className="nav-brand transition-colors duration-300 group-hover:text-black">
+              {settings?.brand_name || "Ayesha."}
+            </span>
         </button>
         <div className="hidden items-center gap-3 md:flex">
           {NAV_ITEMS.map((item) => (
@@ -158,7 +156,7 @@ export function Navbar() {
         <div className="my-2 flex items-center gap-2">
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            className="flex items-center justify-center rounded-full p-2.5 btn-secondary md:hidden"
+            className="flex items-center justify-center rounded-full bg-zinc-900/5 p-2.5 text-zinc-700 hover:text-zinc-900 md:hidden"
             aria-label="Toggle navigation menu"
             aria-expanded={menuOpen}
           >
@@ -171,7 +169,7 @@ export function Navbar() {
         <div className="mx-auto mt-2 w-full max-w-7xl px-3 md:hidden">
           <div className="nav-pill glass-card flex flex-col overflow-hidden rounded-3xl p-2">
             <div className="flex items-center justify-between px-4 py-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-[color:var(--text-secondary)]">
+              <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
                 Theme Mode
               </span>
               <ThemeSwitcher />
@@ -185,8 +183,8 @@ export function Navbar() {
                 }}
                 className={`rounded-2xl px-4 py-3 text-left text-sm font-semibold transition-colors ${
                   active === item.id
-                    ? "bg-[color:var(--accent-soft)] text-[color:var(--text-primary)]"
-                    : "text-[color:var(--text-secondary)] hover:bg-[color:var(--accent-soft)]"
+                    ? "bg-zinc-900 text-white"
+                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
                 }`}
               >
                 {item.label}

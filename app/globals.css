@@ -6,21 +6,21 @@
   --font-inter: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-sora: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
-  --bg-primary: #050505;
-  --bg-secondary: #0b0b0b;
-  --surface: rgba(17, 17, 17, 0.72);
-  --surface-strong: rgba(17, 17, 17, 0.94);
-  --text-primary: #f5f5f5;
-  --text-secondary: #a3a3a3;
-  --text-muted: #666666;
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --surface: rgba(14, 14, 14, 0.75);
+  --surface-strong: rgba(16, 16, 16, 0.97);
+  --text-primary: #ffffff;
+  --text-secondary: #dcdcdc;
+  --text-muted: #8c8c8c;
   --accent-primary: #ffffff;
-  --accent-secondary: #d4d4d4;
-  --accent-soft: #161616;
+  --accent-secondary: #ffffff;
+  --accent-soft: #141414;
   --ring-soft: rgba(255, 255, 255, 0.16);
-  --card-border: #242424;
-  --card-border-hover: #404040;
-  --gradient-main: linear-gradient(115deg, #ffffff 0%, #e8e8e8 45%, #c9c9c9 100%);
-  --on-accent: #0b0b0b;
+  --card-border: #252525;
+  --card-border-hover: #3f3f3f;
+  --gradient-main: linear-gradient(115deg, #ffffff 0%, #ffffff 45%, #c9c9c9 100%);
+  --on-accent: #000000;
 
   /* shadcn/ui tokens — kept monochrome (black / white / grey) */
   --radius: 0.75rem;
@@ -126,6 +126,19 @@ body::after {
   opacity: 0.35;
 }
 
+/* In light/warm themes the accent is ink-dark — keep the decorative glow subtle */
+:root[data-theme="light"] body::before,
+:root[data-theme="warm"] body::before {
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent-primary) 16%, transparent), transparent 72%);
+  opacity: 0.28;
+}
+
+:root[data-theme="light"] body::after,
+:root[data-theme="warm"] body::after {
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent-secondary) 18%, transparent), transparent 72%);
+  opacity: 0.3;
+}
+
 .section-shell {
   padding: 2rem 1.5rem;
 }
@@ -150,7 +163,7 @@ section[id] {
 .glass-card {
   background: var(--surface);
   border: 1px solid var(--card-border);
-  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.14);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(10px);
 }
 
@@ -158,7 +171,7 @@ section[id] {
   background: var(--surface-strong);
   border: 1px solid var(--card-border);
   border-radius: 1.2rem;
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.09);
 }
 
 .btn-primary {
@@ -426,33 +439,91 @@ section[id] {
 }
 
 .nav-cta {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  color: var(--on-accent);
-  box-shadow: 0 8px 22px -12px color-mix(in srgb, var(--accent-primary) 70%, transparent);
+  background: #0a0a0a;
+  color: #ffffff;
+  box-shadow: 0 8px 22px -12px rgba(0, 0, 0, 0.6);
   transform-style: preserve-3d;
-  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, filter 200ms ease;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, filter 200ms ease, background-color 200ms ease;
 }
 
 .nav-cta:hover {
-  filter: brightness(1.06);
+  background: #161619;
+  filter: none;
   transform: translateY(-1px);
 }
 
 .nav-cta:focus-visible {
-  outline: 2px solid var(--accent-primary);
+  outline: 2px solid #0a0a0a;
   outline-offset: 2px;
 }
 
 /* Scroll: the pill becomes a more solid, compact bar */
 
+/* White frosted-glass navbar pill — always light so it reads over any theme */
 .nav-pill {
-  background: color-mix(in srgb, var(--bg-secondary) 92%, var(--surface-strong));
-  box-shadow: 0 12px 32px -18px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.45));
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16), 0 24px 50px -24px rgba(0, 0, 0, 0.45);
 }
 
 .nav-scrolled .nav-pill {
-  background: color-mix(in srgb, var(--bg-secondary) 96%, var(--surface-strong));
-  box-shadow: 0 18px 48px -20px rgba(0, 0, 0, 0.55);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.72));
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18), 0 24px 54px -22px rgba(0, 0, 0, 0.5);
+}
+
+/* Dark ink on the always-light glass */
+.nav-pill .nav-link,
+.nav-pill .nav-brand {
+  color: #1a1a1e;
+}
+
+.nav-pill .nav-link:hover,
+.nav-pill .nav-brand:hover {
+  color: #000000;
+}
+
+.nav-pill .nav-link::after {
+  background: linear-gradient(90deg, #000000, #3f3f46);
+}
+
+.nav-pill .nav-brand svg {
+  color: #000000;
+}
+
+/* Navbar theme switcher — small dark glass toggle that contrasts with the white pill */
+.theme-switcher {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(10, 10, 12, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.theme-switcher button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  color: #9d9da3;
+  background: transparent;
+  transition: color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.theme-switcher button:hover {
+  color: #ffffff;
+}
+
+.theme-switcher button[data-active="true"] {
+  background: #ffffff;
+  color: #0a0a0a;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
 }
 
 .nav-scrolled .nav-brand {

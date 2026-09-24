@@ -32,10 +32,10 @@ export const DEFAULT_CONFIG: ThemeConfig = {
   default: "dark",
   modes: {
     dark: {
-      backgroundColor: "#050505",
-      textColor: "#f5f5f5",
+      backgroundColor: "#000000",
+      textColor: "#ffffff",
       primaryColor: "#ffffff",
-      secondaryColor: "#a3a3a3",
+      secondaryColor: "#ffffff",
       accentColor: "#ffffff",
     },
     light: {
@@ -114,31 +114,25 @@ export function buildThemeVars(palette: ThemePalette): Record<string, string> {
   const sec = palette.secondaryColor
   const dark = luminance(bg) < 0.3
 
-  const surfaceMix = dark ? mixHex(bg, text, 0.07) : mixHex(bg, text, 0.05)
-  const strongMix = dark ? mixHex(bg, text, 0.1) : mixHex(bg, text, 0.03)
-
+  // Surfaces are always nudged *toward the background* so they follow the theme:
+  // dark -> near-black, light/warm -> near-white. Text always contrasts with them.
   return {
     "--bg-primary": bg,
-    "--bg-secondary": mixHex(bg, text, dark ? 0.05 : 0.035),
-    "--surface": rgba(surfaceMix, refreshAlpha(dark, 0.72)),
-    "--surface-strong": rgba(strongMix, refreshAlpha(dark, 0.94)),
+    "--bg-secondary": mixHex(bg, text, dark ? 0.94 : 0.93),
+    "--surface": rgba(mixHex(bg, text, dark ? 0.9 : 0.9), dark ? 0.75 : 0.85),
+    "--surface-strong": rgba(mixHex(bg, text, dark ? 0.87 : 0.93), dark ? 0.97 : 0.97),
     "--text-primary": text,
-    "--text-secondary": mixHex(text, bg, dark ? 0.28 : 0.35),
-    "--text-muted": mixHex(text, bg, dark ? 0.5 : 0.55),
+    "--text-secondary": mixHex(text, bg, dark ? 0.85 : 0.72),
+    "--text-muted": mixHex(text, bg, dark ? 0.55 : 0.5),
     "--accent-primary": prim,
     "--accent-secondary": sec,
-    "--accent-soft": mixHex(bg, prim, dark ? 0.08 : 0.06),
+    "--accent-soft": mixHex(bg, prim, dark ? 0.9 : 0.86),
     "--ring-soft": rgba(prim, 0.16),
-    "--card-border": mixHex(bg, text, dark ? 0.16 : 0.14),
-    "--card-border-hover": mixHex(bg, text, dark ? 0.3 : 0.3),
+    "--card-border": mixHex(bg, text, dark ? 0.87 : 0.88),
+    "--card-border-hover": mixHex(bg, text, dark ? 0.75 : 0.75),
     "--gradient-main": `linear-gradient(115deg, ${prim} 0%, ${sec} 45%, ${mixHex(sec, bg, 0.35)} 100%)`,
     "--on-accent": onTopOf(prim),
   }
-}
-
-// Small helper so surface alpha reads naturally for both lightness extremes.
-function refreshAlpha(dark: boolean, value: number): number {
-  return dark ? value : Math.min(0.94, value + 0.08)
 }
 
 export function applyThemeVarsToRoot(vars: Record<string, string>) {
