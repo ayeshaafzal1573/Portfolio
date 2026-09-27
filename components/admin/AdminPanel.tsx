@@ -85,6 +85,14 @@ export default function AdminPanel() {
   const [active, setActive] = useState<string>(DEFAULT_SECTION)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
+  async function handleSignOut() {
+    try {
+      await fetch("/api/admin-auth", { method: "DELETE" })
+    } finally {
+      window.location.href = "/admin/login"
+    }
+  }
+
   const current = ALL_SECTIONS.find((s) => s.key === active) || ALL_SECTIONS[0]
 
   const renderEditor = () => {
@@ -167,6 +175,12 @@ export default function AdminPanel() {
             >
               Back to Site
             </a>
+            <button
+              onClick={handleSignOut}
+              className="rounded-md border border-white/20 px-3 py-1.5 font-medium text-white hover:border-white hover:bg-white hover:text-zinc-900"
+            >
+              Sign out
+            </button>
           </div>
         </div>
       </div>
