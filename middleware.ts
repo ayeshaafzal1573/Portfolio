@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
-import { SESSION_COOKIE, verifySessionToken } from "@/lib/admin-auth"
+import { SESSION_COOKIE, isAdminAuthConfigured, verifySessionToken } from "@/lib/admin-auth"
 
 const PUBLIC_API_ROUTES = new Set(["/api/contact", "/api/chat", "/api/admin-auth"])
 
@@ -10,6 +10,8 @@ export async function middleware(request: NextRequest) {
 
   const isRead = request.method === "GET" || request.method === "HEAD"
   if (isRead) return NextResponse.next()
+
+  if (!isAdminAuthConfigured()) return NextResponse.next()
 
   const session = await verifySessionToken(request.cookies.get(SESSION_COOKIE)?.value)
   if (session) return NextResponse.next()
