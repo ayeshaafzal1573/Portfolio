@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server"
 import { SESSION_COOKIE, verifySessionToken } from "@/lib/admin-auth"
 
-const PUBLIC_API_ROUTES = new Set(["/api/contact", "/api/chat"])
+const PUBLIC_API_ROUTES = new Set(["/api/contact", "/api/chat", "/api/admin-auth"])
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
