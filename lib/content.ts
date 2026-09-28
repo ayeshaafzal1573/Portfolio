@@ -225,6 +225,17 @@ export const servicesSubtext =
    the professional timeline (Asani.io role). No metrics invented.
    ============================================================ */
 
+export function slugifyCaseStudy(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+}
+
+export function findCaseStudyBySlug(slug: string): CaseStudy | undefined {
+  return caseStudies.find((study) => slugifyCaseStudy(study.projectTitle) === slug)
+}
+
 export interface CaseSection {
   heading: string
   body: string

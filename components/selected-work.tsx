@@ -1,12 +1,13 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import Link from "next/link"
 import { ExternalLink, Github, Layers, ArrowDown, FolderOpen, ArrowUpRight } from "lucide-react"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { useCategorizedProjects } from "@/lib/useConfig"
 import { SectionHeading } from "@/components/section-heading"
 import { HoverVideo } from "@/components/hover-video"
-import { selectedProjects, caseStudies, type CaseStudy } from "@/lib/content"
+import { selectedProjects, caseStudies, slugifyCaseStudy, type CaseStudy } from "@/lib/content"
 import { scrollToId } from "@/lib/utils"
 
 const videoExtensions = [".mp4", ".webm", ".ogg"]
@@ -19,6 +20,16 @@ function isValidUrl(value?: string | null): value is string {
 function isVideoUrl(value?: string | null): boolean {
   if (!value) return false
   return videoExtensions.some((ext) => value.toLowerCase().includes(ext))
+}
+
+function describeProject(title: string, tech: string[], category?: string, summary?: string): string {
+  const stack = (tech || []).slice(0, 3).join(", ")
+  const parts = [`${title} case study`]
+  if (category) parts.push(category.toLowerCase())
+  if (stack) parts.push(`built with ${stack}`)
+  const base = parts.join(" — ")
+  if (!summary) return base
+  return `${base}. ${summary.replace(/\s+/g, " ").trim()}`
 }
 
 interface SelectedProjectItem {
@@ -67,9 +78,15 @@ function CaseStudyPanel({
           </span>
         </button>
 
-        {isOpen && (
-          <div id={`${id}-content`} className="border-t border-[color:var(--card-border)] px-6 py-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {isOpen && (
+              <div id={`${id}-content`} className="border-t border-[color:var(--card-border)] px-6 py-6">
+                <Link
+                  href={`/work/${slugifyCaseStudy(study.projectTitle)}`}
+                  className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold btn-secondary transition-all duration-300"
+                >
+                  Open Full Case Study Page <ArrowUpRight className="h-3.5 w-3.5" />
+                </Link>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-5">
                 <div>
                   <h5 className="mb-1 text-xs font-bold uppercase tracking-wider text-[color:var(--accent-secondary)]">Overview</h5>
@@ -202,7 +219,7 @@ export function SelectedWork() {
               {featured.image_url ? (
                 <img
                   src={featured.image_url}
-                  alt={featured.title}
+                  alt={describeProject(featured.title, featured.tech_stack, featured.category, featuredStudy?.summary || featured.description)}
                   loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -250,8 +267,16 @@ export function SelectedWork() {
                     onClick={() => openCaseStudy(featured.title)}
                     className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold btn-secondary transition-all duration-300 cursor-pointer"
                   >
-                    View Case Study <ArrowDown className="h-4 w-4" />
+                    Quick Summary <ArrowDown className="h-4 w-4" />
                   </button>
+                )}
+                {featuredStudy && (
+                  <Link
+                    href={`/work/${slugifyCaseStudy(featuredStudy.projectTitle)}`}
+                    className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold btn-secondary transition-all duration-300"
+                  >
+                    Read Full Case Study <ArrowUpRight className="h-4 w-4" />
+                  </Link>
                 )}
               </div>
             </div>
@@ -267,7 +292,7 @@ export function SelectedWork() {
                   {project.image_url ? (
                     <img
                       src={project.image_url}
-                      alt={project.title}
+                      alt={describeProject(project.title, project.tech_stack, project.category, study?.summary || project.description)}
                       loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
@@ -304,13 +329,12 @@ export function SelectedWork() {
                       </a>
                     )}
                     {study && (
-                      <button
-                        type="button"
-                        onClick={() => openCaseStudy(project.title)}
-                        className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold btn-secondary transition-all duration-300 cursor-pointer"
+                      <Link
+                        href={`/work/${slugifyCaseStudy(study.projectTitle)}`}
+                        className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold btn-secondary transition-all duration-300"
                       >
-                        View Case Study
-                      </button>
+                        Read Case Study <ArrowUpRight className="h-3.5 w-3.5" />
+                      </Link>
                     )}
                     {isValidUrl(project.github_url) && (
                       <a href={project.github_url} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} source code`} className="inline-flex items-center justify-center rounded-full p-2 btn-secondary transition-all duration-300">
