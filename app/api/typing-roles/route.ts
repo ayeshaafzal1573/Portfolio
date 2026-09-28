@@ -21,15 +21,26 @@ export async function GET() {
 export async function PUT(request: Request) {
   try {
     const { getSupabase } = await import("@/lib/supabase")
+    const { replaceAllRows } = await import("@/lib/admin-crud")
     const supabase = getSupabase()
     const { roles } = await request.json()
-    // Delete all existing and re-insert
-    await supabase.from("typing_roles").delete().neq("id", "00000000-0000-0000-0000-000000000000")
-    const rows = roles.map((role: string, i: number) => ({ role, sort_order: i }))
-    const { error } = await supabase.from("typing_roles").insert(rows)
-    if (error) throw error
-    return NextResponse.json({ success: true })
-  } catch {
-    return NextResponse.json({ error: "Failed to save roles" }, { status: 500 })
+
+    if (!Array.isArray(roles)) {
+      return NextResponse.json({ error: "`roles` must be an array" }, { status: 400 })
+    }
+
+    if (roles.some((r: unknown) => typeof r !== "string" || !r.trim())) {
+      return NextResponse.json(
+        { error: "Every role must be a non-empty string" },
+        { status: 400 }
+      )
+    }
+
+    const rows = roles.map((role: string, i: number) => ({ role: role.trim(), sort_order: i }))
+
+    return await replaceAllRows({ supabase, table: "typing_roles", rows, allowEmpty: true })
+  } catch (error) {
+    const { failWith } = await import("@/lib/admin-crud")
+    return failWith("typing-roles", error, "Failed to save roles")
   }
 }

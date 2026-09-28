@@ -15,14 +15,23 @@ export async function GET() {
 export async function PUT(request: Request) {
   try {
     const { getSupabase } = await import("@/lib/supabase")
+    const { replaceAllRows } = await import("@/lib/admin-crud")
     const supabase = getSupabase()
     const { links } = await request.json()
-    await supabase.from("social_links").delete().neq("id", "00000000-0000-0000-0000-000000000000")
-    const rows = links.map((l: Record<string, unknown>, i: number) => ({ ...l, sort_order: i, id: undefined }))
-    const { error } = await supabase.from("social_links").insert(rows)
-    if (error) throw error
-    return NextResponse.json({ success: true })
-  } catch {
-    return NextResponse.json({ error: "Failed to save links" }, { status: 500 })
+
+    if (!Array.isArray(links)) {
+      return NextResponse.json({ error: "`links` must be an array" }, { status: 400 })
+    }
+
+    const rows = links.map((l: Record<string, unknown>, i: number) => {
+      const row = { ...l, sort_order: i } as Record<string, unknown>
+      delete row.id
+      return row
+    })
+
+    return await replaceAllRows({ supabase, table: "social_links", rows, allowEmpty: true })
+  } catch (error) {
+    const { failWith } = await import("@/lib/admin-crud")
+    return failWith("social-links", error, "Failed to save links")
   }
 }

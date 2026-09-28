@@ -7,7 +7,9 @@ export async function GET() {
     const { data, error } = await supabase.from("skills").select("*").order("sort_order")
     if (error) throw error
     return NextResponse.json(data)
-  } catch {
+  } catch (error) {
+    const { failWith } = await import("@/lib/admin-crud")
+    return failWith("skills", error, "Failed to load skills")
   }
 }
 
@@ -20,27 +22,31 @@ export async function POST(request: Request) {
     if (error) throw error
     return NextResponse.json(data)
   } catch (error) {
+    const { failWith } = await import("@/lib/admin-crud")
+    return failWith("skills", error, "Failed to create skill")
   }
 }
 
 export async function PUT(request: Request) {
   try {
     const { getSupabase } = await import("@/lib/supabase")
+    const { replaceAllRows } = await import("@/lib/admin-crud")
     const supabase = getSupabase()
     const { skills } = await request.json()
 
-    if (!Array.isArray(skills) || skills.length === 0) {
+    if (!Array.isArray(skills)) {
+      return NextResponse.json({ error: "`skills` must be an array" }, { status: 400 })
+    }
+
+    const invalidIndex = skills.findIndex(
+      (s: Record<string, unknown>) => typeof s?.name !== "string" || !s.name.trim()
+    )
+    if (invalidIndex !== -1) {
       return NextResponse.json(
-        { error: "Refusing to save an empty skills list. Existing skills were left unchanged." },
+        { error: `Skill at index ${invalidIndex} is missing a valid name` },
         { status: 400 }
       )
     }
-
-    const { error: deleteError } = await supabase
-      .from("skills")
-      .delete()
-      .neq("id", "00000000-0000-0000-0000-000000000000")
-    if (deleteError) throw deleteError
 
     const rows = skills.map((s: Record<string, unknown>, i: number) => ({
       name: s.name,
@@ -48,9 +54,10 @@ export async function PUT(request: Request) {
       icon: s.icon,
       sort_order: i,
     }))
-    const { error } = await supabase.from("skills").insert(rows)
-    if (error) throw error
-    return NextResponse.json({ success: true })
-  } catch {
+
+    return await replaceAllRows({ supabase, table: "skills", rows })
+  } catch (error) {
+    const { failWith } = await import("@/lib/admin-crud")
+    return failWith("skills", error, "Failed to save skills")
   }
 }
