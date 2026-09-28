@@ -304,6 +304,20 @@ export const selectedProjects: SelectedProject[] = [
     image_url: "",
     video_url: "/Taverna.mp4",
   },
+  {
+    title: "Medicall",
+    demo_url: "https://medicall-self.vercel.app/",
+    github_url: "",
+    image_url: "",
+    video_url: "/medicall.mp4",
+  },
+  {
+    title: "Sochomax Creative",
+    demo_url: "https://sochmaxkreative.com/",
+    github_url: "",
+    image_url: "",
+    video_url: "/sochomax.mp4",
+  },
 ]
 
 export const selectedWorkTitles = selectedProjects.map((p) => p.title)
@@ -393,6 +407,65 @@ export const caseStudies: CaseStudy[] = [
       "A dedicated React Native ERP app for the institute, backed by Firebase.",
     outcome:
       "A production mobile app shipped for the institution. (No private usage data published.)",
+  },
+  {
+    projectTitle: "Medicall",
+    summary:
+      "A nurse calling system that lets patients summon nursing staff from their bedside, with alerts delivered in real time and a live view of pending calls.",
+    role: "Full-stack development — built the patient-facing client and the real-time call service.",
+    type: "Full-Stack · Real-Time / IoT",
+    techStack: [
+      { label: "Frontend", items: ["React"] },
+      { label: "Backend", items: ["Node.js", "Express.js", "Socket.IO"] },
+      { label: "Database", items: ["MongoDB"] },
+    ],
+    architecture: [
+      { label: "Client", detail: "Bedside call interface" },
+      { label: "API Layer", detail: "Express routes" },
+      { label: "Real-Time", detail: "Socket.IO event channel" },
+      { label: "Data Layer", detail: "MongoDB" },
+    ],
+    engineering: [
+      "Built the patient call flow so a bedside request is raised in a single interaction.",
+      "Pushed call alerts to nursing staff over a Socket.IO channel instead of polling.",
+      "Modelled call state in MongoDB so pending, acknowledged, and resolved calls stay consistent.",
+      "Deployed the client and API as a production build on Vercel.",
+    ],
+    problem:
+      "Patients had no reliable way to reach nursing staff, and staff had no live picture of which calls were waiting.",
+    solution:
+      "A bedside call interface backed by a real-time event channel, with a shared view of outstanding calls for nursing staff.",
+    outcome:
+      "A deployed nurse calling system covering the full request-to-resolution loop. (No private usage data published.)",
+  },
+  {
+    projectTitle: "Sochomax Creative",
+    summary:
+      "A creative agency website built as a polished marketing experience, pairing a bold visual identity with smooth motion and a fully responsive layout.",
+    role: "Front-end development — built the site and its animation and responsive behaviour.",
+    type: "Web · Next.js",
+    techStack: [
+      { label: "Framework", items: ["Next.js", "TypeScript"] },
+      { label: "Styling", items: ["Tailwind CSS"] },
+      { label: "Motion", items: ["Framer Motion"] },
+    ],
+    architecture: [
+      { label: "App", detail: "Next.js App Router" },
+      { label: "UI Layer", detail: "Tailwind CSS design system" },
+      { label: "Animation", detail: "Framer Motion transitions" },
+    ],
+    engineering: [
+      "Built the page structure and component system on the Next.js App Router.",
+      "Added scroll and entrance animations so sections reveal as the user moves through the site.",
+      "Made the layout responsive across mobile, tablet, and desktop breakpoints.",
+      "Typed the codebase end to end to keep the component contracts safe to refactor.",
+    ],
+    problem:
+      "The agency needed a site that presented its creative work credibly rather than as a generic template.",
+    solution:
+      "A purpose-built marketing site with a deliberate visual identity, motion used to guide attention, and a layout that holds up on every screen size.",
+    outcome:
+      "A live agency website at sochmaxkreative.com, with the animation and responsive work carrying the presentation.",
   },
 ]
 
