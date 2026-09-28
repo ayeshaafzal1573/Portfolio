@@ -15,7 +15,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const { getSupabase } = await import("@/lib/supabase")
-    const { toTextArray } = await import("@/lib/admin-crud")
+    const { toTextArray, withTimeout } = await import("@/lib/admin-crud")
     const supabase = getSupabase()
     const body = await request.json()
 
@@ -39,7 +39,9 @@ export async function POST(request: Request) {
       updated_at: now,
     }
 
-    const { data, error } = await supabase.from("categorized_projects").insert(row).select().single()
+    const { data, error } = await withTimeout(
+      supabase.from("categorized_projects").insert(row).select().single()
+    )
     if (error) throw error
     return NextResponse.json(data)
   } catch (error) {
@@ -51,7 +53,7 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const { getSupabase } = await import("@/lib/supabase")
-    const { toTextArray } = await import("@/lib/admin-crud")
+    const { toTextArray, withTimeout } = await import("@/lib/admin-crud")
     const supabase = getSupabase()
     const body = await request.json()
 
@@ -73,7 +75,9 @@ export async function PUT(request: Request) {
     if ("is_featured" in body) patch.is_featured = Boolean(body.is_featured)
     if ("sort_order" in body) patch.sort_order = Number(body.sort_order) || 0
 
-    const { error } = await supabase.from("categorized_projects").update(patch).eq("id", body.id)
+    const { error } = await withTimeout(
+      supabase.from("categorized_projects").update(patch).eq("id", body.id)
+    )
     if (error) throw error
     return NextResponse.json({ success: true })
   } catch (error) {
